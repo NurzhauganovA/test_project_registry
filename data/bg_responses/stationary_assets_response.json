@@ -1,0 +1,230 @@
+[
+    {
+        "addiditonalInformation": "С  МАМОЙ",
+        "address": "РЕСПУБЛИКА: Казахстан , ОБЛАСТЬ: Алматинская , РАЙОН: Ескельдинский , СЕЛЬСКИЙ ОКРУГ: Карабулакский , ПОСЕЛОК: Карабулак , УЛИЦА: Ш.Айманова , ДОМ: 36/1",
+        "bedProfile": {
+            "beginDate": null,
+            "code": "072",
+            "endDate": null,
+            "id": "83",
+            "idCode": "8300",
+            "name": "Для восстановительного лечения и медицинской реабилитации: общие для детей"
+        },
+        "benefitType": {
+            "beginDate": null,
+            "code": "2700",
+            "endDate": null,
+            "id": "27",
+            "idCode": "2700",
+            "name": "Нет льгот"
+        },
+        "cardNumber": "2007",
+        "currentPlanDate": "2020-01-27T09:53:00",
+        "dayHospitalType": null,
+        "directDoctor": "Өміржан АРИНА ФРАНЦЕВНА",
+        "finSrcParent": null,
+        "fsmsStatus": null,
+        "hasConfirm": "true",
+        "hasFiles": "false",
+        "hasRefusal": "false",
+        "hasRehabilitationFiles": "false",
+        "hospitalCode": "23.22ND.072.13Q",
+        "hospitalDate": "2020-01-27T09:53:00",
+        "hospitalNoticeStatuses": "100",
+        "hospitalPlanDate": "2020-01-27T09:53:00",
+        "id": "6800000006671308",
+        "inPatientHelpType": null,
+        "orgHealthCareDirect": {
+            "code": "04A3",
+            "funcStructureOrgID": null,
+            "name": "Государственное учреждение \"Управление Здравоохранения Атырауской области\"",
+            "orgHealthCareID": "23600000000000004"
+        },
+        "orgHealthCareRef": {
+            "code": "22ND",
+            "funcStructureOrgID": null,
+            "name": "Корпоративный Фонд «University Medical Center»/Национальный центр детской реабилитации",
+            "orgHealthCareID": "200000000000119"
+        },
+        "orgHealthCareRequest": {
+            "code": "0182",
+            "funcStructureOrgID": null,
+            "name": "Коммунальное государственное предприятие на праве хозяйственного ведения \"Курмангазинская районная больница\" Управления здравоохранения Атырауской области\"",
+            "orgHealthCareID": "43"
+        },
+        "outDate": "2018-01-25T09:56:14",
+        "patient": {
+            "birthDate": "2007-02-10T00:00:00",
+            "citizenIdCode": "108500",
+            "firstName": "АЙЖАН",
+            "hGBD": null,
+            "id": "6800000002395047",
+            "lastName": "СЛОБОДЕНЮК",
+            "nationalityIdCode": null,
+            "personFullName": "СЛОБОДЕНЮК АЙЖАН",
+            "personin": "070210653849",
+            "rpnID": "15300000007098025",
+            "secondName": null,
+            "sexIdCode": "200",
+            "unknownPerson": null
+        },
+        "polyclinicPlanDate": "2020-01-27T17:00:00",
+        "protocolDate": "2018-01-25T00:00:00",
+        "protocolNumber": "7",
+        "referralTarget": {
+            "beginDate": null,
+            "code": "600",
+            "endDate": null,
+            "id": "6",
+            "idCode": "600",
+            "name": "Восстановительное лечение"
+        },
+        "referralType": {
+            "beginDate": null,
+            "code": "800",
+            "endDate": null,
+            "id": "8",
+            "idCode": "800",
+            "name": "Направление на восстановительное лечение УЗ"
+        },
+        "refusalRegDate": null,
+        "refuseJustification": null,
+        "refuseReason": {
+            "beginDate": null,
+            "code": null,
+            "endDate": null,
+            "id": "0",
+            "idCode": null,
+            "name": null
+        },
+        "regDate": "2020-01-27T09:53:00",
+        "rehabilitationType": {
+            "code": "200",
+            "id": "2",
+            "idCode": "200"
+        },
+        "sick": {
+            "beginDate": null,
+            "code": "G80.1",
+            "endDate": null,
+            "id": "3146",
+            "idCode": "G801",
+            "name": "Спастическая диплегия"
+        },
+        "workPlace": null
+    },
+    {
+        "addiditonalInformation": "Тестовая запись 2",
+        "address": "РЕСПУБЛИКА: Казахстан, ГОРОД: Алматы, РАЙОН: Алмалинский, УЛИЦА: Абая, ДОМ: 150",
+        "bedProfile": {
+            "beginDate": null,
+            "code": "010",
+            "endDate": null,
+            "id": "10",
+            "idCode": "1000",
+            "name": "Терапевтический профиль"
+        },
+        "benefitType": {
+            "beginDate": null,
+            "code": "1000",
+            "endDate": null,
+            "id": "10",
+            "idCode": "1000",
+            "name": "Льготы ветеранам"
+        },
+        "cardNumber": "3001",
+        "currentPlanDate": "2025-01-15T10:00:00",
+        "dayHospitalType": null,
+        "directDoctor": "Иванов ИВАН ИВАНОВИЧ",
+        "finSrcParent": null,
+        "fsmsStatus": null,
+        "hasConfirm": "false",
+        "hasFiles": "true",
+        "hasRefusal": "false",
+        "hasRehabilitationFiles": "true",
+        "hospitalCode": "01.10TR.010.15A",
+        "hospitalDate": "2025-01-15T10:00:00",
+        "hospitalNoticeStatuses": "200",
+        "hospitalPlanDate": "2025-01-15T10:00:00",
+        "id": "6800000006671309",
+        "inPatientHelpType": null,
+        "orgHealthCareDirect": {
+            "code": "01A1",
+            "funcStructureOrgID": null,
+            "name": "Управление здравоохранения г. Алматы",
+            "orgHealthCareID": "11000000000000001"
+        },
+        "orgHealthCareRef": {
+            "code": "10TR",
+            "funcStructureOrgID": null,
+            "name": "Городская клиническая больница №1",
+            "orgHealthCareID": "100000000000001"
+        },
+        "orgHealthCareRequest": {
+            "code": "0150",
+            "funcStructureOrgID": null,
+            "name": "Поликлиника №15",
+            "orgHealthCareID": "150"
+        },
+        "outDate": null,
+        "patient": {
+            "birthDate": "1985-05-20T00:00:00",
+            "citizenIdCode": "108500",
+            "firstName": "ПЕТР",
+            "hGBD": null,
+            "id": "6800000002395048",
+            "lastName": "ПЕТРОВ",
+            "nationalityIdCode": null,
+            "personFullName": "ПЕТРОВ ПЕТР ПЕТРОВИЧ",
+            "personin": "850520301234",
+            "rpnID": "15300000007098026",
+            "secondName": "ПЕТРОВИЧ",
+            "sexIdCode": "100",
+            "unknownPerson": null
+        },
+        "polyclinicPlanDate": "2025-01-20T14:00:00",
+        "protocolDate": "2025-01-10T00:00:00",
+        "protocolNumber": "15",
+        "referralTarget": {
+            "beginDate": null,
+            "code": "100",
+            "endDate": null,
+            "id": "1",
+            "idCode": "100",
+            "name": "Лечение"
+        },
+        "referralType": {
+            "beginDate": null,
+            "code": "100",
+            "endDate": null,
+            "id": "1",
+            "idCode": "100",
+            "name": "Плановая госпитализация"
+        },
+        "refusalRegDate": null,
+        "refuseJustification": null,
+        "refuseReason": {
+            "beginDate": null,
+            "code": null,
+            "endDate": null,
+            "id": "0",
+            "idCode": null,
+            "name": null
+        },
+        "regDate": "2025-01-10T14:30:00",
+        "rehabilitationType": {
+            "code": "100",
+            "id": "1",
+            "idCode": "100"
+        },
+        "sick": {
+            "beginDate": null,
+            "code": "I10",
+            "endDate": null,
+            "id": "1250",
+            "idCode": "I10",
+            "name": "Эссенциальная гипертензия"
+        },
+        "workPlace": "ТОО \"Рога и копыта\""
+    }
+]

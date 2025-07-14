@@ -1,0 +1,291 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ru\n"
+
+# Appointment Service Errors
+msgid "Appointment with ID: %(ID)s not found."
+msgstr "Приём с ID: %(ID)s не найден."
+
+msgid "Associated schedule is inactive or not found."
+msgstr "Расписание неактивно или не найдено."
+
+msgid "New appointment date is outside of schedule period."
+msgstr "Новая дата приема выходит за рамки расписания."
+
+msgid "No schedule day available for this date."
+msgstr "На эту дату нет добавленных дней расписания."
+
+msgid "The specialist does not support the provided patient type."
+msgstr "Специалист с этим расписанием не обслуживает указанный тип пациентов."
+
+msgid "The specialist does not support the referral type."
+msgstr "Специалист с этим расписанием не обслуживает указанный тип направлений."
+
+msgid "The specialist does not support the referral origin type."
+msgstr "Специалист с этим расписанием не обслуживает указанный тип источника направления."
+
+msgid "The specialist does not support the provided insurance type."
+msgstr "Специалист с этим расписанием не обслуживает указанный тип страхования."
+
+msgid "The specialist with ID: %(ID) not found."
+msgstr "Специалист с указанным ID: %(ID) не найден."
+
+msgid "The selected appointment slot is already booked."
+msgstr "Выбранный интервал времени уже забронирован."
+
+msgid "The appointment cannot overlap with the break time."
+msgstr "Приём не может совпадать со временем перерыва/обеда специалиста. Пожалуйста, выберите другое время."
+
+msgid "Schedule with ID: %(ID)s not found."
+msgstr "Расписание с ID: %(ID)s не найдено."
+
+msgid "The schedule is inactive."
+msgstr "Расписание не активно."
+
+msgid "Appointment date is outside the schedule period."
+msgstr "Дата приёма вне срока действия расписания."
+
+msgid "No active schedule day available for the given date."
+msgstr "На указанную дату нет доступных активных дней расписания."
+
+msgid "Schedule day with ID %(id)s not found."
+msgstr "День расписания с ID: %(id)s не найден."
+
+msgid "The schedule day is inactive."
+msgstr "День расписания неактивен."
+
+msgid "Selected time %(start_time)s for %(appointment_interval)d-minute appointment is outside working hours (%(work_start_time)s–%(work_end_time)s)."
+msgstr "Выбранное время - %(start_time)s для приёма, длительностью %(appointment_interval)s минут назначено вне рабочего времени (%(work_start_time)s–%(work_end_time)s)."
+
+msgid "Schedule for day ID %(ID)s not found."
+msgstr "Расписание на день с идентификатором: %(ID)s не найдено."
+
+msgid "Schedule day with ID %(ID)s not found."
+msgstr "Расписание дня с идентификатором %(ID)s не найдено."
+
+msgid "Doctor with ID: %(ID)s not found."
+msgstr "Врач с идентификатором: %(ID)s не найден."
+
+msgid "Schedule day %(id)s is inactive."
+msgstr "День расписания %(id)s неактивен."
+
+# Schedule Validation Errors
+msgid "Schedule name cannot exceed 20 characters."
+msgstr "Название расписания не может превышать 20 символов."
+
+msgid "Schedule description cannot exceed 256 characters."
+msgstr "Описание/примечание расписания не может превышать 256 символов."
+
+msgid "New schedule end date cannot be earlier than new start date."
+msgstr "Новая дата окончания расписания не может быть раньше новой даты начала."
+
+msgid "New schedule period exceeds the maximum allowed period of: %(MAX_VALUE)s days."
+msgstr "Новый период расписания превышает максимально допустимый период: %(MAX_VALUE)s дней."
+
+# Schedule Service Errors
+msgid "Schedule with ID: %(ID) not found."
+msgstr "Расписание с ID: %(ID) не найдено."
+
+msgid "New schedule end date cannot be earlier than existing schedule start date."
+msgstr "Новая дата окончания расписания не может быть раньше даты начала существующего расписания."
+
+msgid "New period must be within the boundaries of the existing schedule period."
+msgstr "Новый период должен находиться в пределах границ существующего периода расписания."
+
+msgid "Schedule period exceeds the maximum allowed period of: %(MAX_VALUE)s days."
+msgstr "Период действия графика превышает максимально допустимое количество дней: %(MAX_VALUE)s."
+
+msgid "Schedule with name: '%(NAME)s' for this specialist is already taken."
+msgstr "Наименование графика: '%(NAME)s' для данного специалиста уже занято."
+
+msgid "Cannot update schedule. Cannot remove day with ID: %(ID)s because active appointments exist."
+msgstr "Невозможно обновить расписание. Невозможно удалить день с ID: %(ID)s, поскольку существуют активные приёмы."
+
+msgid "Cannot update day with ID: %(ID)s. Active appointments exist."
+msgstr "Невозможно обновить день с ID: %(ID)s. Существуют активные приёмы."
+
+msgid "User with ID: %(ID)s not found or not a doctor."
+msgstr "Пользователь с ID: %(ID)s не найден или не является доктором."
+
+msgid "Appointment interval must be equal to or greater than 5 and less than or equal to 60 minutes."
+msgstr "Интервал приёма должен быть равен или больше 5 и меньше или равен 60 минутам."
+
+# Schedule Day Service Errors
+msgid "Day with ID: %(ID)s not found."
+msgstr "День с ID: %(ID)s не найден."
+
+msgid "Cannot deactivate day with ID: %(ID)s — active appointments exist."
+msgstr "Невозможно деактивировать день с ID: %(ID)s — существуют активные приёмы."
+
+msgid "New working hours %(new_start)s-%(new_end)s do not cover all active appointments."
+msgstr "Новые рабочие часы %(new_start)s-%(new_end)s не охватывают все активные приёмы."
+
+msgid "Break time %(EFFECTIVE_BS)s-%(EFFECTIVE_BE)s "
+                                "conflicts with an active %(APPT_INTERVAL)s "
+                                "minutes appointment at %(APPT_TIME)s with "
+                                "ID: %(APPT_ID)s."
+msgstr "Время перерыва %(EFFECTIVE_BS)s-%(EFFECTIVE_BE)s "
+                                "конфликтует с активной %(APPT_INTERVAL)s "
+                                "минутным приёмом в %(APPT_TIME)s с "
+                                "ID: %(APPT_ID)s."
+
+msgid "Cannot delete day with ID: %(ID)s and date: %(DATE)s — active appointments exist."
+msgstr "Невозможно удалить день с ID: %(ID)s и датой: %(DATE)s — существуют активные приёмы."
+
+# Auth Service repository errors
+msgid "Something went wrong. Please, try again later."
+msgstr "Что-то пошло не так. Пожалуйста, попробуйте позже."
+
+msgid "Access denied. You're not allowed to proceed this operation."
+msgstr "Отказано в доступе. У вас недостаточно прав для выполнения данной операции."
+
+# RPN Integration Service repository errors
+msgid "Something went wrong. Please, try again later."
+msgstr "Что-то пошло не так. Пожалуйста, попробуйте позже."
+
+# Validation helpers errors
+msgid "IIN must be exactly 12 digits."
+msgstr "ИИН должен состоять из 12 цифр."
+
+# RPN Integration Service errors
+msgid "No active attachments found for this specialist."
+msgstr "Для этого специалиста не найдено активных прикреплений."
+
+# Validation helpers errors
+msgid "%(FIELD)s must not be empty."
+msgstr "%(FIELD)s не может быть пустым."
+
+msgid "Date of birth cannot be in the future."
+msgstr "Дата рождения не может быть в будущем."
+
+msgid "IIN must be exactly 12 digits."
+msgstr "ИИН должен состоять из 12 цифр."
+
+msgid "Client roles must be provided as a list."
+msgstr "Клиентские роли должны быть предоставлены в виде списка."
+
+msgid "Duplicate roles are not allowed."
+msgstr "Дублирование клиентских ролей не допускается."
+
+# User service errors
+msgid "User with ID: %(ID)s not found."
+msgstr "Пользователь с ID: %(ID)s не найден."
+
+msgid "User with ID: %(ID)s already exists."
+msgstr "Пользователь с ID: %(ID)s уже существует."
+
+msgid "User with IIN: %(IIN)s already exists."
+msgstr "Пользователь с ИИН: %(IIN)s уже существует."
+
+msgid "Couldn't handle an event. Unsupported action type: '%(ACTION)s'."
+msgstr "Не удалось обработать event из Kafka. Приведён недопустимый тип операции (action type): '%(ACTION)s'."
+
+# Shared catalog errors
+msgid "Field 'lang' must be '%(DEFAULT_LANG)s.'"
+msgstr "Поле 'lang' должно быть '%(DEFAULT_LANG)s.'"
+
+# Citizenship catalog errors
+msgid "Citizenship with ID: %(ID)s not found."
+msgstr "Гражданство с ID: '%(ID)s' не найдено."
+
+msgid "Citizenship with country code: '%(COUNTRY_CODE)s' already exists."
+msgstr "Гражданство с кодом страны: '%(COUNTRY_CODE)s' уже существует."
+
+# Nationalities catalog errors
+msgid "Nationality with ID: %(ID)s not found."
+msgstr "Национальность с ID: '%(ID)s' не найдена."
+
+msgid "Given nationality name (RU): '%(NAME)s' is already taken."
+msgstr "Переданное имя национальности (РУС): '%(NAME)s' уже занято."
+
+msgid "Given nationality name (EN): '%(NAME)s' is already taken."
+msgstr "Переданное имя национальности (АНГЛ): '%(NAME)s' уже занято."
+
+msgid "Given nationality name (KZ): '%(NAME)s' is already taken."
+msgstr "Переданное имя национальности (КАЗ): '%(NAME)s' уже занято."
+
+# Patient context attributes service errors
+msgid "Patient context attribute with ID: %(ATTR_ID)s was not found."
+msgstr "Дополнительный признак пациента с ID: %(ATTR_ID)s не найден."
+
+msgid "Attribute with name: '%(NAME)s' already exists."
+msgstr "Дополнительный признак пациента с именем: '%(NAME)s' уже существует."
+
+msgid "Attribute's '%(CODE)s' locale: '%(VALUE)s' already exists in some record's locale. It's already taken."
+msgstr "Локаль '%(CODE)s' со значением '%(VALUE)s' уже используется в другой записи. Она уже занята."
+
+msgid "Attribute with id: %(ID)s not found."
+msgstr "Дополнительный признак пациента с id: %(ID)s не найден."
+
+# Financing sources service errors
+msgid "Financing source with ID: %(SRC_ID)s was not found."
+msgstr "Источник финансирования с ID: %(SRC_ID)s не найден."
+
+msgid "Financing source with name: '%(NAME)s' already exists."
+msgstr "Источник финансирования с именем: '%(NAME)s' уже существует."
+
+msgid "Financing source with code: '%(SRC_CODE)s' already exists."
+msgstr "Источник финансирования с кодом: '%(SRC_CODE)s' уже существует."
+
+msgid "Financing source's '%(CODE)s' locale: '%(VALUE)s' already exists in some record's locale. It's already taken."
+msgstr "Локаль источника финансирования '%(CODE)s' со значением '%(VALUE)s' уже используется в другой записи. Она уже занята."
+
+msgid "Financing source with id: %(ID)s not found."
+msgstr "Источник финансирования с id: %(ID)s не найден."
+
+# Medical organizations catalog errors
+msgid "Medical organization with ID: %(ORG_ID)s was not found."
+msgstr "Медицинская организация с ID: %(ORG_ID)s не найдена."
+
+msgid "Medical organization with id: %(ID)s not found."
+msgstr "Медицинская организация с id: %(ID)s не найдена."
+
+msgid "Medical organization with name: '%(NAME)s' already exists."
+msgstr "Медицинская организация с именем: '%(NAME)s' уже существует."
+
+msgid "Medical organization with internal code: '%(ORG_CODE)s' already exists."
+msgstr "Медицинская организация с внутренним кодом: '%(ORG_CODE)s' уже существует."
+
+msgid "Medical organization's '%(CODE)s' name locale: '%(VALUE)s' already exists in some record's name locale. It's already taken."
+msgstr "Локализованное имя организации ('%(CODE)s': '%(VALUE)s') уже используется в другой записи. Это значение уже занято."
+
+msgid "Medical organization's '%(CODE)s' locale: '%(VALUE)s' already exists in some record's locale. It's already taken."
+msgstr "Локаль ('%(CODE)s': '%(VALUE)s') медицинской организации уже используется в другой записи. Это значение уже занято."
+
+# Citizenship catalog service errors
+msgid "Citizenship with ID: %(ATTR_ID)s was not found."
+msgstr "Гражданство с ID: %(ATTR_ID)s не найдено."
+
+msgid "Citizenship with name: '%(NAME)s' already exists."
+msgstr "Гражданство с именем: '%(NAME)s' уже существует."
+
+msgid "Citizenship with country code: '%(CODE)s' already exists."
+msgstr "Гражданство с кодом страны: '%(CODE)s' уже существует."
+
+msgid "Citizenship's '%(CODE)s' locale: '%(VALUE)s' already exists in some record's locale. It's already taken."
+msgstr "Локаль '%(CODE)s' со значением '%(VALUE)s' уже используется в другой записи. Она уже занята."
+
+# Platform rules errors
+msgid "Platform rule with ID: '%(ID)s' not found."
+msgstr "Бизнес-правило платформы с ID: '%(ID)s' не найдено."
+
+msgid "Platform rule with key: '%(KEY)s' already exists."
+msgstr "Бизнес-правило платформы с ключом (key): '%(KEY)s' уже существует."
+
+# Patient service errors
+msgid "Patient with ID: '%(ID)s' not found."
+msgstr "Пациент с ID: '%(ID)s' не найден."
+
+msgid "Patient with IIN: '%(IIN)s' not found."
+msgstr "Пациент с ИИН: '%(IIN)s' не найден."
+
+msgid "Patient with IIN: '%(IIN)s' already exists."
+msgstr "Пациент с ИИН: '%(IIN)s' уже существует."
+
+# Insurance info catalog errors
+msgid "'valid_till' date must be equal or greater than 'valid_from' date."
+msgstr "Дата, переданная в поле 'valid_till' должна быть больше или равна дате в поле 'valid_from'."
+
+msgid "Insurance info record with ID: %(ID)s was not found."
+msgstr "Запись страхования с ID: %(ID)s не найдена."

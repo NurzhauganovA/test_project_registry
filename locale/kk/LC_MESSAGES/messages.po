@@ -1,0 +1,163 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: kk\n"
+
+# Schedule Domain Errors
+msgid "Schedule name cannot exceed 20 characters."
+msgstr "Кесте атауы 20 таңбадан аспауы тиіс."
+
+msgid "The schedule period must not exceed 3 months."
+msgstr "Кесте мерзімі 3 айдан аспауы керек."
+
+msgid "At least one payment type must be selected."
+msgstr "Кемінде бір төлем түрі таңдалуы қажет (МӘМС, ЕМС және т.б.)."
+
+msgid "At least one referral type must be selected."
+msgstr "Кемінде бір жазылу көзі таңдалуы керек (Өзіндік жазылу, Сыртқы ұйым)."
+
+# Appointment Service Errors
+msgid "Appointment with ID: %(ID)s not found."
+msgstr "%(ID)s нөмірлі қабылдау табылмады."
+
+msgid "Associated schedule is inactive or not found."
+msgstr "Тиісті кесте белсенді емес немесе табылмады."
+
+msgid "New appointment date is outside of schedule period."
+msgstr "Жаңа қабылдау күні кесте мерзімінен тыс."
+
+msgid "No schedule day available for this date."
+msgstr "Бұл күнге кесте күні қосылмаған."
+
+msgid "The schedule does not support the provided insurance type."
+msgstr "Бұл кесте бойынша көрсетілген сақтандыру түрі қызмет көрсетпейді."
+
+msgid "The selected appointment slot is already booked."
+msgstr "Таңдалған уақыт аралығы қазірдің өзінде брондалған."
+
+msgid "The appointment cannot overlap with the break time."
+msgstr "Қабылдау маманның үзіліс/түскі уақытымен сәйкес келмеуі тиіс. Басқа уақыт таңдаңыз."
+
+msgid "Schedule with ID: %(ID)s not found."
+msgstr "%(ID)s нөмірлі кесте табылмады."
+
+msgid "The schedule is inactive."
+msgstr "Кесте белсенді емес."
+
+msgid "Appointment date is outside the schedule period."
+msgstr "Қабылдау күні кесте мерзімінен тыс."
+
+msgid "No active schedule day available for the given date."
+msgstr "Көрсетілген күнге белсенді кесте күні жоқ."
+
+msgid "Schedule day with ID %(id)s not found."
+msgstr "%(id)s нөмірлі кесте күні табылмады."
+
+msgid "The schedule day is inactive."
+msgstr "Кесте күні белсенді емес."
+
+msgid "Selected time from %(st)s for %(ai)s minutes appointment is outside working hours (%(ws)s–%(we)s)."
+msgstr "Таңдалған уақыт — %(st)s, қабылдау ұзақтығы %(ai)s минут, жұмыс уақытының (%(ws)s–%(we)s) шегінен тыс тағайындалған."
+
+# Schedule Service Errors
+msgid "Schedule with ID: %(ID) not found."
+msgstr "%(ID)s нөмірлі кесте табылмады."
+
+msgid "Schedule overlaps with an existing one. Please, adjust the dates."
+msgstr "Кесте бар кестемен сәйкес келеді. Даталарды түзетіңіз."
+
+msgid "New schedule end date cannot be earlier than existing schedule start date."
+msgstr "Жаңа кестенің аяқталу күні қолданыстағы кестенің басталу күнінен ерте болмауы керек."
+
+msgid "New period must be within the boundaries of the existing schedule period."
+msgstr "Жаңа мерзім қолданыстағы кесте мерзімінің шегінде болуы тиіс."
+
+msgid "Cannot update schedule. Cannot remove day with ID: %(ID)s because active appointments exist."
+msgstr "Кестені жаңарту мүмкін емес. Себебі %(ID)s нөмірлі күні бар белсенді қабылдаулар бар."
+
+msgid "Cannot update day with ID: %(ID)s. Active appointments exist."
+msgstr "%(ID)s нөмірлі күнді жаңарту мүмкін емес. Белсенді қабылдаулар бар."
+
+msgid "Cannot delete schedule. Active appointments exist."
+msgstr "Кестені өшіру мүмкін емес. Белсенді қабылдаулар бар."
+
+msgid "Cannot deactivate schedule. Active appointments exist."
+msgstr "Кестені белсенді емес ету мүмкін емес. Белсенді қабылдаулар бар."
+
+msgid "Cannot delete day with ID: %(ID)s — active appointments exist."
+msgstr "%(ID)s нөмірлі күнді өшіру мүмкін емес — белсенді қабылдаулар бар."
+
+msgid "User with ID: %(ID)s not found or not a doctor."
+msgstr "%(ID)s нөмірлі қолданушы табылмады немесе дәрігер емес."
+
+# Schedule Day Service Errors
+msgid "Day with ID: %(ID)s not found."
+msgstr "%(ID)s нөмірлі күн табылмады."
+
+msgid "Cannot change appointment interval for day with ID: %(ID)s because it has active appointments."
+msgstr "%(ID)s нөмірлі күнге арналған қабылдау интервалын өзгерту мүмкін емес, себебі сол күнде белсенді қабылдаулар бар."
+
+msgid "Cannot deactivate day with ID: %(ID)s — active appointments exist."
+msgstr "%(ID)s нөмірлі күнді белсенді емес ету мүмкін емес — белсенді қабылдаулар бар."
+
+msgid "New working hours %(new_start)s-%(new_end)s do not cover all active appointments."
+msgstr "Жаңа жұмыс уақыты %(new_start)s-%(new_end)s барлық белсенді қабылдауларды қамтымайды."
+
+msgid "Break time %(EFFECTIVE_BS)s-%(EFFECTIVE_BE)s "
+                                "conflicts with an active %(APPT_INTERVAL)s "
+                                "minutes appointment at %(APPT_TIME)s with "
+                                "ID: %(APPT_ID)s."
+msgstr "Үзіліс уақыты %(EFFECTIVE_BS)s-%(EFFECTIVE_BE)s "
+                                "%(APPT_TIME)s уақытында %(APPT_INTERVAL)s минуттық "
+                                "%(APPT_ID)s нөмірлі белсенді қабылдаумен сәйкес келеді."
+
+msgid "Cannot delete day with ID: %(ID)s and date: %(DATE)s — active appointments exist."
+msgstr "%(ID)s нөмірлі және %(DATE)s күнді өшіру мүмкін емес — белсенді қабылдаулар бар."
+
+# Auth Service repository errors
+msgid "Something went wrong. Please, try again later."
+msgstr "Бірдеңе дұрыс болмады. Кейінірек қайталап көріңіз."
+
+msgid "Access denied. You're not allowed to proceed this operation."
+msgstr "Қолжетімсіз. Бұл операцияны орындауға құқығыңыз жоқ."
+
+# RPN Integration Service repository errors
+msgid "Something went wrong. Please, try again later."
+msgstr "Бірдеңе дұрыс болмады. Кейінірек қайталап көріңіз."
+
+# Validation helpers errors
+msgid "IIN must be exactly 12 digits."
+msgstr "ЖСН дәл 12 саннан тұруы керек."
+
+# RPN Integration Service errors
+msgid "No active attachments found for this specialist."
+msgstr "Бұл маман үшін белсенді тіркемелер табылмады."
+
+# Validation helpers errors
+msgid "%(FIELD)s must not be empty."
+msgstr "%(FIELD)s бос болмауы керек."
+
+msgid "Date of birth cannot be in the future."
+msgstr "Туған күні болашақта болмауы тиіс."
+
+msgid "IIN must be exactly 12 digits."
+msgstr "ЖСН дәл 12 саннан тұруы керек."
+
+msgid "Client roles must be provided as a list."
+msgstr "Клиент рөлдері тізім түрінде берілуі тиіс."
+
+msgid "Duplicate roles are not allowed."
+msgstr "Қайталанатын рөлдерге рұқсат етілмейді."
+
+# User service errors
+msgid "User with ID: %(ID)s not found."
+msgstr "%(ID)s нөмірлі қолданушы табылмады."
+
+msgid "User with ID: %(ID)s already exists."
+msgstr "%(ID)s нөмірлі қолданушы бұрыннан бар."
+
+msgid "User with IIN: %(IIN)s already exists."
+msgstr "%(IIN)s ЖСН-і бар қолданушы бұрыннан бар."
+
+msgid "Couldn't handle an event. Unsupported action type: '%(ACTION)s'."
+msgstr "Kafka-дан event өңделмеді. Рұқсат етілмеген операция түрі: '%(ACTION)s'."

@@ -1,0 +1,35 @@
+name: registry-service-orkendeu-stack
+
+services:
+  registry-module:
+    container_name: registry-module-dev
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file:
+      - ../.envs/app/dev.env
+    ports:
+      - "8002:8002"  # <- Please check that these ports are the same as FastAPI app port in .envs/app/dev.env
+    volumes:
+      - ..:/app
+    networks:
+      - mis_orkendeu_network
+
+  registry-db:
+    container_name: registry-module-db-dev
+    image: postgres:17-alpine
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../.envs/db/dev.env
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    networks:
+      - mis_orkendeu_network
+
+volumes:
+  db_data:
+
+networks:
+  mis_orkendeu_network:
+    external: true

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry-module-orkendeu-project
+  labels:
+    app: registry-module
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry-module
+  template:
+    metadata:
+      name: registry-module
+      labels:
+        app: registry-module
+    spec:
+      containers:
+        - name: registry-module
+          image: ${IMAGE}:${TAG}
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8001
+          envFrom:
+            - configMapRef:
+                name: registry-config
+            - secretRef:
+                name: registry-secret
+      restartPolicy: Always
+
+      

@@ -1,0 +1,26 @@
+# Test HTTP requests files
+/test_main.http
+
+# All python cache files
+*pyc
+__pycache__/
+
+# Project files
+.idea/
+.idea/*
+
+# Virtual environment
+/.venv/
+
+# Logs
+/logs/
+
+# Compiled translations
+/locale/ru/LC_MESSAGES/messages.mo
+/locale/kk/LC_MESSAGES/messages.mo
+
+# Env files
+/.envs/app/dev.env
+/.envs/app/prod.env
+/.envs/db/dev.env
+/.envs/db/prod.env

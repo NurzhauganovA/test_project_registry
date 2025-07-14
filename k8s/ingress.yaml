@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: registry-module
+  annotations:
+    konghq.com/strip-path: "true"
+spec:
+  ingressClassName: kong
+  rules:
+    - host: api.dzhandosoft.kz
+      http:
+        paths:
+          - path: /registry-module-orkendeu-project
+            pathType: Prefix
+            backend:
+              service:
+                name: registry-module
+                port:
+                  number: 80
