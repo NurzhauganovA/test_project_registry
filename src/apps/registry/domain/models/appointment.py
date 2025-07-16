@@ -1,12 +1,9 @@
 from datetime import UTC, datetime, time
-from typing import Dict, Optional
+from typing import Any, Dict, List, Optional
 from uuid import UUID
 
-from src.apps.registry.domain.enums import (
-    AppointmentInsuranceType,
-    AppointmentStatusEnum,
-    AppointmentTypeEnum,
-)
+from src.apps.registry.domain.enums import AppointmentStatusEnum, AppointmentTypeEnum
+from src.apps.registry.domain.exceptions import InvalidAppointmentStatusDomainError
 from src.apps.registry.domain.models.schedule import ScheduleDomain
 from src.apps.registry.exceptions import (
     ScheduleDayIsNotActiveError,
@@ -28,23 +25,29 @@ class AppointmentDomain:
         schedule_day_id: UUID,
         time: time,
         patient_id: Optional[UUID],
+        phone_number: Optional[str] = None,
+        address: Optional[str] = None,
         status: AppointmentStatusEnum = AppointmentStatusEnum.BOOKED,
-        type: AppointmentTypeEnum,
-        insurance_type: AppointmentInsuranceType,
+        type: Optional[AppointmentTypeEnum] = None,
+        financing_sources_ids: Optional[List[int]] = None,
         reason: Optional[str] = None,
-        additional_services: Optional[Dict[str, bool]] = None,
+        additional_services: Optional[List[Dict[str, Any]]] = None,
         cancelled_at: Optional[datetime] = None,
     ):
         self.id = id
         self.schedule_day_id = schedule_day_id
         self.time = time
         self.patient_id = patient_id
+        self.phone_number = phone_number
+        self.address = address
         self.status = status
         self.type = type
-        self.insurance_type = insurance_type
+        self.financing_sources_ids = (
+            financing_sources_ids if financing_sources_ids else []
+        )
         self.reason = reason
         self.additional_services = (
-            additional_services if additional_services is not None else {}
+            additional_services if additional_services is not None else []
         )
         self.cancelled_at = cancelled_at
 
@@ -80,3 +83,26 @@ class AppointmentDomain:
         if self.status != AppointmentStatusEnum.CANCELLED:
             self.status = AppointmentStatusEnum.CANCELLED
             self.cancelled_at = datetime.now(UTC)
+
+    def validate_appointment_status(self):
+        """
+        Validates the consistency between the appointment status and the presence of a patient ID.
+
+        Note:
+            If the `status` is 'APPOINTMENT', a `patient_id` must be provided (not None).
+            If the `status` is 'BOOKED', there must NOT be a `patient_id` (it should be None).
+
+        Raises:
+            InvalidAppointmentStatusDomainError: If the appointment status does not match the
+                `patient_id` presence rules.
+        """
+        if self.status == AppointmentStatusEnum.APPOINTMENT and self.patient_id is None:
+            raise InvalidAppointmentStatusDomainError(
+                detail="Invalid appointment status. "
+                "You can't select an 'appointment' status without 'patient_id' provided."
+            )
+        if self.status == AppointmentStatusEnum.BOOKED and self.patient_id is not None:
+            raise InvalidAppointmentStatusDomainError(
+                detail="Invalid appointment status. "
+                "You can't select an 'booked' status with 'patient_id' provided."
+            )

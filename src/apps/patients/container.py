@@ -23,6 +23,7 @@ from src.apps.patients.infrastructure.repositories.patient_repository import (
 )
 from src.apps.patients.services.patients_service import PatientService
 from src.apps.patients.uow import UnitOfWorkImpl
+from src.core.database.config import provide_async_session
 from src.core.logger import LoggerService
 
 
@@ -57,9 +58,7 @@ class PatientsContainer(containers.DeclarativeContainer):
     )
 
     # Async session
-    async_db_session = providers.Singleton(
-        lambda session_factory: session_factory(), session_factory
-    )
+    async_db_session = providers.Resource(provide_async_session, session_factory)
 
     # UOW
     unit_of_work = providers.Factory(

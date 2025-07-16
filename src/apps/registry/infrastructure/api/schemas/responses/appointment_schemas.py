@@ -1,16 +1,15 @@
 from datetime import date, datetime, time
-from typing import Dict, List, Optional
+from typing import List, Optional
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from src.apps.patients.infrastructure.api.schemas.responses.patient_response_schemas import (
     ResponsePatientSchema,
 )
-from src.apps.registry.domain.enums import (
-    AppointmentInsuranceType,
-    AppointmentStatusEnum,
-    AppointmentTypeEnum,
+from src.apps.registry.domain.enums import AppointmentStatusEnum, AppointmentTypeEnum
+from src.apps.registry.infrastructure.api.schemas.appointment_schemas import (
+    AdditionalServiceSchema,
 )
 from src.apps.users.infrastructure.schemas.user_schemas import UserSchema
 from src.shared.schemas.pagination_schemas import PaginationMetaDataSchema
@@ -28,11 +27,15 @@ class ResponseAppointmentSchema(BaseModel):
     patient: Optional[ResponsePatientSchema] = (
         None  # Not in the 'appointments' DB table, only 'patient_id' is in the DB
     )
+    phone_number: Optional[str] = None
+    address: Optional[str] = None
     status: AppointmentStatusEnum
-    type: AppointmentTypeEnum
-    insurance_type: AppointmentInsuranceType
+    type: Optional[AppointmentTypeEnum] = None
+    financing_sources_ids: Optional[List[int]] = None
     reason: str
-    additional_services: Dict[str, bool]
+    additional_services: Optional[List[AdditionalServiceSchema]] = Field(
+        default_factory=list
+    )
 
     # Optional field. Is being set by the server when the appointment is cancelled.
     cancelled_at: Optional[datetime] = None

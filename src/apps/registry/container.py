@@ -3,6 +3,9 @@ from sqlalchemy.ext.asyncio.engine import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm.session import sessionmaker
 
+from src.apps.catalogs.services.financing_sources_catalog_service import (
+    FinancingSourceCatalogService,
+)
 from src.apps.registry.infrastructure.repositories.appointment_repository import (
     AppointmentRepositoryImpl,
 )
@@ -16,6 +19,7 @@ from src.apps.registry.services.appointment_service import AppointmentService
 from src.apps.registry.services.schedule_day_service import ScheduleDayService
 from src.apps.registry.services.schedule_service import ScheduleService
 from src.apps.registry.uow import UnitOfWorkImpl
+from src.core.database.config import provide_async_session
 from src.core.logger import LoggerService
 
 
@@ -34,6 +38,9 @@ class RegistryContainer(containers.DeclarativeContainer):
     user_repository = providers.Dependency()
     platform_rules_repository = providers.Dependency()
     engine = providers.Dependency(instance_of=AsyncEngine)
+    financing_sources_catalog_service = providers.Dependency(
+        instance_of=FinancingSourceCatalogService
+    )
 
     # Session factory
     session_factory = providers.Singleton(
@@ -41,9 +48,7 @@ class RegistryContainer(containers.DeclarativeContainer):
     )
 
     # Async session
-    async_db_session = providers.Singleton(
-        lambda session_factory: session_factory(), session_factory
-    )
+    async_db_session = providers.Resource(provide_async_session, session_factory)
 
     # UOW
     unit_of_work = providers.Factory(
@@ -90,6 +95,7 @@ class RegistryContainer(containers.DeclarativeContainer):
         user_service=user_service,
         patients_service=patients_service,
         user_repository=user_repository,
+        financing_sources_catalog_service=financing_sources_catalog_service,
     )
 
     schedule_service = providers.Factory(

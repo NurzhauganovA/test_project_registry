@@ -3,8 +3,12 @@ from typing import Any, Awaitable, Dict, List, TypeVar
 
 from dependency_injector import containers, providers
 
+from src.apps.assets_journal.infrastructure.api.newborn_asset_routes import newborn_assets_router
 from src.apps.assets_journal.infrastructure.api.stationary_asset_routes import (
     stationary_assets_router,
+)
+from src.apps.assets_journal.infrastructure.api.emergency_asset_routes import (
+    emergency_assets_router,
 )
 from src.apps.catalogs.infrastructure.api.citizenship_catalog_routes import (
     citizenship_catalog_router,
@@ -136,6 +140,14 @@ def get_routers() -> List[Dict[str, Any]]:
             "router": stationary_assets_router,
             "tag": ["Stationary assets routes"],
         },
+        {
+            "router": emergency_assets_router,
+            "tag": ["Emergency assets routes"],
+        },
+        {
+            "router": newborn_assets_router,
+            "tag": ["Newborn assets routes"]
+        }
     ]
 
     return routers

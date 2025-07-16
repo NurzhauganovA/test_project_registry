@@ -3,24 +3,46 @@ kind: ConfigMap
 metadata:
   name: registry-config
 data:
-  DB_USER: registry_module_user
-  DB_HOST: 10.0.0.17
-  DB_PORT: "5432"
-  DB_NAME: registry_service_db
-  PROJECT_NAME: Registry Service [ORKENDEU]
-  PROJECT_VERSION: 0.0.3
-  API_PREFIX: /api/v1
+  # --- FastAPI app params ---
+  APP_PORT: "8002"
+  APP_HOST: "0.0.0.0"
+  PROJECT_NAME: "Registry Service [ORKENDEU]"
+  PROJECT_VERSION: "0.0.3"
+  API_PREFIX: "/api/v1"
   API_ENABLE_DOCS: "true"
   BACKEND_CORS_ORIGINS: '["http://localhost:3000","http://localhost:5173","http://localhost:8000","http://127.0.0.1:3000","http://127.0.0.1:5173","http://127.0.0.1:8000","http://0.0.0.0:3000","http://0.0.0.0:5173","http://0.0.0.0:8000","https://orkendeu.dzhandosoft.kz","https://api.dzhandosoft.kz/auth-service-orkendeu-project","https://api.dzhandosoft.kz/admin-module-orkendeu-project","https://api.dzhandosoft.kz/rpn-integration-service-orkendeu-project"]'
-  DEBUG: "0"
-  LANGUAGES: "[\"ru\",\"en\",\"kk\"]"
+  DEBUG: "false"
+
+  # --- Database params ---
+  DB_NAME: "registry_service_db"
+  DB_USER: "registry_module_user"
+  DB_HOST: "10.0.0.17"
+  DB_PORT: "5432"
+  POOL_SIZE: "10"
+  MAX_OVERFLOW: "20"
+
+  # --- i18 params ---
+  LANGUAGES: '["ru","kk","en"]'
   DEFAULT_LANGUAGE: "ru"
-  APP_HOST: 0.0.0.0
-  APP_PORT: "8002"
-  AUTH_SERVICE_BASE_URL: https://auth-service-app-dev:8001/api/v1
-  RPN_INTEGRATION_SERVICE_BASE_URL: https://rpn-integration-service:8010
+
+  # --- httpx params ---
   TIMEOUT: "5"
   MAX_KEEPALIVE_CONNECTIONS: "10"
   MAX_CONNECTIONS: "100"
+
+  # --- Auth Service params ---
+  AUTH_SERVICE_BASE_URL: "https://api.dzhandosoft.kz/auth-service-orkendeu-project/api/v1"
+
+  # --- RPN Integration Service params ---
+  RPN_INTEGRATION_SERVICE_BASE_URL: "https://rpn-integration-service:8010"
+
+  # --- List of user (doctor) roles for which schedule creation is allowed ---
+  SCHEDULABLE_USER_ROLES: '["Chief Doctor","Primary Healthcare Expert","Registrar","General Practitioner","Specialist Doctor","Attending Physician"]'
+
+  # --- Kafka params ---
   KAFKA_BOOTSTRAP_SERVERS: '["kafka:9092"]'
-  ACTIONS_ON_USERS_KAFKA_TOPIC: auth_service-registry_service
+  ACTIONS_ON_USERS_KAFKA_TOPIC: "auth_service-registry_service"
+  KAFKA_GROUP_ID: "registry-service-users-group"
+
+  # --- Business rules ---
+  ADULT_AGE_LIMIT: "18"

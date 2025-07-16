@@ -13,6 +13,11 @@ from src.apps.registry.infrastructure.api.schemas.responses.schedule_day_schemas
     ResponseScheduleDaySchema,
 )
 from src.apps.registry.services.schedule_day_service import ScheduleDayService
+from src.shared.dependencies.check_user_permissions import check_user_permissions
+from src.shared.dependencies.resources_map import (
+    AvailableResourcesEnum,
+    AvailableScopesEnum,
+)
 from src.shared.schemas.pagination_schemas import (
     PaginationMetaDataSchema,
     PaginationParams,
@@ -29,6 +34,16 @@ async def get_by_id(
     day_id: UUID,
     schedule_day_service: ScheduleDayService = Depends(
         Provide[RegistryContainer.schedule_day_service]
+    ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.SCHEDULES,
+                    "scopes": [AvailableScopesEnum.READ],
+                },
+            ],
+        )
     ),
 ) -> ResponseScheduleDaySchema:
     schedule_day = await schedule_day_service.get_by_id(id=day_id)
@@ -55,6 +70,16 @@ async def get_all_by_schedule_id(
     pagination_params: PaginationParams = Depends(),
     schedule_day_service: ScheduleDayService = Depends(
         Provide[RegistryContainer.schedule_day_service]
+    ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.SCHEDULES,
+                    "scopes": [AvailableScopesEnum.READ],
+                },
+            ],
+        )
     ),
 ) -> MultipleScheduleDaysResponseSchema:
     schedule_days, total_schedule_days_amount = (
@@ -109,6 +134,16 @@ async def update(
     update_schema: UpdateScheduleDaySchema,
     schedule_day_service: ScheduleDayService = Depends(
         Provide[RegistryContainer.schedule_day_service]
+    ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.SCHEDULES,
+                    "scopes": [AvailableScopesEnum.UPDATE],
+                },
+            ],
+        )
     ),
 ) -> ResponseScheduleDaySchema:
     return await schedule_day_service.update(

@@ -16,13 +16,13 @@ from src.apps.assets_journal.infrastructure.api.schemas.requests.stationary_asse
 from src.apps.assets_journal.infrastructure.api.schemas.responses.stationary_asset_schemas import (
     StationaryAssetStatisticsSchema,
 )
-from src.apps.assets_journal.interfaces.repository_interfaces import (
+from src.apps.assets_journal.interfaces.stationary_repository_interfaces import (
     StationaryAssetRepositoryInterface,
 )
 from src.apps.assets_journal.interfaces.uow_interface import (
     AssetsJournalUnitOfWorkInterface,
 )
-from src.apps.assets_journal.mappers import map_bg_response_to_domain, map_create_schema_to_domain
+from src.apps.assets_journal.mappers.stationary_asset_mappers import map_bg_response_to_domain, map_create_schema_to_domain
 from src.apps.catalogs.services.medical_organizations_catalog_service import MedicalOrganizationsCatalogService
 from src.apps.patients.services.patients_service import PatientService
 from src.core.i18n import _

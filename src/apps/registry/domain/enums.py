@@ -10,6 +10,7 @@ class AppointmentStatusEnum(enum.Enum):
     FREE = "free"
     BOOKED = "booked"
     CANCELLED = "cancelled"
+    APPOINTMENT = "appointment"
 
 
 class AppointmentReferralTypeEnum(enum.Enum):

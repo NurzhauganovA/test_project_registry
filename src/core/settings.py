@@ -45,8 +45,14 @@ class Settings(BaseSettings):
     # RPN Integration Service params
     RPN_INTEGRATION_SERVICE_BASE_URL: str = "https://rpn-integration-service:8010"
 
+    # List of user (doctor) roles for which schedule creation is allowed
+    SCHEDULABLE_USER_ROLES: List[str] = []
+
     # Kafka params
     kafka: KafkaSettings = KafkaSettings()
+
+    # Business rules
+    ADULT_AGE_LIMIT: int = 18
 
     @field_validator(
         "AUTH_SERVICE_BASE_URL",

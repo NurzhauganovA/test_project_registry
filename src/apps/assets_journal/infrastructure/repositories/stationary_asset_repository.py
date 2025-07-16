@@ -9,11 +9,11 @@ from src.apps.assets_journal.domain.models.stationary_asset import StationaryAss
 from src.apps.assets_journal.infrastructure.api.schemas.responses.stationary_asset_schemas import (
     StationaryAssetStatisticsSchema,
 )
-from src.apps.assets_journal.infrastructure.db_models.models import StationaryAsset
-from src.apps.assets_journal.interfaces.repository_interfaces import (
+from src.apps.assets_journal.infrastructure.db_models.stationary_models import StationaryAsset
+from src.apps.assets_journal.interfaces.stationary_repository_interfaces import (
     StationaryAssetRepositoryInterface,
 )
-from src.apps.assets_journal.mappers import (
+from src.apps.assets_journal.mappers.stationary_asset_mappers import (
     map_stationary_asset_db_to_domain,
     map_stationary_asset_domain_to_db,
 )

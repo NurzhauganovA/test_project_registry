@@ -26,6 +26,31 @@ class StationaryAssetAlreadyRefusedError(AssetsJournalAppError):
     pass
 
 
+class EmergencyAssetNotFoundError(AssetsJournalAppError):
+    """Актив скорой помощи не найден"""
+    pass
+
+
+class EmergencyAssetAlreadyExistsError(AssetsJournalAppError):
+    """Актив скорой помощи уже существует"""
+    pass
+
+
+class EmergencyAssetAlreadyConfirmedError(AssetsJournalAppError):
+    """Актив скорой помощи уже подтвержден"""
+    pass
+
+
+class EmergencyAssetAlreadyRefusedError(AssetsJournalAppError):
+    """Актив скорой помощи уже отказан"""
+    pass
+
+
+class InvalidDiagnosisDataError(AssetsJournalAppError):
+    """Неверные данные диагноза"""
+    pass
+
+
 class InvalidAssetStatusTransitionError(AssetsJournalAppError):
     """Недопустимый переход статуса актива"""
     pass

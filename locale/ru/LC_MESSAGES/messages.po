@@ -70,6 +70,12 @@ msgstr "Врач с идентификатором: %(ID)s не найден."
 msgid "Schedule day %(id)s is inactive."
 msgstr "День расписания %(id)s неактивен."
 
+msgid "Invalid appointment status. You can't select an 'appointment' status without 'patient_id' provided."
+msgstr "Неверный статус приёма. Статус 'appointment' нельзя установить без указания 'patient_id'."
+
+msgid "Invalid appointment status. You can't select an 'booked' status with 'patient_id' provided."
+msgstr "Неверный статус приёма. Статус 'booked' нельзя установить при наличии 'patient_id'."
+
 # Schedule Validation Errors
 msgid "Schedule name cannot exceed 20 characters."
 msgstr "Название расписания не может превышать 20 символов."
@@ -110,6 +116,9 @@ msgstr "Пользователь с ID: %(ID)s не найден или не я�
 
 msgid "Appointment interval must be equal to or greater than 5 and less than or equal to 60 minutes."
 msgstr "Интервал приёма должен быть равен или больше 5 и меньше или равен 60 минутам."
+
+msgid "Schedule creation for a user with the provided set of client roles is prohibited."
+msgstr "Создание расписания для пользователя с набором переданных ролей запрещено."
 
 # Schedule Day Service Errors
 msgid "Day with ID: %(ID)s not found."

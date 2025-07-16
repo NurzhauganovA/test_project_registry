@@ -25,6 +25,11 @@ from src.apps.registry.mappers import map_appointment_domain_to_response_schema
 from src.apps.registry.services.appointment_service import AppointmentService
 from src.apps.users.infrastructure.schemas.user_schemas import UserSchema
 from src.apps.users.mappers import map_user_domain_to_schema
+from src.shared.dependencies.check_user_permissions import check_user_permissions
+from src.shared.dependencies.resources_map import (
+    AvailableResourcesEnum,
+    AvailableScopesEnum,
+)
 from src.shared.schemas.pagination_schemas import (
     PaginationMetaDataSchema,
     PaginationParams,
@@ -36,13 +41,22 @@ appointments_router = APIRouter()
 @appointments_router.get(
     "/appointments/{appointment_id}",
     response_model=ResponseAppointmentSchema,
-    response_model_exclude_none=True,
 )
 @inject
 async def get_by_id(
     appointment_id: int,
     appointment_service: AppointmentService = Depends(
         Provide[RegistryContainer.appointment_service]
+    ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.APPOINTMENTS,
+                    "scopes": [AvailableScopesEnum.READ],
+                },
+            ],
+        )
     ),
 ) -> ResponseAppointmentSchema:
     appointment, patient, doctor, end_time, appointment_date = (
@@ -74,6 +88,16 @@ async def get_appointments(
     filter_params: Annotated[AppointmentFilterParams, Depends()],
     appointment_service: AppointmentService = Depends(
         Provide[RegistryContainer.appointment_service]
+    ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.APPOINTMENTS,
+                    "scopes": [AvailableScopesEnum.READ],
+                },
+            ],
+        )
     ),
     pagination_params: PaginationParams = Depends(),
 ) -> MultipleAppointmentsResponseSchema:
@@ -133,6 +157,16 @@ async def update_appointment(
     appointment_service: AppointmentService = Depends(
         Provide[RegistryContainer.appointment_service]
     ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.APPOINTMENTS,
+                    "scopes": [AvailableScopesEnum.UPDATE],
+                },
+            ],
+        )
+    ),
 ) -> ResponseAppointmentSchema:
     appointment, patient, doctor, end_time, appointment_date = (
         await appointment_service.update_appointment(
@@ -160,6 +194,7 @@ async def update_appointment(
 @appointments_router.post(
     "/days/{schedule_day_id}/appointments",
     response_model=ResponseAppointmentSchema,
+    status_code=201,
 )
 @inject
 async def create_appointment(
@@ -167,6 +202,16 @@ async def create_appointment(
     create_data: CreateAppointmentSchema,
     appointment_service: AppointmentService = Depends(
         Provide[RegistryContainer.appointment_service]
+    ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.APPOINTMENTS,
+                    "scopes": [AvailableScopesEnum.CREATE],
+                },
+            ],
+        )
     ),
 ) -> ResponseAppointmentSchema:
     appointment, patient, doctor, end_time, appointment_date = (
@@ -198,6 +243,16 @@ async def delete_appointment(
     appointment_id: int,
     appointment_service: AppointmentService = Depends(
         Provide[RegistryContainer.appointment_service]
+    ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.APPOINTMENTS,
+                    "scopes": [AvailableScopesEnum.DELETE],
+                },
+            ],
+        )
     ),
 ) -> None:
     await appointment_service.delete_by_id(appointment_id=appointment_id)

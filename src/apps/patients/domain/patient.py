@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from typing import Any, Dict, List, Optional
 from uuid import UUID
 
@@ -8,6 +8,7 @@ from src.apps.patients.domain.enums import (
     PatientProfileStatusEnum,
     PatientSocialStatusEnum,
 )
+from src.core.settings import project_settings
 
 
 class PatientDomain:
@@ -53,3 +54,16 @@ class PatientDomain:
         self.addresses = addresses or []
         self.contact_info = contact_info or []
         self.profile_status = profile_status
+
+    def is_adult(self) -> bool:
+        today = datetime.today().date()
+        age = (
+            today.year
+            - self.date_of_birth.year
+            - (
+                (today.month, today.day)
+                < (self.date_of_birth.month, self.date_of_birth.day)
+            )
+        )
+
+        return age >= project_settings.ADULT_AGE_LIMIT

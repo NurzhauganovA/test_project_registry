@@ -16,6 +16,7 @@ from src.apps.registry.exceptions import (
     ScheduleExceedsMaxAllowedPeriod,
     ScheduleInvalidUpdateDatesError,
     ScheduleNameIsAlreadyTakenError,
+    UserRoleIsNotSchedulableError,
 )
 from src.apps.registry.infrastructure.api.schemas.requests.filters.schedule_filter_params import (
     ScheduleFilterParams,
@@ -39,6 +40,7 @@ from src.apps.users.domain.models.user import UserDomain
 from src.apps.users.services.user_service import UserService
 from src.core.i18n import _
 from src.core.logger import LoggerService
+from src.core.settings import project_settings
 from src.shared.exceptions import ApplicationError
 from src.shared.schemas.pagination_schemas import PaginationParams
 
@@ -186,6 +188,19 @@ class ScheduleService:
             appointment.status = AppointmentStatusEnum.CANCELLED
             await self._appointment_repository.update(appointment)
 
+    @staticmethod
+    def _is_provided_role_schedulable(role_name: str) -> bool:
+        """
+        Checks whether the given user role is allowed to have a schedule.
+
+        Args:
+            role_name (str): The name of the user role to check.
+
+        Returns:
+            bool: True if the role is allowed for scheduling, False otherwise.
+        """
+        return role_name in project_settings.SCHEDULABLE_USER_ROLES
+
     async def get_by_id(self, schedule_id: UUID) -> List[ScheduleDomain | UserDomain]:
         """
         Retrieves a schedule by its ID.
@@ -254,6 +269,18 @@ class ScheduleService:
                 status_code=404,
                 detail=_("User with ID: %(ID)s not found or not a doctor.")
                 % {"ID": doctor_id},
+            )
+
+        # Check if at least one of the provided client roles is schedulable
+        if not any(
+            self._is_provided_role_schedulable(role_name)
+            for role_name in existing_user.client_roles
+        ):
+            raise UserRoleIsNotSchedulableError(
+                status_code=409,
+                detail=_(
+                    "Schedule creation for a user with the provided set of client roles is prohibited."
+                ),
             )
 
         # Check if a user already has a schedule with the same schedule name

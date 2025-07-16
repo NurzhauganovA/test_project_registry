@@ -180,7 +180,7 @@ def dummy_domain_appointment():
         patient_id=uuid.UUID("a5d05a81-4203-4a58-9096-40208fa4182c"),
         status=AppointmentStatusEnum.BOOKED,
         type=AppointmentTypeEnum.CONSULTATION,
-        insurance_type=AppointmentInsuranceType.DMS,
+        financing_sources_ids=[1],
         reason="Жалоба на головную боль",
     )
 

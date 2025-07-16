@@ -18,6 +18,11 @@ from src.apps.registry.infrastructure.api.schemas.responses.schedule_schemas imp
 )
 from src.apps.registry.services.schedule_service import ScheduleService
 from src.apps.users.mappers import map_user_domain_to_schema
+from src.shared.dependencies.check_user_permissions import check_user_permissions
+from src.shared.dependencies.resources_map import (
+    AvailableResourcesEnum,
+    AvailableScopesEnum,
+)
 from src.shared.schemas.pagination_schemas import (
     PaginationMetaDataSchema,
     PaginationParams,
@@ -32,6 +37,16 @@ async def get_schedule_by_id(
     schedule_id: UUID,
     schedule_service: ScheduleService = Depends(
         Provide[RegistryContainer.schedule_service]
+    ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.SCHEDULES,
+                    "scopes": [AvailableScopesEnum.READ],
+                },
+            ],
+        )
     ),
 ) -> ResponseScheduleSchema:
     schedule, doctor = await schedule_service.get_by_id(schedule_id)
@@ -61,6 +76,16 @@ async def get_schedules(
     filter_params: ScheduleFilterParams = Depends(),
     schedule_service: ScheduleService = Depends(
         Provide[RegistryContainer.schedule_service]
+    ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.SCHEDULES,
+                    "scopes": [AvailableScopesEnum.READ],
+                },
+            ],
+        )
     ),
 ) -> MultipleSchedulesResponseSchema:
     schedules_with_doctors, total_schedules_amount = (
@@ -116,6 +141,16 @@ async def create_schedule(
     schedule_service: ScheduleService = Depends(
         Provide[RegistryContainer.schedule_service]
     ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.SCHEDULES,
+                    "scopes": [AvailableScopesEnum.CREATE],
+                },
+            ],
+        )
+    ),
 ) -> ResponseScheduleSchema:
     schedule, doctor = await schedule_service.create_schedule(doctor_id, create_schema)
     doctor_response_schema = map_user_domain_to_schema(doctor)
@@ -143,6 +178,16 @@ async def update_schedule(
     schedule_service: ScheduleService = Depends(
         Provide[RegistryContainer.schedule_service]
     ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.SCHEDULES,
+                    "scopes": [AvailableScopesEnum.UPDATE],
+                },
+            ],
+        )
+    ),
 ) -> ResponseScheduleSchema:
     updated_schedule, doctor = await schedule_service.update_schedule(
         schedule_id, update_schema
@@ -168,6 +213,16 @@ async def delete_schedule(
     schedule_id: UUID,
     schedule_service: ScheduleService = Depends(
         Provide[RegistryContainer.schedule_service]
+    ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.SCHEDULES,
+                    "scopes": [AvailableScopesEnum.DELETE],
+                },
+            ],
+        )
     ),
 ) -> None:
     await schedule_service.delete(schedule_id)

@@ -8,6 +8,7 @@ from src.apps.users.infrastructure.repositories.user_repository import (
     SQLAlchemyUserRepository,
 )
 from src.apps.users.services.user_service import UserService
+from src.core.database.config import provide_async_session
 from src.core.logger import LoggerService
 
 
@@ -35,9 +36,7 @@ class UsersContainer(containers.DeclarativeContainer):
     )
 
     # Async session
-    async_db_session = providers.Singleton(
-        lambda session_factory: session_factory(), session_factory
-    )
+    async_db_session = providers.Resource(provide_async_session, session_factory)
 
     # Repositories
     user_repository = providers.Factory(

@@ -117,6 +117,7 @@ class CoreContainer(containers.DeclarativeContainer):
         patients_service=patients_container.patients_service,
         user_repository=users_container.user_repository,
         platform_rules_repository=platform_rules_container.platform_rules_repository,
+        financing_sources_catalog_service=catalogs_container.financing_sources_catalog_service,
     )
 
     # OVERRIDE --------------------------------------------------------------------------------------------------------

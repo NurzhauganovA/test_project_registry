@@ -20,7 +20,7 @@ from src.apps.assets_journal.infrastructure.api.schemas.responses.stationary_ass
     StationaryAssetStatisticsSchema, StationaryAssetsByOrganizationResponseSchema,
     PatientStationaryAssetsResponseSchema,
 )
-from src.apps.assets_journal.mappers import (
+from src.apps.assets_journal.mappers.stationary_asset_mappers import (
     map_stationary_asset_domain_to_full_response,
     map_stationary_asset_domain_to_list_item,
 )

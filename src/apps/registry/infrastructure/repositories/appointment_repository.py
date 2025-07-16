@@ -9,7 +9,10 @@ from src.apps.registry.infrastructure.db_models.models import Appointment, Sched
 from src.apps.registry.interfaces.repository_interfaces import (
     AppointmentRepositoryInterface,
 )
-from src.apps.registry.mappers import map_appointment_db_entity_to_domain
+from src.apps.registry.mappers import (
+    map_appointment_db_entity_to_domain,
+    map_appointment_domain_to_db_entity,
+)
 from src.shared.infrastructure.base import BaseRepository
 
 
@@ -130,22 +133,13 @@ class AppointmentRepositoryImpl(BaseRepository, AppointmentRepositoryInterface):
         return [map_appointment_db_entity_to_domain(row) for row in rows]
 
     async def add(self, appointment: AppointmentDomain) -> AppointmentDomain:
-        new_appointment = Appointment(
-            schedule_day_id=appointment.schedule_day_id,
-            time=appointment.time,
-            patient_id=appointment.patient_id,
-            status=appointment.status,
-            type=appointment.type,
-            insurance_type=appointment.insurance_type,
-            reason=appointment.reason,
-            additional_services=appointment.additional_services,
-            cancelled_at=appointment.cancelled_at,
-        )
-        self._async_db_session.add(new_appointment)
-        await self._async_db_session.flush()
-        await self._async_db_session.refresh(new_appointment)
+        db_entity = map_appointment_domain_to_db_entity(appointment)
 
-        return map_appointment_db_entity_to_domain(new_appointment)
+        self._async_db_session.add(db_entity)
+        await self._async_db_session.flush()
+        await self._async_db_session.refresh(db_entity)
+
+        return map_appointment_db_entity_to_domain(db_entity)
 
     async def update(self, appointment: AppointmentDomain) -> AppointmentDomain:
         result = await self._async_db_session.execute(
@@ -153,13 +147,17 @@ class AppointmentRepositoryImpl(BaseRepository, AppointmentRepositoryInterface):
         )
         existing = result.scalar_one_or_none()
 
+        db_entity = map_appointment_domain_to_db_entity(appointment)
+
         fields_to_update = [
             "schedule_day_id",
             "time",
             "patient_id",
+            "phone_number",
+            "address",
             "status",
             "type",
-            "insurance_type",
+            "financing_sources_ids",
             "reason",
             "additional_services",
             "cancelled_at",
@@ -171,7 +169,7 @@ class AppointmentRepositoryImpl(BaseRepository, AppointmentRepositoryInterface):
 
         # Updating fields...
         for field in fields_to_update:
-            setattr(existing, field, getattr(appointment, field))
+            setattr(existing, field, getattr(db_entity, field))
 
         self._async_db_session.add(existing)
         await self._async_db_session.flush()

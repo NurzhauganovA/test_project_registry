@@ -6,6 +6,7 @@ from sqlalchemy.orm.session import sessionmaker
 from src.apps.platform_rules.infrastructure.repositories.platform_rules_repository import (
     SQLAlchemyPlatformRulesRepositoryImpl,
 )
+from src.core.database.config import provide_async_session
 from src.core.logger import LoggerService
 
 
@@ -27,9 +28,7 @@ class PlatformRulesContainer(containers.DeclarativeContainer):
     )
 
     # Async session
-    async_db_session = providers.Singleton(
-        lambda session_factory: session_factory(), session_factory
-    )
+    async_db_session = providers.Resource(provide_async_session, session_factory)
 
     # Repositories
     platform_rules_repository = providers.Factory(

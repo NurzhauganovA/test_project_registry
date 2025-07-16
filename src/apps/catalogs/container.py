@@ -48,6 +48,7 @@ from src.apps.catalogs.services.nationalities_catalog_service import (
 from src.apps.catalogs.services.patient_context_attribute_service import (
     PatientContextAttributeService,
 )
+from src.core.database.config import provide_async_session
 from src.apps.catalogs.services.patients_and_diagnoses_service import (
     DiagnosedPatientDiagnosisService,
 )
@@ -73,9 +74,7 @@ class CatalogsContainer(containers.DeclarativeContainer):
     )
 
     # Async session
-    async_db_session = providers.Singleton(
-        lambda session_factory: session_factory(), session_factory
-    )
+    async_db_session = providers.Resource(provide_async_session, session_factory)
 
     # Repositories
     citizenship_catalog_repository = providers.Factory(

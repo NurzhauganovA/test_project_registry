@@ -1,6 +1,6 @@
-import uuid
 from datetime import date, datetime, time
-from typing import Dict, List
+from typing import Any, Dict, List, Optional
+from uuid import UUID
 
 from sqlalchemy import UUID as sqlalchemy_UUID
 from sqlalchemy import (
@@ -18,11 +18,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql.sqltypes import DateTime
 
-from src.apps.registry.domain.enums import (
-    AppointmentInsuranceType,
-    AppointmentStatusEnum,
-    AppointmentTypeEnum,
-)
+from src.apps.registry.domain.enums import AppointmentStatusEnum, AppointmentTypeEnum
 from src.shared.infrastructure.base import (
     Base,
     ChangedAtMixin,
@@ -36,7 +32,7 @@ from src.shared.infrastructure.base import (
 class Schedule(Base, PrimaryKey, CreatedAtMixin, ChangedAtMixin):
     __tablename__ = "schedules"
 
-    doctor_id: Mapped[uuid.UUID] = mapped_column(
+    doctor_id: Mapped[UUID] = mapped_column(
         sqlalchemy_UUID(as_uuid=True),
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
@@ -77,7 +73,7 @@ class Schedule(Base, PrimaryKey, CreatedAtMixin, ChangedAtMixin):
 class ScheduleDay(Base, PrimaryKey, CreatedAtMixin, ChangedAtMixin):
     __tablename__ = "schedule_days"
 
-    schedule_id: Mapped[uuid.UUID] = mapped_column(
+    schedule_id: Mapped[UUID] = mapped_column(
         ForeignKey("schedules.id", ondelete="CASCADE"), nullable=False
     )
     day_of_week: Mapped[int] = mapped_column(
@@ -108,30 +104,39 @@ class Appointment(Base, CreatedAtMixin, ChangedAtMixin):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     time: Mapped[time] = mapped_column(Time, nullable=False)
-    patient_id: Mapped[uuid.UUID] = mapped_column(
+    patient_id: Mapped[Optional[UUID]] = mapped_column(
         sqlalchemy_UUID(as_uuid=True),
         ForeignKey("patients.id", ondelete="CASCADE"),
         nullable=True,
-    )  # User's id from the Auth Service
+    )
+    phone_number: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    address: Mapped[Optional[str]] = mapped_column(String(256), nullable=True)
     status: Mapped[AppointmentStatusEnum] = mapped_column(
-        Enum(AppointmentStatusEnum), nullable=False
+        Enum(
+            AppointmentStatusEnum,
+            name="appointment_status_enum",
+            validate_strings=True,
+            values_callable=lambda enums: [enum.value for enum in enums],
+        ),
+        nullable=False,
+        comment="Appointment status",
     )
-    type: Mapped[AppointmentTypeEnum] = mapped_column(
-        Enum(AppointmentTypeEnum), nullable=False
+    type: Mapped[Optional[AppointmentTypeEnum]] = mapped_column(
+        Enum(AppointmentTypeEnum), nullable=True
     )
-    insurance_type: Mapped[AppointmentInsuranceType] = mapped_column(
-        Enum(AppointmentInsuranceType), nullable=False
+    financing_sources_ids: Mapped[Optional[List[int]]] = mapped_column(
+        JSONB, nullable=True, default="[]"
     )
-    reason: Mapped[str] = mapped_column(Text, nullable=True)
-    additional_services: Mapped[Dict[str, bool]] = mapped_column(
-        JSONB, nullable=False, server_default="{}"
+    reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    additional_services: Mapped[Optional[List[Dict[str, Any]]]] = mapped_column(
+        JSONB, nullable=True, server_default="[]"
     )
-    schedule_day_id: Mapped[uuid.UUID] = mapped_column(
+    schedule_day_id: Mapped[UUID] = mapped_column(
         ForeignKey("schedule_days.id", ondelete="CASCADE"), nullable=False
     )
 
     # Optional field to track when the appointment was cancelled (updatable only by the server)
-    cancelled_at: Mapped[datetime] = mapped_column(
+    cancelled_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
 

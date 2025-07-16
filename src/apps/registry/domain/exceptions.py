@@ -13,6 +13,10 @@ class AppointmentIsNotAvailableError(AppointmentError):
     pass
 
 
+class InvalidAppointmentStatusDomainError(AppointmentError):
+    pass
+
+
 # ScheduleDomain errors
 class ScheduleError(DomainError):
     pass
