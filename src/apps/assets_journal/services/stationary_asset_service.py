@@ -117,6 +117,7 @@ class StationaryAssetService:
             page=pagination_params.page,
             limit=pagination_params.limit,
         )
+        print("ASSETS:", assets)
 
         # Загружаем данные организаций для каждого актива
         await self._load_organization_data_for_assets(assets)
@@ -482,7 +483,7 @@ class StationaryAssetService:
                 asset.organization_data = {
                     'id': organization.id,
                     'name': organization.name,
-                    'code': organization.code,
+                    'code': organization.organization_code,
                     'address': organization.address,
                 }
             except NoInstanceFoundError:

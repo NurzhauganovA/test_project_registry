@@ -102,6 +102,7 @@ class CreateNewbornAssetSchema(BaseModel):
         default=None,
         description="ФИО в случае отсутствии регистрации"
     )
+    patient_iin: Optional[str] = Field(default=None, description="ИИН пациента")
 
     # Данные о получении актива
     receive_date: datetime = Field(..., description="Дата получения")
@@ -126,7 +127,7 @@ class CreateNewbornAssetSchema(BaseModel):
         json_schema_extra = {
             "example": {
                 "bg_asset_id": "6800000006671320",
-                "patient_iin": None,
+                "patient_iin": "030611550511",
                 "patient_full_name_if_not_registered": "Новорожденный Серіккызы",
                 "receive_date": "2025-07-14T10:30:00",
                 "receive_time": "10:30:00",

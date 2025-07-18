@@ -2,7 +2,7 @@ from datetime import datetime, time
 from typing import Optional
 from uuid import UUID
 
-from src.apps.assets_journal.domain.models.stationary_asset import StationaryAssetDomain
+from src.apps.assets_journal.domain.models.stationary_asset import StationaryAssetDomain, StationaryAssetListItemDomain
 from src.apps.assets_journal.infrastructure.api.schemas.requests.stationary_asset_schemas import (
     CreateStationaryAssetSchema,
 )
