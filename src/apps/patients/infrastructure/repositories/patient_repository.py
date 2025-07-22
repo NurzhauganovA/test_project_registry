@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 from uuid import UUID
 
-from sqlalchemy import and_, func, or_, select
+from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
 from src.apps.catalogs.infrastructure.db_models.financing_sources_catalogue import (
@@ -27,6 +27,27 @@ class SQLAlchemyPatientRepository(BaseRepository, PatientRepositoryInterface):
     """
     SQLAlchemy repository for working with patients.
     """
+
+    def _apply_filters_to_query(self, query, filters: Dict[str, Any]):
+        full_name = filters.pop("patient_full_name", None)
+        if isinstance(full_name, str):
+            text = full_name.strip().lower()
+            if text:
+                query = query.where(SQLAlchemyPatient.full_name.ilike(f"%{text}%"))
+
+        for attribute, value in filters.items():
+            column = getattr(SQLAlchemyPatient, attribute, None)
+            if column is None or value is None:
+                continue
+            if hasattr(column, "type") and hasattr(column.type, "enums"):
+                enum_value = value.value if isinstance(value, Enum) else value
+                query = query.where(column == enum_value)
+            elif isinstance(value, str):
+                query = query.where(column.ilike(f"%{value}%"))
+            else:
+                query = query.where(column == value)
+
+        return query
 
     async def get_total_number_of_patients(self) -> int:
         query = select(func.count(SQLAlchemyPatient.id))
@@ -80,42 +101,7 @@ class SQLAlchemyPatientRepository(BaseRepository, PatientRepositoryInterface):
         )
 
         if filters:
-            # Complex filtering by a several fields
-            full_name = filters.pop("patient_full_name", None)
-            if isinstance(full_name, str):
-                text = full_name.strip().lower()
-                if text:
-                    parts = [patient for patient in text.split() if patient]
-                    clauses = [
-                        or_(
-                            func.lower(SQLAlchemyPatient.first_name).ilike(f"%{part}%"),
-                            func.lower(SQLAlchemyPatient.last_name).ilike(f"%{part}%"),
-                            func.lower(
-                                func.coalesce(SQLAlchemyPatient.middle_name, "")
-                            ).ilike(f"%{part}%"),
-                        )
-                        for part in parts
-                    ]
-                    if clauses:
-                        query = query.where(and_(*clauses))
-
-            # Other filters
-            for attribute, value in filters.items():
-                column = getattr(SQLAlchemyPatient, attribute, None)
-                if column is None or value is None:
-                    continue
-
-                # Enum filtering
-                if hasattr(column, "type") and hasattr(column.type, "enums"):
-                    enum_value = value.value if isinstance(value, Enum) else value
-                    query = query.where(column == enum_value)
-
-                # String *ILIKE filtering
-                elif isinstance(value, str):
-                    query = query.where(column.ilike(f"%{value}%"))
-
-                else:
-                    query = query.where(column == value)
+            query = self._apply_filters_to_query(query, filters)
 
         query = query.offset((page - 1) * limit).limit(limit)
         result = await self._async_db_session.execute(query)

@@ -292,9 +292,19 @@ msgstr "Пациент с ИИН: '%(IIN)s' не найден."
 msgid "Patient with IIN: '%(IIN)s' already exists."
 msgstr "Пациент с ИИН: '%(IIN)s' уже существует."
 
+msgid "Impossible to delete patient with ID: '%(ID)s'. Related entities exist."
+msgstr "Невозможно удалить пациента с ID: '%(ID)s'. Существуют связанные с ним записи."
+
 # Insurance info catalog errors
 msgid "'valid_till' date must be equal or greater than 'valid_from' date."
 msgstr "Дата, переданная в поле 'valid_till' должна быть больше или равна дате в поле 'valid_from'."
 
 msgid "Insurance info record with ID: %(ID)s was not found."
 msgstr "Запись страхования с ID: %(ID)s не найдена."
+
+# Identity documents catalog errors
+msgid "Document expiration date must be later than issue date."
+msgstr "Дата окончания действия документа должна быть позднее даты его выдачи."
+
+msgid "Identity document with ID: %(ID)s was not found."
+msgstr "Документ, удостоверяющий личность с ID: %(ID)s не найден."

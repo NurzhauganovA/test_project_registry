@@ -8,25 +8,34 @@ from httpx import AsyncClient
 import pytest
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
+from src.apps.catalogs.enums import IdentityDocumentTypeEnum
 from src.apps.catalogs.infrastructure.api.schemas.requests.diagnoses_catalog_request_schemas import \
     AddDiagnosisRequestSchema, UpdateDiagnosisRequestSchema, AddDiagnosedPatientDiagnosisRecordRequestSchema, \
     UpdateDiagnosedPatientDiagnosisRecordRequestSchema
+from src.apps.catalogs.infrastructure.api.schemas.requests.identity_documents_catalog_request_schemas import \
+    AddIdentityDocumentRequestSchema, UpdateIdentityDocumentRequestSchema
 from src.apps.catalogs.infrastructure.api.schemas.requests.insurance_info_catalog_request_schemas import \
     AddInsuranceInfoRecordSchema
 from src.apps.catalogs.infrastructure.api.schemas.responses.diagnoses_catalog_response_schemas import \
     DiagnosesCatalogResponseSchema, DiagnosedPatientDiagnosisResponseSchema, DiagnosesCatalogBaseResponseSchema
+from src.apps.catalogs.infrastructure.api.schemas.responses.identity_documents_catalog_response_schemas import \
+    IdentityDocumentResponseSchema
 from src.apps.catalogs.infrastructure.db_models.diagnoses_catalogue import SQLAlchemyDiagnosesCatalogue, \
     SQLAlchemyPatientsAndDiagnoses
+from src.apps.catalogs.infrastructure.db_models.identity_documents_catalogue import SQLAlchemyIdentityDocumentsCatalogue
 from src.apps.catalogs.infrastructure.repositories.citizenship_catalog_repository import \
     SQLAlchemyCitizenshipCatalogueRepositoryImpl
 from src.apps.catalogs.infrastructure.repositories.diagnoses_and_patients_repository import \
     SQLAlchemyDiagnosedPatientDiagnosisRepositoryImpl
 from src.apps.catalogs.infrastructure.repositories.diagnoses_catalog_repository import \
     SQLAlchemyDiagnosesCatalogRepositoryImpl
+from src.apps.catalogs.infrastructure.repositories.identity_documents_catalog_repository import \
+    SQLAlchemyIdentityDocumentsCatalogRepositoryImpl
 from src.apps.catalogs.infrastructure.repositories.insurance_info_catalog_repository import \
     SQLAlchemyInsuranceInfoCatalogRepositoryImpl
 from src.apps.catalogs.infrastructure.repositories.nationalities_catalog_repository import \
     SQLAlchemyNationalitiesCatalogRepositoryImpl
+from src.apps.catalogs.services.identity_documents_catalog_service import IdentityDocumentsCatalogService
 from src.apps.catalogs.services.insurance_info_catalog_service import InsuranceInfoCatalogService
 from src.apps.catalogs.services.nationalities_catalog_service import NationalitiesCatalogService
 from src.apps.patients.infrastructure.api.schemas.responses.patient_response_schemas import \
@@ -900,7 +909,7 @@ def diagnoses_catalog_repository_impl(
 @pytest.fixture
 def mock_diagnoses_catalog_response_from_db():
     return SQLAlchemyDiagnosesCatalogue(
-        id = 12,
+        id=12,
         diagnosis_code='AJ-09',
         description='Dummy description',
         is_active=True,
@@ -1004,4 +1013,97 @@ def mock_diagnoses_and_patients_update_schema():
         date_diagnosed=datetime.date(2020, 6, 4),
         comment=None,
         doctor_id=uuid.uuid4(),
+    )
+
+
+# Identity documents catalog fixtures
+@pytest.fixture
+def identity_documents_repository_impl(mock_async_db_session, dummy_logger):
+    return SQLAlchemyIdentityDocumentsCatalogRepositoryImpl(
+        async_db_session=mock_async_db_session,
+        logger=dummy_logger
+    )
+
+
+@pytest.fixture
+def mock_identity_document_db_entity():
+    return SQLAlchemyIdentityDocumentsCatalogue(
+        id=1,
+        type=IdentityDocumentTypeEnum.ID_CARD,
+        series="AB",
+        number="1234567",
+        issued_by="Gov",
+        issue_date=datetime.date(2020, 1, 1),
+        expiration_date=datetime.date(2030, 1, 1),
+        patient_id=uuid.uuid4(),
+        changed_at=datetime.datetime.now(),
+        created_at=datetime.datetime.now(),
+    )
+
+
+@pytest.fixture
+def mock_identity_document_response_schema(mock_identity_document_db_entity):
+    return IdentityDocumentResponseSchema(
+        id=mock_identity_document_db_entity.id,
+        type=mock_identity_document_db_entity.type,
+        series=mock_identity_document_db_entity.series,
+        number=mock_identity_document_db_entity.number,
+        issued_by=mock_identity_document_db_entity.issued_by,
+        issue_date=mock_identity_document_db_entity.issue_date,
+        expiration_date=mock_identity_document_db_entity.expiration_date,
+        patient_id=mock_identity_document_db_entity.patient_id,
+    )
+
+
+@pytest.fixture
+def mock_add_identity_document_schema():
+    return AddIdentityDocumentRequestSchema(
+        patient_id=uuid.uuid4(),
+        type=IdentityDocumentTypeEnum.ID_CARD,
+        series="AB",
+        number="1234567",
+        issued_by="Gov",
+        issue_date=datetime.date(2020, 1, 1),
+        expiration_date=datetime.date(2030, 1, 1)
+    )
+
+
+@pytest.fixture
+def mock_update_identity_document_schema():
+    return UpdateIdentityDocumentRequestSchema(
+        series="CD",
+        number="7654321",
+        expiration_date=datetime.date(2035, 1, 1),
+        patient_id=None,
+        type=None,
+        issued_by=None,
+        issue_date=None,
+    )
+
+
+@pytest.fixture
+def mock_identity_documents_repository(mocker):
+    repo = mocker.AsyncMock()
+    repo.get_by_id = AsyncMock()
+    repo.get_identity_documents = AsyncMock()
+    repo.get_total_number_of_identity_documents = AsyncMock()
+    repo.add_identity_document = AsyncMock()
+    repo.update_identity_document = AsyncMock()
+    repo.delete_by_id = AsyncMock()
+    return repo
+
+
+@pytest.fixture
+def mock_patient_service(mocker):
+    svc = mocker.AsyncMock()
+    svc.get_by_id = AsyncMock()
+    return svc
+
+
+@pytest.fixture
+def identity_documents_service(dummy_logger, mock_identity_documents_repository, mock_patient_service):
+    return IdentityDocumentsCatalogService(
+        logger=dummy_logger,
+        identity_documents_repository=mock_identity_documents_repository,
+        patients_service=mock_patient_service
     )

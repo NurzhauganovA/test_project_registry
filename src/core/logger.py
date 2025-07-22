@@ -6,8 +6,8 @@ from logging import Logger
 class LoggerService:
     def __init__(
         self,
-        name: str,
-        log_file_name: str = "registry-module",
+        name: str = "Registry Service Logger [MIS ORKENDEU]",
+        log_file_name: str = "registry_service",
         log_dir: str = "logs",
         log_format: str = "%(levelname)s:    %(asctime)s - %(name)s: %(message)s",
         date_format: str = "%Y-%m-%d %H:%M:%S",
@@ -47,17 +47,20 @@ class LoggerService:
             file_handler.setFormatter(formatter)
             self.logger.addHandler(file_handler)
 
-    def debug(self, message: str) -> None:
-        self.logger.debug(message)
+    def debug(self, message: str, *, exc_info: bool | Exception = False) -> None:
+        self.logger.debug(message, exc_info=exc_info)
 
-    def info(self, message: str) -> None:
-        self.logger.info(message)
+    def info(self, message: str, *, exc_info: bool | Exception = False) -> None:
+        self.logger.info(message, exc_info=exc_info)
 
-    def warning(self, message: str) -> None:
-        self.logger.warning(message)
+    def warning(self, message: str, *, exc_info: bool | Exception = False) -> None:
+        self.logger.warning(message, exc_info=exc_info)
 
-    def error(self, message: str) -> None:
-        self.logger.error(message)
+    def error(self, message: str, *, exc_info: bool | Exception = False) -> None:
+        self.logger.error(message, exc_info=exc_info)
 
-    def critical(self, message: str) -> None:
-        self.logger.critical(message)
+    def critical(self, message: str, *, exc_info: bool | Exception = False) -> None:
+        self.logger.critical(message, exc_info=exc_info)
+
+
+logger = LoggerService()

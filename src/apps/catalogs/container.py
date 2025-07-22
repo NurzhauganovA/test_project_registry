@@ -15,6 +15,9 @@ from src.apps.catalogs.infrastructure.repositories.diagnoses_catalog_repository 
 from src.apps.catalogs.infrastructure.repositories.financing_sources_repository import (
     SQLAlchemyFinancingSourcesCatalogRepositoryImpl,
 )
+from src.apps.catalogs.infrastructure.repositories.identity_documents_catalog_repository import (
+    SQLAlchemyIdentityDocumentsCatalogRepositoryImpl,
+)
 from src.apps.catalogs.infrastructure.repositories.insurance_info_catalog_repository import (
     SQLAlchemyInsuranceInfoCatalogRepositoryImpl,
 )
@@ -36,6 +39,9 @@ from src.apps.catalogs.services.diagnoses_catalogue_service import (
 from src.apps.catalogs.services.financing_sources_catalog_service import (
     FinancingSourceCatalogService,
 )
+from src.apps.catalogs.services.identity_documents_catalog_service import (
+    IdentityDocumentsCatalogService,
+)
 from src.apps.catalogs.services.insurance_info_catalog_service import (
     InsuranceInfoCatalogService,
 )
@@ -48,10 +54,10 @@ from src.apps.catalogs.services.nationalities_catalog_service import (
 from src.apps.catalogs.services.patient_context_attribute_service import (
     PatientContextAttributeService,
 )
-from src.core.database.config import provide_async_session
 from src.apps.catalogs.services.patients_and_diagnoses_service import (
     DiagnosedPatientDiagnosisService,
 )
+from src.core.database.config import provide_async_session
 from src.core.logger import LoggerService
 
 
@@ -125,6 +131,12 @@ class CatalogsContainer(containers.DeclarativeContainer):
         logger=logger,
     )
 
+    identity_documents_repository = providers.Factory(
+        SQLAlchemyIdentityDocumentsCatalogRepositoryImpl,
+        async_db_session=async_db_session,
+        logger=logger,
+    )
+
     # Services
     nationalities_catalog_service = providers.Factory(
         NationalitiesCatalogService,
@@ -177,4 +189,11 @@ class CatalogsContainer(containers.DeclarativeContainer):
         patient_service=patients_service,
         user_service=user_service,
         diagnosed_patient_diagnosis_repository=diagnoses_and_patients_repository,
+    )
+
+    identity_documents_catalog_service = providers.Factory(
+        IdentityDocumentsCatalogService,
+        logger=logger,
+        identity_documents_repository=identity_documents_repository,
+        patients_service=patients_service,
     )

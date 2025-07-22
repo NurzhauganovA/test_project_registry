@@ -15,3 +15,4 @@ class AvailableResourcesEnum(str, Enum):
 
     # Catalogs (In Russian: "Справочники")
     DIAGNOSES_CATALOG = "diagnoses_catalog"
+    IDENTITY_DOCUMENTS_CATALOG = "identity_documents_catalog"

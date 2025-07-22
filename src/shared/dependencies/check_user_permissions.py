@@ -13,7 +13,7 @@ from src.shared.infrastructure.auth_service_adapter.interfaces.auth_service_repo
     AuthServiceRepositoryInterface,
 )
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="https://api.dzhandosoft.kz/auth-service-orkendeu-project/api/v1/auth/login")
 
 
 @inject

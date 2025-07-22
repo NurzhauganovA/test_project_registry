@@ -16,61 +16,31 @@ class StationaryAssetFilterParams:
     def __init__(
             self,
             # Поиск по пациенту
-            patient_search: Optional[str] = Query(
-                None,
-                description="Поиск по ФИО или ИИН пациента"
-            ),
-            patient_id: Optional[UUID] = Query(
-                None,
-                description="ID пациента"
-            ),
-            patient_iin: Optional[str] = Query(
-                None,
-                description="ИИН пациента"
-            ),
+            patient_search: Optional[str] = None,
+            patient_id: Optional[UUID] = None,
+            patient_iin: Optional[str] = None,
 
             # Период
-            date_from: Optional[datetime] = Query(
-                None,
-                description="Дата начала периода"
-            ),
-            date_to: Optional[datetime] = Query(
-                None,
-                description="Дата окончания периода"
-            ),
+            date_from: Optional[datetime] = None,
+            date_to: Optional[datetime] = None,
 
             # Статус актива
-            status: Optional[AssetStatusEnum] = Query(
-                None,
-                description="Статус актива"
-            ),
+            status: Optional[AssetStatusEnum] = None,
 
             # Статус доставки
-            delivery_status: Optional[AssetDeliveryStatusEnum] = Query(
-                None,
-                description="Статус доставки"
-            ),
+            delivery_status: Optional[AssetDeliveryStatusEnum] = None,
 
             # Участок
-            area: Optional[str] = Query(
-                None,
-                description="Участок (например: 17-Терапевтический)"
-            ),
+            area: Optional[str] = None,
 
             # Специализация
-            specialization: Optional[str] = Query(
-                None,
-                description="Специализация (например: Педиатр)"
-            ),
+            specialization: Optional[str] = None,
 
             # Специалист
-            specialist: Optional[str] = Query(
-                None,
-                description="Специалист (например: Малышева А.О.)"
-            ),
+            specialist: Optional[str] = None,
 
             # ID организации (может быть передан вручную для фильтрации)
-            organization_id: Optional[UUID] = None,
+            organization_id: Optional[int] = None,
     ):
         self.patient_search = patient_search
         self.patient_id = patient_id
@@ -86,12 +56,15 @@ class StationaryAssetFilterParams:
 
     def to_dict(self, exclude_none: bool = True) -> dict:
         """Преобразовать в словарь для передачи в репозиторий"""
-        data = vars(self)
-        return {
-            key: value
-            for key, value in data.items()
-            if not exclude_none or value is not None
-        }
+        data = {}
+        for key, value in vars(self).items():
+            if not exclude_none or value is not None:
+                # Преобразуем enum в его значение
+                if isinstance(value, (AssetStatusEnum, AssetDeliveryStatusEnum)):
+                    data[key] = value.value
+                else:
+                    data[key] = value
+        return data
 
 
 class OrganizationAssetsFilterParams:

@@ -17,7 +17,7 @@ class PatientsFilterParams:
         ),
         patient_full_name_filter: Optional[str] = Query(
             None,
-            description="Patient's full name search (partial match)",
+            description="Patient's full name (last_name + first_name) search (partial match)",
         ),
         attached_clinic_id_filter: Optional[int] = Query(
             None, description="Medical organization's ID the patient attached to"

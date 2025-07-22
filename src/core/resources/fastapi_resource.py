@@ -47,7 +47,7 @@ def FastAPIResource(
     # Routers
     for router_dict in routers:
         router: APIRouter = router_dict["router"]
-        tag = router_dict["tag"]
-        app.include_router(router, prefix=api_prefix, tags=[tag])
+        tags = router_dict["tags"]
+        app.include_router(router, prefix=api_prefix, tags=tags)
 
     return app

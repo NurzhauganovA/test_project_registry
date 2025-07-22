@@ -2,6 +2,10 @@ from src.apps.catalogs.infrastructure.api.schemas.requests.diagnoses_catalog_req
     AddDiagnosedPatientDiagnosisRecordRequestSchema,
     AddDiagnosisRequestSchema,
 )
+from src.apps.catalogs.infrastructure.api.schemas.requests.identity_documents_catalog_request_schemas import (
+    AddIdentityDocumentRequestSchema,
+    UpdateIdentityDocumentRequestSchema,
+)
 from src.apps.catalogs.infrastructure.api.schemas.requests.insurance_info_catalog_request_schemas import (
     AddInsuranceInfoRecordSchema,
     UpdateInsuranceInfoRecordSchema,
@@ -10,12 +14,18 @@ from src.apps.catalogs.infrastructure.api.schemas.responses.diagnoses_catalog_re
     DiagnosedPatientDiagnosisResponseSchema,
     DiagnosesCatalogResponseSchema,
 )
+from src.apps.catalogs.infrastructure.api.schemas.responses.identity_documents_catalog_response_schemas import (
+    IdentityDocumentResponseSchema,
+)
 from src.apps.catalogs.infrastructure.api.schemas.responses.insurance_info_catalog_response_schemas import (
     ResponseInsuranceInfoRecordSchema,
 )
 from src.apps.catalogs.infrastructure.db_models.diagnoses_catalogue import (
     SQLAlchemyDiagnosesCatalogue,
     SQLAlchemyPatientsAndDiagnoses,
+)
+from src.apps.catalogs.infrastructure.db_models.identity_documents_catalogue import (
+    SQLAlchemyIdentityDocumentsCatalogue,
 )
 from src.apps.catalogs.infrastructure.db_models.insurance_info_catalogue import (
     SQLAlchemyInsuranceInfoCatalogue,
@@ -127,4 +137,45 @@ def map_insurance_info_db_entity_to_response_schema(
         valid_till=db_entity.valid_till,
         comment=db_entity.comment,
         patient_id=db_entity.patient_id,
+    )
+
+
+def map_identity_document_create_schema_to_db_entity(
+    create_schema: AddIdentityDocumentRequestSchema,
+) -> SQLAlchemyIdentityDocumentsCatalogue:
+    return SQLAlchemyIdentityDocumentsCatalogue(
+        patient_id=create_schema.patient_id,
+        type=create_schema.type,
+        series=create_schema.series,
+        number=create_schema.number,
+        issued_by=create_schema.issued_by,
+        issue_date=create_schema.issue_date,
+        expiration_date=create_schema.expiration_date,
+    )
+
+
+def map_identity_document_update_schema_to_db_entity(
+    db_entity: SQLAlchemyIdentityDocumentsCatalogue,
+    update_schema: UpdateIdentityDocumentRequestSchema,
+) -> SQLAlchemyIdentityDocumentsCatalogue:
+    update_data = update_schema.model_dump(exclude_unset=True)
+
+    for field, value in update_data.items():
+        setattr(db_entity, field, value)
+
+    return db_entity
+
+
+def map_identity_document_db_entity_to_response_schema(
+    db_entity: SQLAlchemyIdentityDocumentsCatalogue,
+) -> IdentityDocumentResponseSchema:
+    return IdentityDocumentResponseSchema(
+        id=db_entity.id,
+        patient_id=db_entity.patient_id,
+        type=db_entity.type,
+        series=db_entity.series,
+        number=db_entity.number,
+        issued_by=db_entity.issued_by,
+        issue_date=db_entity.issue_date,
+        expiration_date=db_entity.expiration_date,
     )

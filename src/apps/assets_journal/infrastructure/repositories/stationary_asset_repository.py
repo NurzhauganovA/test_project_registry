@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 from uuid import UUID
 
-from sqlalchemy import func, or_, select
+from sqlalchemy import func, or_, select, Integer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -241,7 +241,7 @@ class StationaryAssetRepositoryImpl(BaseRepository, StationaryAssetRepositoryInt
         # Фильтр по организации через attachment_data пациента
         if filters.get("organization_id"):
             query = query.join(SQLAlchemyPatient).where(
-                SQLAlchemyPatient.attachment_data['attached_clinic_id'] == filters["organization_id"]
+                SQLAlchemyPatient.attachment_data['attached_clinic_id'].cast(Integer) == filters["organization_id"]
             )
 
         # Период по дате регистрации

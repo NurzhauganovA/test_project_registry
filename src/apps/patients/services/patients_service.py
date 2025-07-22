@@ -1,6 +1,8 @@
 from typing import List, Tuple
 from uuid import UUID
 
+from sqlalchemy.exc import IntegrityError
+
 from src.apps.catalogs.services.citizenship_catalog_service import (
     CitizenshipCatalogService,
 )
@@ -31,6 +33,7 @@ from src.apps.patients.mappers import map_update_schema_to_domain
 from src.core.i18n import _
 from src.shared.exceptions import (
     ApplicationError,
+    DeleteRestrictedError,
     InstanceAlreadyExistsError,
     NoInstanceFoundError,
 )
@@ -174,9 +177,7 @@ class PatientService:
         return fresh_patient
 
     async def update_patient_attachment_data(
-            self,
-            patient_id: UUID,
-            attachment_data: dict
+        self, patient_id: UUID, attachment_data: dict
     ) -> PatientDomain:
         """
         Обновить attachment_data пациента
@@ -192,7 +193,9 @@ class PatientService:
         patient.attachment_data = attachment_data
 
         async with self._uow:
-            updated_patient = await self._uow.patients_repository.update_patient(patient)
+            updated_patient = await self._uow.patients_repository.update_patient(
+                patient
+            )
 
         return updated_patient
 
@@ -200,5 +203,13 @@ class PatientService:
         # Check that patient with this ID exists
         await self.get_by_id(patient_id)
 
-        async with self._uow:
-            await self._uow.patients_repository.delete_by_id(patient_id)
+        try:
+            async with self._uow:
+                await self._uow.patients_repository.delete_by_id(patient_id)
+        except IntegrityError as err:
+            raise DeleteRestrictedError(
+                status_code=409,
+                detail=_(
+                    "Impossible to delete patient with ID: '%(ID)s'. Related entities exist."
+                ),
+            ) from err

@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from sqlalchemy import Date
 from sqlalchemy import Enum as SAEnum
@@ -9,6 +9,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.apps.catalogs.infrastructure.db_models.financing_sources_catalogue import (
     SQLAlchemyFinancingSourcesCatalog,
+)
+from src.apps.catalogs.infrastructure.db_models.identity_documents_catalogue import (
+    SQLAlchemyIdentityDocumentsCatalogue,
 )
 from src.apps.catalogs.infrastructure.db_models.patient_context_attributes_catalogue import (
     SQLAlchemyPatientContextAttributesCatalogue,
@@ -43,6 +46,10 @@ class SQLAlchemyPatient(Base, PrimaryKey, ChangedAtMixin, CreatedAtMixin):
         String(100),
         nullable=True,
         comment="Patient's maiden name (девичья фамилия). The optional field.",
+    )
+    # Contains only last_name + first_name
+    full_name: Mapped[Optional[str]] = mapped_column(
+        String(300), nullable=True, index=True
     )
     date_of_birth: Mapped[date] = mapped_column(Date, nullable=False)
     gender: Mapped[PatientGenderEnum] = mapped_column(
@@ -183,5 +190,11 @@ class SQLAlchemyPatient(Base, PrimaryKey, ChangedAtMixin, CreatedAtMixin):
             back_populates="patient",
             lazy="selectin",
             cascade="all, delete-orphan",
+        )
+    )
+    identity_documents: Mapped[List["SQLAlchemyIdentityDocumentsCatalogue"]] = (
+        relationship(
+            "SQLAlchemyIdentityDocumentsCatalogue",
+            back_populates="patient",
         )
     )

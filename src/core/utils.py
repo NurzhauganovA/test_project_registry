@@ -3,12 +3,14 @@ from typing import Any, Awaitable, Dict, List, TypeVar
 
 from dependency_injector import containers, providers
 
-from src.apps.assets_journal.infrastructure.api.newborn_asset_routes import newborn_assets_router
-from src.apps.assets_journal.infrastructure.api.stationary_asset_routes import (
-    stationary_assets_router,
-)
 from src.apps.assets_journal.infrastructure.api.emergency_asset_routes import (
     emergency_assets_router,
+)
+from src.apps.assets_journal.infrastructure.api.newborn_asset_routes import (
+    newborn_assets_router,
+)
+from src.apps.assets_journal.infrastructure.api.stationary_asset_routes import (
+    stationary_assets_router,
 )
 from src.apps.catalogs.infrastructure.api.citizenship_catalog_routes import (
     citizenship_catalog_router,
@@ -21,6 +23,9 @@ from src.apps.catalogs.infrastructure.api.diagnoses_catalog_routes import (
 )
 from src.apps.catalogs.infrastructure.api.financing_sources_catalog_routes import (
     financing_sources_catalog_router,
+)
+from src.apps.catalogs.infrastructure.api.identity_documents_catalog_routes import (
+    identity_documents_router,
 )
 from src.apps.catalogs.infrastructure.api.insurance_info_catalog_routes import (
     insurance_info_catalog_router,
@@ -73,81 +78,86 @@ def get_routers() -> List[Dict[str, Any]]:
     routers = [
         {
             "router": schedule_router,
-            "tag": ["Schedule routes"],
+            "tags": ["Schedule routes"],
         },
         {
             "router": schedule_days_router,
-            "tag": ["Schedule days routes"],
+            "tags": ["Schedule days routes"],
         },
         {
             "router": appointments_router,
-            "tag": ["Appointments routes"],
+            "tags": ["Appointments routes"],
         },
         {
             "router": medical_staff_journal_router,
-            "tag": ["Medical staff journal routes"],
+            "tags": ["Medical staff journal routes"],
         },
         {
             "router": platform_rules_router,
-            "tag": ["Platform rules routes"],
+            "tags": ["Platform rules routes"],
         },
         {
             "router": citizenship_catalog_router,
-            "tag": ["Citizenship catalog routes"],
+            "tags": ["Citizenship catalog routes"],
         },
         {
             "router": nationalities_catalog_router,
-            "tag": ["Nationalities catalog routes"],
+            "tags": ["Nationalities catalog routes"],
         },
         {
             "router": patient_context_attributes_router,
-            "tag": ["Patient context attributes catalog routes"],
+            "tags": ["Patient context attributes catalog routes"],
         },
         {
             "router": financing_sources_catalog_router,
-            "tag": ["Financing sources catalog routes"],
+            "tags": ["Financing sources catalog routes"],
         },
         {
             "router": medical_organizations_router,
-            "tag": ["Medical organizations routes"],
+            "tags": ["Medical organizations routes"],
         },
         {
             "router": insurance_info_catalog_router,
-            "tag": ["Insurance info catalog routes"],
+            "tags": ["Insurance info catalog routes"],
         },
         {
             "router": patients_router,
-            "tag": ["Patient routes"],
+            "tags": ["Patient routes"],
         },
         {
             "router": diagnoses_catalog_router,
-            "tag": (
-                (diagnoses_catalog_router.tags)
+            "tags": (
+                diagnoses_catalog_router.tags
                 if diagnoses_catalog_router.tags
                 else ["Diagnoses Catalog Routes"]
             ),
         },
         {
             "router": diagnosed_patient_diagnosis_router,
-            "tag": (
-                (diagnosed_patient_diagnosis_router.tags)
+            "tags": (
+                diagnosed_patient_diagnosis_router.tags
                 if diagnosed_patient_diagnosis_router.tags
                 else ["Patient's Diagnoses Routes"]
+            ),
+        },
+        {
+            "router": identity_documents_router,
+            "tags": (
+                identity_documents_router.tags
+                if identity_documents_router.tags
+                else ["Identity Documents"]
             ),
         },
         # Assets Journal routes
         {
             "router": stationary_assets_router,
-            "tag": ["Stationary assets routes"],
+            "tags": ["Stationary assets routes"],
         },
         {
             "router": emergency_assets_router,
-            "tag": ["Emergency assets routes"],
+            "tags": ["Emergency assets routes"],
         },
-        {
-            "router": newborn_assets_router,
-            "tag": ["Newborn assets routes"]
-        }
+        {"router": newborn_assets_router, "tags": ["Newborn assets routes"]},
     ]
 
     return routers

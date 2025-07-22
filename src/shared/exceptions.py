@@ -17,6 +17,10 @@ class InstanceAlreadyExistsError(ApplicationError):
     pass
 
 
+class DeleteRestrictedError(ApplicationError):
+    pass
+
+
 class InfrastructureError(Exception):
     def __init__(self, detail: str):
         self.detail = detail
