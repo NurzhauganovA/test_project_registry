@@ -366,50 +366,50 @@ async def delete_emergency_asset(
     await emergency_asset_service.delete_asset(asset_id)
 
 
-@emergency_assets_router.get(
-    "/emergency-assets/statistics",
-    response_model=EmergencyAssetStatisticsSchema,
-    summary="Получить статистику активов скорой помощи",
-    # dependencies=[
-    #     Depends(
-    #         check_user_permissions(
-    #             resources=[{"resource_name": "emergency_assets", "scopes": ["read"]}]
-    #         )
-    #     )
-    # ],
-)
-@inject
-async def get_emergency_assets_statistics(
-        patient_search: str = Query(None, description="Поиск по ФИО или ИИН пациента"),
-        patient_id: UUID = Query(None, description="ID пациента"),
-        patient_iin: str = Query(None, description="ИИН пациента"),
-        date_from: str = Query(None, description="Дата начала периода"),
-        date_to: str = Query(None, description="Дата окончания периода"),
-        status: AssetStatusEnum = Query(None, description="Статус актива"),
-        delivery_status: AssetDeliveryStatusEnum = Query(None, description="Статус доставки"),
-        outcome: EmergencyOutcomeEnum = Query(None, description="Исход обращения"),
-        diagnosis_code: str = Query(None, description="Код диагноза"),
-        organization_id: UUID = Query(None, description="ID организации"),
-        emergency_asset_service: EmergencyAssetService = Depends(
-            Provide[AssetsJournalContainer.emergency_asset_service]
-        ),
-) -> EmergencyAssetStatisticsSchema:
-    """Получить статистику активов скорой помощи"""
-
-    filter_params = EmergencyAssetFilterParams(
-        patient_search=patient_search,
-        patient_id=patient_id,
-        patient_iin=patient_iin,
-        date_from=date_from,
-        date_to=date_to,
-        status=status,
-        delivery_status=delivery_status,
-        outcome=outcome,
-        diagnosis_code=diagnosis_code,
-        organization_id=organization_id,
-    )
-
-    return await emergency_asset_service.get_statistics(filter_params)
+# @emergency_assets_router.get(
+#     "/emergency-assets/statistics",
+#     response_model=EmergencyAssetStatisticsSchema,
+#     summary="Получить статистику активов скорой помощи",
+#     # dependencies=[
+#     #     Depends(
+#     #         check_user_permissions(
+#     #             resources=[{"resource_name": "emergency_assets", "scopes": ["read"]}]
+#     #         )
+#     #     )
+#     # ],
+# )
+# @inject
+# async def get_emergency_assets_statistics(
+#         patient_search: str = Query(None, description="Поиск по ФИО или ИИН пациента"),
+#         patient_id: UUID = Query(None, description="ID пациента"),
+#         patient_iin: str = Query(None, description="ИИН пациента"),
+#         date_from: str = Query(None, description="Дата начала периода"),
+#         date_to: str = Query(None, description="Дата окончания периода"),
+#         status: AssetStatusEnum = Query(None, description="Статус актива"),
+#         delivery_status: AssetDeliveryStatusEnum = Query(None, description="Статус доставки"),
+#         outcome: EmergencyOutcomeEnum = Query(None, description="Исход обращения"),
+#         diagnosis_code: str = Query(None, description="Код диагноза"),
+#         organization_id: UUID = Query(None, description="ID организации"),
+#         emergency_asset_service: EmergencyAssetService = Depends(
+#             Provide[AssetsJournalContainer.emergency_asset_service]
+#         ),
+# ) -> EmergencyAssetStatisticsSchema:
+#     """Получить статистику активов скорой помощи"""
+#
+#     filter_params = EmergencyAssetFilterParams(
+#         patient_search=patient_search,
+#         patient_id=patient_id,
+#         patient_iin=patient_iin,
+#         date_from=date_from,
+#         date_to=date_to,
+#         status=status,
+#         delivery_status=delivery_status,
+#         outcome=outcome,
+#         diagnosis_code=diagnosis_code,
+#         organization_id=organization_id,
+#     )
+#
+#     return await emergency_asset_service.get_statistics(filter_params)
 
 
 @emergency_assets_router.post(

@@ -10,7 +10,7 @@ data:
   PROJECT_VERSION: "0.0.3"
   API_PREFIX: "/api/v1"
   API_ENABLE_DOCS: "true"
-  BACKEND_CORS_ORIGINS: '["http://localhost:3000","http://localhost:5173","http://localhost:8000","http://127.0.0.1:3000","http://127.0.0.1:5173","http://127.0.0.1:8000","http://0.0.0.0:3000","http://0.0.0.0:5173","http://0.0.0.0:8000","https://orkendeu.dzhandosoft.kz","https://api.dzhandosoft.kz/auth-service-orkendeu-project","https://api.dzhandosoft.kz/admin-module-orkendeu-project","https://api.dzhandosoft.kz/rpn-integration-service-orkendeu-project"]'
+  BACKEND_CORS_ORIGINS: '["http://localhost:3000","http://localhost:5173","http://localhost:8000","http://127.0.0.1:3000","http://127.0.0.1:5173","https://127.0.0.1:5173","http://127.0.0.1:8000","http://0.0.0.0:3000","http://0.0.0.0:5173","http://0.0.0.0:8000","https://orkendeu.dzhandosoft.kz","https://api.dzhandosoft.kz/auth-service-orkendeu-project","https://api.dzhandosoft.kz/admin-module-orkendeu-project","https://api.dzhandosoft.kz/rpn-integration-service-orkendeu-project"]'
   DEBUG: "false"
 
   # --- Database params ---

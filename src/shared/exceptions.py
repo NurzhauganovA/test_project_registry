@@ -21,10 +21,26 @@ class DeleteRestrictedError(ApplicationError):
     pass
 
 
+class InvalidActionTypeError(ApplicationError):
+    pass
+
+
 class InfrastructureError(Exception):
     def __init__(self, detail: str):
         self.detail = detail
         super().__init__(self.detail)
+
+
+class UniqueViolationError(Exception):
+    """Custom exception to signal duplicate key violation in the repository layer."""
+
+    pass
+
+
+class MapperError(InfrastructureError):
+    """Basic mapper error"""
+
+    pass
 
 
 class AuthServiceError(InfrastructureError):
@@ -74,7 +90,3 @@ class DomainValidationError(Exception):
         self.detail = detail
         self.status_code = status_code
         super().__init__(self.detail)
-
-
-class InvalidActionTypeError(ApplicationError):
-    pass

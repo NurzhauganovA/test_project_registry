@@ -6,8 +6,11 @@ import typing
 from types import FrameType
 from typing import Any
 
+from mis_eventer_lib.eventer_consumer import EventerConsumerService
+
 from src.apps.users.infrastructure.kafka.kafka_consumer import UsersKafkaConsumerImpl
 from src.core.core_container import CoreContainer
+from src.core.logger import logger
 from src.core.settings import Settings
 from src.core.utils import asyncify, unwire_subcontainers, wire_subcontainers
 
@@ -30,10 +33,12 @@ class Entrypoint:
         self._signal_event = asyncio.Event()
 
         self._users_kafka_consumer: UsersKafkaConsumerImpl | None = None
+        self._eventer_consumer_service: EventerConsumerService | None = None
         self._uvicorn_server: Any = None
 
         # Kafka consumer & Uvicorn tasks
         self._users_kafka_consumer_task: asyncio.Task | None = None
+        self._eventer_consumer_task: asyncio.Task | None = None
         self._asgi_server_task: asyncio.Task | None = None
 
     async def serve(self) -> None:
@@ -55,21 +60,40 @@ class Entrypoint:
         self._users_kafka_consumer = (
             await self._container.users_container().users_kafka_consumer()
         )
+        self._eventer_consumer_service = self._container.eventer_consumer_service()
         self._uvicorn_server = self._container.api_server()
 
         if self._users_kafka_consumer is None:
-            raise RuntimeError("Kafka consumer for users is not initialized!")
+            raise RuntimeError(
+                "[DEPRECATED] Kafka consumer for users is not initialized!"
+            )
 
-        # Start Kafka consumer & Uvicorn tasks
+        if self._eventer_consumer_service is None:
+            RuntimeError("[NEW] Kafka consumer for events is not initialized!")
+
+        # Start Kafka consumers & Uvicorn tasks
         self._users_kafka_consumer_task = asyncio.create_task(
             self._users_kafka_consumer.start()
         )
+
+        self._eventer_consumer_task = asyncio.create_task(
+            self._eventer_consumer_service.start()
+        )
+        logger.info(
+            f"Started Eventer Consumer task on topics: {', '.join(self._eventer_consumer_service.topics)}"
+        )
+
         self._asgi_server_task = asyncio.create_task(self._uvicorn_server.serve())
 
     async def shutdown(self) -> None:
         # Stop Kafka consumer
         if self._users_kafka_consumer is not None:
             await self._users_kafka_consumer.stop()
+
+        if self._eventer_consumer_task is not None:
+            self._eventer_consumer_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await self._eventer_consumer_task
 
         # Stop ASGI-server (Uvicorn) task
         if self._asgi_server_task:

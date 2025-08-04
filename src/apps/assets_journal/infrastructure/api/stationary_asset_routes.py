@@ -336,27 +336,27 @@ async def delete_stationary_asset(
     await stationary_asset_service.delete_asset(asset_id)
 
 
-@stationary_assets_router.get(
-    "/stationary-assets/statistics",
-    response_model=StationaryAssetStatisticsSchema,
-    summary="Получить статистику активов стационара",
-    # dependencies=[
-    #     Depends(
-    #         check_user_permissions(
-    #             resources=[{"resource_name": "stationary_assets", "scopes": ["read"]}]
-    #         )
-    #     )
-    # ],
-)
-@inject
-async def get_stationary_assets_statistics(
-    filter_params: StationaryAssetFilterParams = Depends(),
-    stationary_asset_service: StationaryAssetService = Depends(
-        Provide[AssetsJournalContainer.stationary_asset_service]
-    ),
-) -> StationaryAssetStatisticsSchema:
-    """Получить статистику активов стационара"""
-    return await stationary_asset_service.get_statistics(filter_params)
+# @stationary_assets_router.get(
+#     "/stationary-assets/statistics",
+#     response_model=StationaryAssetStatisticsSchema,
+#     summary="Получить статистику активов стационара",
+#     # dependencies=[
+#     #     Depends(
+#     #         check_user_permissions(
+#     #             resources=[{"resource_name": "stationary_assets", "scopes": ["read"]}]
+#     #         )
+#     #     )
+#     # ],
+# )
+# @inject
+# async def get_stationary_assets_statistics(
+#     filter_params: StationaryAssetFilterParams = Depends(),
+#     stationary_asset_service: StationaryAssetService = Depends(
+#         Provide[AssetsJournalContainer.stationary_asset_service]
+#     ),
+# ) -> StationaryAssetStatisticsSchema:
+#     """Получить статистику активов стационара"""
+#     return await stationary_asset_service.get_statistics(filter_params)
 
 
 @stationary_assets_router.post(

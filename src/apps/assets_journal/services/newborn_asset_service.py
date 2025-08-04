@@ -276,15 +276,47 @@ class NewbornAssetService:
             if hasattr(asset, field) and value is not None:
                 if field == "diagnoses" and value:
                     # Специальная обработка диагнозов
-                    diagnoses = [map_newborn_diagnosis_schema_to_domain(d) for d in value]
+                    from src.apps.assets_journal.infrastructure.api.schemas.requests.newborn_asset_schemas import \
+                        NewbornDiagnosisSchema
+
+                    diagnoses = []
+                    for diagnosis_data in value:
+                        # Если это уже объект схемы
+                        if isinstance(diagnosis_data, NewbornDiagnosisSchema):
+                            diagnoses.append(map_newborn_diagnosis_schema_to_domain(diagnosis_data))
+                        # Если это словарь, создаем объект схемы
+                        elif isinstance(diagnosis_data, dict):
+                            diagnosis_schema = NewbornDiagnosisSchema(**diagnosis_data)
+                            diagnoses.append(map_newborn_diagnosis_schema_to_domain(diagnosis_schema))
+
                     setattr(asset, field, diagnoses)
                 elif field == "mother_data" and value:
                     # Специальная обработка данных матери
-                    mother_data = map_mother_data_schema_to_domain(value)
+                    from src.apps.assets_journal.infrastructure.api.schemas.requests.newborn_asset_schemas import \
+                        MotherDataSchema
+
+                    if isinstance(value, MotherDataSchema):
+                        mother_data = map_mother_data_schema_to_domain(value)
+                    elif isinstance(value, dict):
+                        mother_data_schema = MotherDataSchema(**value)
+                        mother_data = map_mother_data_schema_to_domain(mother_data_schema)
+                    else:
+                        mother_data = value
+
                     setattr(asset, field, mother_data)
                 elif field == "newborn_data" and value:
                     # Специальная обработка данных новорожденного
-                    newborn_data = map_newborn_data_schema_to_domain(value)
+                    from src.apps.assets_journal.infrastructure.api.schemas.requests.newborn_asset_schemas import \
+                        NewbornDataSchema
+
+                    if isinstance(value, NewbornDataSchema):
+                        newborn_data = map_newborn_data_schema_to_domain(value)
+                    elif isinstance(value, dict):
+                        newborn_data_schema = NewbornDataSchema(**value)
+                        newborn_data = map_newborn_data_schema_to_domain(newborn_data_schema)
+                    else:
+                        newborn_data = value
+
                     setattr(asset, field, newborn_data)
                 else:
                     setattr(asset, field, value)

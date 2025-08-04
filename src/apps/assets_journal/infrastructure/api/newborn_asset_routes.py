@@ -373,56 +373,56 @@ async def delete_newborn_asset(
     await newborn_asset_service.delete_asset(asset_id)
 
 
-@newborn_assets_router.get(
-    "/newborn-assets/statistics",
-    response_model=NewbornAssetStatisticsSchema,
-    summary="Получить статистику активов новорожденных",
-    # dependencies=[
-    #     Depends(
-    #         check_user_permissions(
-    #             resources=[{"resource_name": "newborn_assets", "scopes": ["read"]}]
-    #         )
-    #     )
-    # ],
-)
-@inject
-async def get_newborn_assets_statistics(
-        patient_search: str = Query(None, description="Поиск по ФИО пациента"),
-        patient_id: UUID = Query(None, description="ID пациента"),
-        patient_iin: str = Query(None, description="ИИН пациента"),
-        mother_search: str = Query(None, description="Поиск по ФИО матери"),
-        mother_iin: str = Query(None, description="ИИН матери"),
-        date_from: str = Query(None, description="Дата начала периода"),
-        date_to: str = Query(None, description="Дата окончания периода"),
-        status: AssetStatusEnum = Query(None, description="Статус актива"),
-        delivery_status: AssetDeliveryStatusEnum = Query(None, description="Статус доставки"),
-        newborn_condition: NewbornConditionEnum = Query(None, description="Состояние новорожденного"),
-        delivery_type: DeliveryTypeEnum = Query(None, description="Тип родов"),
-        diagnosis_code: str = Query(None, description="Код диагноза"),
-        organization_id: UUID = Query(None, description="ID организации"),
-        newborn_asset_service: NewbornAssetService = Depends(
-            Provide[AssetsJournalContainer.newborn_asset_service]
-        ),
-) -> NewbornAssetStatisticsSchema:
-    """Получить статистику активов новорожденных"""
-
-    filter_params = NewbornAssetFilterParams(
-        patient_search=patient_search,
-        patient_id=patient_id,
-        patient_iin=patient_iin,
-        mother_search=mother_search,
-        mother_iin=mother_iin,
-        date_from=date_from,
-        date_to=date_to,
-        status=status,
-        delivery_status=delivery_status,
-        newborn_condition=newborn_condition,
-        delivery_type=delivery_type,
-        diagnosis_code=diagnosis_code,
-        organization_id=organization_id,
-    )
-
-    return await newborn_asset_service.get_statistics(filter_params)
+# @newborn_assets_router.get(
+#     "/newborn-assets/statistics",
+#     response_model=NewbornAssetStatisticsSchema,
+#     summary="Получить статистику активов новорожденных",
+#     # dependencies=[
+#     #     Depends(
+#     #         check_user_permissions(
+#     #             resources=[{"resource_name": "newborn_assets", "scopes": ["read"]}]
+#     #         )
+#     #     )
+#     # ],
+# )
+# @inject
+# async def get_newborn_assets_statistics(
+#         patient_search: str = Query(None, description="Поиск по ФИО пациента"),
+#         patient_id: UUID = Query(None, description="ID пациента"),
+#         patient_iin: str = Query(None, description="ИИН пациента"),
+#         mother_search: str = Query(None, description="Поиск по ФИО матери"),
+#         mother_iin: str = Query(None, description="ИИН матери"),
+#         date_from: str = Query(None, description="Дата начала периода"),
+#         date_to: str = Query(None, description="Дата окончания периода"),
+#         status: AssetStatusEnum = Query(None, description="Статус актива"),
+#         delivery_status: AssetDeliveryStatusEnum = Query(None, description="Статус доставки"),
+#         newborn_condition: NewbornConditionEnum = Query(None, description="Состояние новорожденного"),
+#         delivery_type: DeliveryTypeEnum = Query(None, description="Тип родов"),
+#         diagnosis_code: str = Query(None, description="Код диагноза"),
+#         organization_id: UUID = Query(None, description="ID организации"),
+#         newborn_asset_service: NewbornAssetService = Depends(
+#             Provide[AssetsJournalContainer.newborn_asset_service]
+#         ),
+# ) -> NewbornAssetStatisticsSchema:
+#     """Получить статистику активов новорожденных"""
+#
+#     filter_params = NewbornAssetFilterParams(
+#         patient_search=patient_search,
+#         patient_id=patient_id,
+#         patient_iin=patient_iin,
+#         mother_search=mother_search,
+#         mother_iin=mother_iin,
+#         date_from=date_from,
+#         date_to=date_to,
+#         status=status,
+#         delivery_status=delivery_status,
+#         newborn_condition=newborn_condition,
+#         delivery_type=delivery_type,
+#         diagnosis_code=diagnosis_code,
+#         organization_id=organization_id,
+#     )
+#
+#     return await newborn_asset_service.get_statistics(filter_params)
 
 
 @newborn_assets_router.post(

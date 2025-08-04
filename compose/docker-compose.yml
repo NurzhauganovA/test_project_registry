@@ -15,13 +15,6 @@ services:
     networks:
       - mis_orkendeu_network
 
-  kafka:
-    image: apache/kafka:latest
-    hostname: kafka
-    container_name: kafka
-    ports:
-      - 9092:9092
-
   registry-db:
     container_name: registry-module-db-dev
     image: postgres:17-alpine

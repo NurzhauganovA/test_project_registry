@@ -29,7 +29,6 @@ class UsersKafkaConsumerImpl(KafkaConsumerInterface):
         self._running = False
 
     async def start(self):
-        self._logger.info("Starting Kafka consumer...")
         self.consumer = AIOKafkaConsumer(
             self.topic,
             bootstrap_servers=self.bootstrap_servers,

@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Any, Dict, List, Tuple
 from uuid import UUID
 
 from sqlalchemy.exc import IntegrityError
@@ -79,6 +79,36 @@ class PatientService:
             for attribute_id in patient.context_attributes_ids:
                 await self._patient_context_attributes_service.get_by_id(attribute_id)
 
+    @staticmethod
+    async def _has_valid_filters(filters: Dict[str, Any]) -> bool:
+        """
+        Validate filter params by minimal input length.
+        Clean short string filters (length < 2) by setting them to None.
+
+        Args:
+            filters (Dict[str, Any]): filter parameters dict.
+
+        Returns:
+            bool: True if at least one filter should be applied, False otherwise.
+        """
+        cleaned_filters = filters.copy()
+
+        full_name = cleaned_filters.get("patient_full_name")
+        if full_name is not None and len(full_name.strip()) < 2:
+            cleaned_filters["patient_full_name"] = None
+
+        iin = cleaned_filters.get("iin")
+        if iin is not None and len(iin.strip()) < 2:
+            cleaned_filters["iin"] = None
+
+        has_filters = any(
+            # If value is not string and not None. If string - it must be not empty.
+            value is not None and (not isinstance(value, str) or value.strip() != "")
+            for value in cleaned_filters.values()
+        )
+
+        return has_filters
+
     async def get_by_id(self, patient_id: UUID) -> PatientDomain:
         patient = await self._patients_repository.get_by_id(patient_id)
         if not patient:
@@ -109,8 +139,13 @@ class PatientService:
             await self._patients_repository.get_total_number_of_patients()
         )
 
+        filters_dict = filter_params.to_dict(exclude_none=True)
+        if not await self._has_valid_filters(filters_dict):
+            # If filters are too short or empty - return an empty list
+            return [], total_amount_of_patients
+
         patients = await self._patients_repository.get_patients(
-            filters=filter_params.to_dict(exclude_none=True),
+            filters=filters_dict,
             page=pagination_params.page,
             limit=pagination_params.limit,
         )

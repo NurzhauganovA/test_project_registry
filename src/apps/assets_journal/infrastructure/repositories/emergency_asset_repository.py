@@ -127,10 +127,25 @@ class EmergencyAssetRepositoryImpl(BaseRepository, EmergencyAssetRepositoryInter
         result = await self._async_db_session.execute(query)
         db_asset = result.scalar_one()
 
-        # Обновляем поля
+        # Обновляем поля, но специально обрабатываем diagnoses
         for field, value in asset.__dict__.items():
             if hasattr(db_asset, field) and field not in ['id', 'created_at', 'patient_data', '_organization_data']:
-                setattr(db_asset, field, value)
+                if field == 'diagnoses':
+                    # Преобразуем доменные объекты диагнозов в JSON
+                    from src.apps.assets_journal.mappers.emergency_asset_mappers import \
+                        map_emergency_diagnosis_domain_to_dict
+
+                    diagnoses_json = []
+                    if value:
+                        for diagnosis in value:
+                            if hasattr(diagnosis, 'diagnosis_type'):  # Это объект EmergencyDiagnosis
+                                diagnoses_json.append(map_emergency_diagnosis_domain_to_dict(diagnosis))
+                            elif isinstance(diagnosis, dict):  # Это уже словарь
+                                diagnoses_json.append(diagnosis)
+
+                    setattr(db_asset, field, diagnoses_json)
+                else:
+                    setattr(db_asset, field, value)
 
         await self._async_db_session.flush()
         await self._async_db_session.refresh(db_asset)

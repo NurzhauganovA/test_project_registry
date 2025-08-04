@@ -28,12 +28,19 @@ class SQLAlchemyPatientRepository(BaseRepository, PatientRepositoryInterface):
     SQLAlchemy repository for working with patients.
     """
 
-    def _apply_filters_to_query(self, query, filters: Dict[str, Any]):
+    @staticmethod
+    def _apply_filters_to_query(query, filters: Dict[str, Any]):
         full_name = filters.pop("patient_full_name", None)
         if isinstance(full_name, str):
             text = full_name.strip().lower()
             if text:
                 query = query.where(SQLAlchemyPatient.full_name.ilike(f"%{text}%"))
+
+        iin = filters.pop("iin", None)
+        if isinstance(iin, str):
+            text = iin.strip().lower()
+            if text:
+                query = query.where(SQLAlchemyPatient.iin.ilike(f"%{text}%"))
 
         for attribute, value in filters.items():
             column = getattr(SQLAlchemyPatient, attribute, None)

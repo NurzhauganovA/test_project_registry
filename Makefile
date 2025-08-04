@@ -12,3 +12,9 @@ rebuild:
 
 compile-locales:
 	poetry run compile-locales
+
+kafka-up:
+	docker-compose -f debug/docker-compose-debug-services.yml up -d
+
+kafka-down:
+	docker-compose -f debug/docker-compose-debug-services.yml down

@@ -65,7 +65,10 @@ class CatalogsContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         packages=[
             "src.apps.catalogs.infrastructure.api",
-        ]
+        ],
+        modules=[
+            "src.apps.catalogs.infrastructure.kafka.event_handlers",
+        ],
     )
 
     # Dependencies from core DI-container

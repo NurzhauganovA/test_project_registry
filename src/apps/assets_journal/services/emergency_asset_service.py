@@ -263,7 +263,8 @@ class EmergencyAssetService:
                 if field == "diagnoses" and value:
                     # Специальная обработка диагнозов
                     diagnoses = [map_emergency_diagnosis_schema_to_domain(d) for d in value]
-                    setattr(asset, field, diagnoses)
+                    # diagnoses serialize to json
+                    asset.diagnoses = diagnoses
                 else:
                     setattr(asset, field, value)
 

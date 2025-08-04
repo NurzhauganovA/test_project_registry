@@ -6,8 +6,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class KafkaSettings(BaseSettings):
     KAFKA_BOOTSTRAP_SERVERS: List[str] = []
-    ACTIONS_ON_USERS_KAFKA_TOPIC: str = "auth_service.user.actions"
-    KAFKA_GROUP_ID: str = "registry-service-users-group"
+    ACTIONS_ON_USERS_KAFKA_TOPIC: str = "auth_service-registry_service"
+    ACTIONS_ON_CATALOGS_KAFKA_TOPIC: str = "admin_service-registry_service"
+    KAFKA_GROUP_ID: str = "registry-service-consumer-group"
 
 
 class Settings(BaseSettings):

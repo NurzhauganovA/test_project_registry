@@ -1,7 +1,6 @@
 from typing import List, Optional
 
 from sqlalchemy import delete, func, or_, select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.apps.catalogs.infrastructure.api.schemas.requests.nationalities_catalog_request_schemas import (
     AddNationalitySchema,
@@ -16,18 +15,14 @@ from src.apps.catalogs.infrastructure.db_models.nationalities_catalogue import (
 from src.apps.catalogs.interfaces.nationalities_catalog_repository_interface import (
     NationalitiesCatalogRepositoryInterface,
 )
-from src.core.logger import LoggerService
 from src.core.settings import project_settings
+from src.shared.helpers.decorators import handle_unique_violation, transactional
 from src.shared.infrastructure.base import BaseRepository
 
 
 class SQLAlchemyNationalitiesCatalogRepositoryImpl(
     BaseRepository, NationalitiesCatalogRepositoryInterface
 ):
-    def __init__(self, async_db_session: AsyncSession, logger: LoggerService):
-        self._async_db_session = async_db_session
-        self._logger = logger
-
     async def get_by_default_name(
         self, name: str
     ) -> Optional[NationalityCatalogFullResponseSchema]:
@@ -108,10 +103,13 @@ class SQLAlchemyNationalitiesCatalogRepositoryImpl(
             for record in records
         ]
 
+    @transactional
+    @handle_unique_violation
     async def add_nationality(
         self, request_dto: AddNationalitySchema
     ) -> NationalityCatalogFullResponseSchema:
         obj = SQLAlchemyNationalitiesCatalogue(
+            id=request_dto.id,  # If None - DB will generate
             name=request_dto.name,
             lang=request_dto.lang,
             name_locales=request_dto.name_locales,
@@ -124,6 +122,7 @@ class SQLAlchemyNationalitiesCatalogRepositoryImpl(
 
         return NationalityCatalogFullResponseSchema.model_validate(obj)
 
+    @transactional
     async def update_nationality(
         self, nationality_id: int, request_dto: UpdateNationalitySchema
     ) -> NationalityCatalogFullResponseSchema:
@@ -147,9 +146,11 @@ class SQLAlchemyNationalitiesCatalogRepositoryImpl(
 
         return NationalityCatalogFullResponseSchema.model_validate(obj)
 
+    @transactional
     async def delete_by_id(self, nationality_id: int) -> None:
         query = delete(SQLAlchemyNationalitiesCatalogue).where(
             SQLAlchemyNationalitiesCatalogue.id == nationality_id
         )
+
         await self._async_db_session.execute(query)
         await self._async_db_session.commit()

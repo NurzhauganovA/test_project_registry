@@ -13,11 +13,15 @@ class PatientsFilterParams:
     def __init__(
         self,
         iin_filter: Optional[str] = Query(
-            None, description="Patient's IIN (exact match)"
+            None,
+            description="Patient's IIN (partial match, 2+ symbols only)",
+            pattern=r"^\d+$",  # Only digits
         ),
         patient_full_name_filter: Optional[str] = Query(
             None,
-            description="Patient's full name (last_name + first_name) search (partial match)",
+            description="Patient's full name (last_name + first_name) search (partial match, 2+ symbols only)",
+            # Only letters, spaces, apostrophes and hyphens (In Russian: "дефисы")
+            pattern=r"^[A-Za-zА-Яа-яЁё\s\-\']+$",
         ),
         attached_clinic_id_filter: Optional[int] = Query(
             None, description="Medical organization's ID the patient attached to"

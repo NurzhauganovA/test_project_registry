@@ -38,11 +38,12 @@ def map_emergency_diagnosis_dict_to_domain(diagnosis_dict: dict) -> EmergencyDia
 
 def map_emergency_diagnosis_schema_to_domain(diagnosis_schema: EmergencyDiagnosisSchema) -> EmergencyDiagnosis:
     """Маппинг схемы диагноза в доменную модель"""
+
     return EmergencyDiagnosis(
-        diagnosis_type=diagnosis_schema.diagnosis_type,
-        diagnosis_code=diagnosis_schema.diagnosis_code,
-        diagnosis_name=diagnosis_schema.diagnosis_name,
-        note=diagnosis_schema.note,
+        diagnosis_type=diagnosis_schema.get('diagnosis_type', DiagnosisTypeEnum.PRIMARY),
+        diagnosis_code=diagnosis_schema.get('diagnosis_code', ''),
+        diagnosis_name=diagnosis_schema.get('diagnosis_name', ''),
+        note=diagnosis_schema.get('note', None)
     )
 
 

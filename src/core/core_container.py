@@ -3,6 +3,7 @@ from fastapi import FastAPI
 
 from src.apps.assets_journal.container import AssetsJournalContainer
 from src.apps.catalogs.container import CatalogsContainer
+from src.apps.catalogs.infrastructure.kafka.event_handlers import eventer_listener
 from src.apps.medical_staff_journal.container import MedicalStaffJournalContainer
 from src.apps.patients.container import PatientsContainer
 from src.apps.platform_rules.container import PlatformRulesContainer
@@ -11,6 +12,7 @@ from src.apps.users.container import UsersContainer
 from src.core.logger import LoggerService
 from src.core.resources.fastapi_resource import FastAPIResource
 from src.core.resources.httpx_resource import HttpxClientResource
+from src.core.resources.kafka_consumer_resource import EventerConsumerResource
 from src.core.resources.sqlalchemy_resource import sqlalchemy_resource
 from src.core.resources.uvicorn_resource import uvicorn_server_resource
 from src.core.settings import project_settings
@@ -163,4 +165,16 @@ class CoreContainer(containers.DeclarativeContainer):
         engine=engine,
         patients_service=patients_container.patients_service,
         medical_organizations_catalog_service=catalogs_container.medical_organizations_catalog_service,
+    )
+
+    # Kafka consumer
+    eventer_consumer_service = providers.Resource(
+        EventerConsumerResource,
+        project_settings.kafka.ACTIONS_ON_CATALOGS_KAFKA_TOPIC,
+        bootstrap_servers=project_settings.kafka.KAFKA_BOOTSTRAP_SERVERS,
+        listeners=[
+            eventer_listener,
+        ],
+        group_id=project_settings.kafka.KAFKA_GROUP_ID,
+        start_thread=False,
     )
