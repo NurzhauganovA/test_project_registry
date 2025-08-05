@@ -1,3 +1,6 @@
+from src.apps.assets_journal.infrastructure.repositories.polyclinic_asset_repository import (
+    PolyclinicAssetRepositoryImpl
+)
 from src.apps.assets_journal.infrastructure.repositories.stationary_asset_repository import (
     StationaryAssetRepositoryImpl,
 )
@@ -36,6 +39,14 @@ class AssetsJournalUnitOfWorkImpl(BaseUnitOfWork, AssetsJournalUnitOfWorkInterfa
     def newborn_asset_repository(self) -> NewbornAssetRepositoryImpl:
         """Репозиторий активов новорожденных"""
         return NewbornAssetRepositoryImpl(
+            async_db_session=self._session,
+            logger=self._logger
+        )
+
+    @property
+    def polyclinic_asset_repository(self) -> PolyclinicAssetRepositoryImpl:
+        """Репозиторий активов поликлиники"""
+        return PolyclinicAssetRepositoryImpl(
             async_db_session=self._session,
             logger=self._logger
         )

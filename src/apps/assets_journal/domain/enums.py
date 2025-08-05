@@ -102,3 +102,60 @@ class MedicalServiceTypeEnum(enum.Enum):
     """Тип медицинской услуги"""
     PHARMACY = "pharmacy"            # Аптека
     BLOOD_TEST = "blood_test"        # Анализ крови
+
+
+class PolyclinicVisitTypeEnum(enum.Enum):
+    """Тип посещения поликлиники"""
+    FIRST_VISIT = "first_visit"         # Первичное обращение
+    REPEAT_VISIT = "repeat_visit"       # Повторное обращение
+
+
+class PolyclinicServiceTypeEnum(enum.Enum):
+    """Тип услуги в поликлинике"""
+    CONSULTATION = "consultation"       # Консультация
+    PROCEDURE = "procedure"             # Процедура
+    DIAGNOSTIC = "diagnostic"           # Диагностика
+    VACCINATION = "vaccination"         # Вакцинация
+    LABORATORY = "laboratory"           # Лабораторные исследования
+
+
+class WeekdayEnum(enum.Enum):
+    """Дни недели"""
+    MONDAY = "monday"         # Понедельник
+    TUESDAY = "tuesday"       # Вторник
+    WEDNESDAY = "wednesday"   # Среда
+    THURSDAY = "thursday"     # Четверг
+    FRIDAY = "friday"         # Пятница
+    SATURDAY = "saturday"     # Суббота
+    SUNDAY = "sunday"         # Воскресенье
+
+
+class PolyclinicOutcomeEnum(enum.Enum):
+    """Исход посещения поликлиники"""
+    RECOVERED = "recovered"             # Выздоровел
+    IMPROVED = "improved"               # Улучшение
+    WITHOUT_CHANGES = "without_changes" # Без изменений
+    WORSENED = "worsened"              # Ухудшение
+    REFERRED = "referred"               # Направлен к другому специалисту
+    HOSPITALIZED = "hospitalized"       # Госпитализирован
+
+
+class RejectionReasonByEnum(enum.Enum):
+    """Кто отклонил актив"""
+    PATIENT = "patient"           # Пациент
+    SPECIALIST = "specialist"     # Специалист
+    ADMINISTRATION = "administration"  # Администрация
+
+
+class PolyclinicReasonAppeal(enum.Enum):
+    """Повод обращения"""
+    PATRONAGE = "patronage"         # Патронаж
+    ROUTINE_CHECKUP = "routine_checkup"  # Плановый осмотр
+
+
+class PolyclinicTypeActiveVisit(enum.Enum):
+    """Вид активного посещения"""
+    FIRST_APPEAL = "first_appeal"       # Первичное обращение
+    REPEAT_APPEAL = "repeat_appeal"     # Повторное обращение
+    EMERGENCY_APPEAL = "emergency_appeal"  # Экстренное обращение
+    PLANNED_APPEAL = "planned_appeal"   # Плановое обращение

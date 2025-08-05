@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio.engine import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm.session import sessionmaker
 
+from src.apps.assets_journal.infrastructure.repositories import polyclinic_asset_repository
 from src.apps.assets_journal.infrastructure.repositories.stationary_asset_repository import (
     StationaryAssetRepositoryImpl,
 )
@@ -12,6 +13,7 @@ from src.apps.assets_journal.infrastructure.repositories.emergency_asset_reposit
 from src.apps.assets_journal.infrastructure.repositories.newborn_asset_repository import (
     NewbornAssetRepositoryImpl,
 )
+from src.apps.assets_journal.services.polyclinic_asset_service import PolyclinicAssetService
 from src.apps.assets_journal.services.stationary_asset_service import (
     StationaryAssetService,
 )
@@ -108,6 +110,14 @@ class AssetsJournalContainer(containers.DeclarativeContainer):
         NewbornAssetService,
         uow=unit_of_work,
         newborn_asset_repository=newborn_asset_repository,
+        patients_service=patients_service,
+        medical_organizations_catalog_service=medical_organizations_catalog_service,
+        logger=logger,
+    )
+
+    polyclinic_asset_service = providers.Factory(
+        PolyclinicAssetService,
+        uow=unit_of_work,
         patients_service=patients_service,
         medical_organizations_catalog_service=medical_organizations_catalog_service,
         logger=logger,
