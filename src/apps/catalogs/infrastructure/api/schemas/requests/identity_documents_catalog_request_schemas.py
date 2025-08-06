@@ -9,6 +9,7 @@ from src.core.i18n import _
 
 
 class IdentityDocumentRequestBaseSchema(BaseModel):
+    id: Optional[int] = Field(None, description="Unique identity document record ID")
     patient_id: Optional[UUID] = Field(None, description="Related Patient ID")
     type: Optional[IdentityDocumentTypeEnum] = Field(
         None, description="Identity Document Type"
@@ -38,3 +39,7 @@ class AddIdentityDocumentRequestSchema(IdentityDocumentRequestBaseSchema):
 
 class UpdateIdentityDocumentRequestSchema(IdentityDocumentRequestBaseSchema):
     pass
+
+
+class DeleteIdentityDocumentSchema(BaseModel):
+    id: int

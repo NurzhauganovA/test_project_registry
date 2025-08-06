@@ -96,10 +96,7 @@ class MedicalOrganizationsCatalogService:
         self,
         medical_organization_id: int,
         include_all_locales: bool = False,
-    ) -> Union[
-        MedicalOrganizationCatalogFullResponseSchema,
-        MedicalOrganizationCatalogPartialResponseSchema,
-    ]:
+    ) -> MedicalOrganizationCatalogFullResponseSchema |  MedicalOrganizationCatalogPartialResponseSchema:
         full_schema = await self._medical_organizations_catalog_repository.get_by_id(
             medical_organization_id
         )

@@ -1,19 +1,22 @@
 from datetime import date, time
 from decimal import Decimal
-from typing import Optional
+from typing import Dict, List, Optional
 from uuid import UUID
 
 from src.apps.patients.infrastructure.api.schemas.responses.patient_response_schemas import (
+    PatientTruncatedAppointmentBlankInfoSchema,
+    PatientTruncatedResponseSchema,
     ResponsePatientSchema,
 )
 from src.apps.registry.domain.models.appointment import AppointmentDomain
 from src.apps.registry.domain.models.schedule import ScheduleDomain
+from src.apps.registry.infrastructure.api.schemas.appointment_schemas import AdditionalServiceSchema
 from src.apps.registry.infrastructure.api.schemas.requests.appointment_schemas import (
-    AdditionalServiceSchema,
     CreateAppointmentSchema,
     UpdateAppointmentSchema,
 )
 from src.apps.registry.infrastructure.api.schemas.responses.appointment_schemas import (
+    AppointmentBlankInfoSchema,
     ResponseAppointmentSchema,
 )
 from src.apps.registry.infrastructure.api.schemas.responses.schedule_day_schemas import (
@@ -24,7 +27,7 @@ from src.apps.registry.infrastructure.db_models.models import (
     Schedule,
     ScheduleDay,
 )
-from src.apps.users.infrastructure.schemas.user_schemas import UserSchema
+from src.apps.users.infrastructure.schemas.user_schemas import DoctorTruncatedResponseSchema, UserSchema
 
 
 def map_appointment_create_schema_to_domain(
@@ -49,6 +52,7 @@ def map_appointment_create_schema_to_domain(
             if schema.additional_services
             else []
         ),
+        office_number=schema.office_number,
     )
 
 
@@ -92,6 +96,7 @@ def map_appointment_domain_to_db_entity(appointment: AppointmentDomain) -> Appoi
         additional_services=prepare_additional_services(
             appointment.additional_services
         ),
+        office_number=appointment.office_number,
         cancelled_at=appointment.cancelled_at,
     )
 
@@ -123,6 +128,7 @@ def map_appointment_db_entity_to_domain(
         financing_sources_ids=appointment_from_db.financing_sources_ids,
         reason=appointment_from_db.reason,
         additional_services=additional_services,
+        office_number=appointment_from_db.office_number,
         cancelled_at=appointment_from_db.cancelled_at,
     )
 
@@ -134,20 +140,37 @@ def map_appointment_domain_to_response_schema(
     patient_schema: Optional[ResponsePatientSchema],
     doctor_schema: UserSchema,
 ) -> ResponseAppointmentSchema:
+    doctor_truncated_schema = DoctorTruncatedResponseSchema(
+        id=doctor_schema.id,
+        iin=doctor_schema.iin,
+        first_name=doctor_schema.first_name,
+        last_name=doctor_schema.last_name,
+        middle_name=doctor_schema.middle_name,
+    )
+
+    patient_truncated_schema = PatientTruncatedResponseSchema(
+        id=patient_schema.id,
+        iin=patient_schema.iin,
+        first_name=patient_schema.first_name,
+        last_name=patient_schema.last_name,
+        middle_name=patient_schema.middle_name,
+    ) if patient_schema else None
+
     return ResponseAppointmentSchema(
         id=appointment.id,
         schedule_day_id=appointment.schedule_day_id,
         start_time=appointment.time,
         end_time=appointment_end_time,
         date=appointment_date,
-        patient=patient_schema,
-        doctor=doctor_schema,
+        patient=patient_truncated_schema,
+        doctor=doctor_truncated_schema,
         phone_number=appointment.phone_number,
         address=appointment.address,
         status=appointment.status,
         type=appointment.type,
         financing_sources_ids=appointment.financing_sources_ids,
         reason=appointment.reason,
+        office_number=appointment.office_number,
         additional_services=[
             AdditionalServiceSchema(
                 name=additional_service["name"],
@@ -157,6 +180,51 @@ def map_appointment_domain_to_response_schema(
             for additional_service in appointment.additional_services
         ],
         cancelled_at=appointment.cancelled_at,
+    )
+
+
+def build_appointment_info_blank_schema(
+        appointment: AppointmentDomain,
+        appointment_date: date,
+        patient_schema: Optional[ResponsePatientSchema],
+        doctor_schema: UserSchema,
+) -> AppointmentBlankInfoSchema:
+    doctor_specializations: List[Dict[str, str]] = doctor_schema.get_specializations()
+    doctor_speciality_name = (
+        doctor_specializations[0]["name"] if doctor_specializations else None
+    )
+
+    patient_addresses = patient_schema.addresses if patient_schema else None
+    patient_primary_address = None
+    if patient_addresses:
+        primary_addresses = [addr.value for addr in patient_addresses if addr.is_primary]
+        if primary_addresses:
+            patient_primary_address = primary_addresses[0]
+
+    return AppointmentBlankInfoSchema(
+        appointment_id=appointment.id,
+        date=appointment_date,
+        start_time=appointment.time,
+        doctor_full_name=(
+            f"{doctor_schema.last_name} {doctor_schema.first_name}"
+            + (f" {doctor_schema.middle_name}" if doctor_schema.middle_name else "")
+            if doctor_schema else None
+        ),
+        doctor_speciality=doctor_speciality_name,
+        reason=appointment.reason,
+        office_number=appointment.office_number if appointment.office_number else None,
+        patient=PatientTruncatedAppointmentBlankInfoSchema(
+            id=patient_schema.id,
+            iin=patient_schema.iin,
+            first_name=patient_schema.first_name,
+            last_name=patient_schema.last_name,
+            middle_name=patient_schema.middle_name,
+            maiden_name=patient_schema.maiden_name,
+            date_of_birth=patient_schema.date_of_birth,
+            gender=patient_schema.gender,
+            address=patient_primary_address,
+            ambulatory_card_number=getattr(patient_schema, "ambulatory_card_number", 312),
+        ) if patient_schema else None,
     )
 
 

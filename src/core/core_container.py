@@ -3,7 +3,28 @@ from fastapi import FastAPI
 
 from src.apps.assets_journal.container import AssetsJournalContainer
 from src.apps.catalogs.container import CatalogsContainer
-from src.apps.catalogs.infrastructure.kafka.event_handlers import eventer_listener
+from src.apps.catalogs.infrastructure.kafka.citizenship_catalog_event_handlers import (
+    citizenship_catalog_eventer_listener,
+)
+from src.apps.catalogs.infrastructure.kafka.diagnoses_catalog_event_handlers import diagnoses_catalog_eventer_listener
+from src.apps.catalogs.infrastructure.kafka.financing_sources_catalog_event_handlers import (
+    financing_sources_catalog_event_handler,
+)
+from src.apps.catalogs.infrastructure.kafka.identity_documents_catalog_event_handlers import (
+    identity_documents_catalog_event_handler,
+)
+from src.apps.catalogs.infrastructure.kafka.insurance_info_catalog_event_handlers import (
+    insurance_info_catalog_event_handler,
+)
+from src.apps.catalogs.infrastructure.kafka.medical_organizations_catalog_event_handlers import (
+    medical_organizations_catalog_event_handler,
+)
+from src.apps.catalogs.infrastructure.kafka.nationalities_catalog_event_handlers import (
+    nationalities_catalog_eventer_listener,
+)
+from src.apps.catalogs.infrastructure.kafka.patient_context_attributes_catalog_event_handlers import (
+    patient_context_attributes_catalog_event_handler,
+)
 from src.apps.medical_staff_journal.container import MedicalStaffJournalContainer
 from src.apps.patients.container import PatientsContainer
 from src.apps.platform_rules.container import PlatformRulesContainer
@@ -173,7 +194,14 @@ class CoreContainer(containers.DeclarativeContainer):
         project_settings.kafka.ACTIONS_ON_CATALOGS_KAFKA_TOPIC,
         bootstrap_servers=project_settings.kafka.KAFKA_BOOTSTRAP_SERVERS,
         listeners=[
-            eventer_listener,
+            nationalities_catalog_eventer_listener,
+            citizenship_catalog_eventer_listener,
+            diagnoses_catalog_eventer_listener,
+            financing_sources_catalog_event_handler,
+            identity_documents_catalog_event_handler,
+            insurance_info_catalog_event_handler,
+            medical_organizations_catalog_event_handler,
+            patient_context_attributes_catalog_event_handler,
         ],
         group_id=project_settings.kafka.KAFKA_GROUP_ID,
         start_thread=False,

@@ -41,14 +41,14 @@ def validate_addresses_and_locales(values: Dict[str, Any]) -> Dict[str, Any]:
     non-blank values.
     """
     lang = values.get("lang")
-    default = project_settings.DEFAULT_LANGUAGE
+    default = "ru"
     if lang is not None and lang != default:
         raise ValueError(
             _("Field 'lang' must be the default language: '%(DEFAULT)s'.")
             % {"DEFAULT": default}
         )
 
-    allowed = set(project_settings.LANGUAGES) - {default}
+    allowed = set({"ru", "kk", "en"}) - {default}
 
     address_locales = values.get("address_locales") or {}
     invalid_address = set(address_locales) - allowed

@@ -34,9 +34,12 @@ async def get_by_id_for_client(
         Provide[CatalogsContainer.financing_sources_catalog_service]
     ),
 ) -> FinancingSourcePartialResponseSchema:
-    financing_source: FinancingSourcePartialResponseSchema = await service.get_by_id(
+    # fmt: off
+    financing_source: FinancingSourcePartialResponseSchema = await service.get_by_id(  # type: ignore
         financing_source_id, include_all_locales=False
     )
+    # fmt: off
+
     return financing_source
 
 
@@ -51,9 +54,11 @@ async def get_by_id_for_admin(
         Provide[CatalogsContainer.financing_sources_catalog_service]
     ),
 ) -> FinancingSourceFullResponseSchema:
-    financing_source: FinancingSourceFullResponseSchema = await service.get_by_id(
+    # fmt: off
+    financing_source: FinancingSourceFullResponseSchema = await service.get_by_id(  # type: ignore
         financing_source_id, include_all_locales=True
     )
+    # fmt: on
     return financing_source
 
 

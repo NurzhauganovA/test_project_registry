@@ -84,7 +84,7 @@ class UserSchema(BaseModel):
         cleaned = [item.strip() for item in v if isinstance(item, str) and item.strip()]
         return cleaned
 
-    def get_specializations_as_dict(self) -> List[dict[str, str]]:
+    def get_specializations(self) -> List[dict[str, str]]:
         """
         Converts a list of SpecializationModels into a list of dictionaries
         with keys 'id' and 'name', ready for UserDomain.
@@ -98,6 +98,10 @@ class UserSchema(BaseModel):
                 }
             )
         return specs
+
+
+class DeleteUserSchema(BaseModel):
+    id: UUID
 
 
 class DoctorTruncatedResponseSchema(BaseModel):

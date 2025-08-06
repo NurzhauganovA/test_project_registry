@@ -19,20 +19,21 @@ class AppointmentDomain:
     """Appointment domain class"""
 
     def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        schedule_day_id: UUID,
-        time: time,
-        patient_id: Optional[UUID],
-        phone_number: Optional[str] = None,
-        address: Optional[str] = None,
-        status: AppointmentStatusEnum = AppointmentStatusEnum.BOOKED,
-        type: Optional[AppointmentTypeEnum] = None,
-        financing_sources_ids: Optional[List[int]] = None,
-        reason: Optional[str] = None,
-        additional_services: Optional[List[Dict[str, Any]]] = None,
-        cancelled_at: Optional[datetime] = None,
+            self,
+            *,
+            id: Optional[int] = None,
+            schedule_day_id: UUID,
+            time: time,
+            patient_id: Optional[UUID],
+            phone_number: Optional[str] = None,
+            address: Optional[str] = None,
+            status: AppointmentStatusEnum = AppointmentStatusEnum.BOOKED,
+            type: Optional[AppointmentTypeEnum] = None,
+            financing_sources_ids: Optional[List[int]] = None,
+            reason: Optional[str] = None,
+            additional_services: Optional[List[Dict[str, Any]]] = None,
+            office_number: Optional[int] = None,
+            cancelled_at: Optional[datetime] = None,
     ):
         self.id = id
         self.schedule_day_id = schedule_day_id
@@ -49,6 +50,7 @@ class AppointmentDomain:
         self.additional_services = (
             additional_services if additional_services is not None else []
         )
+        self.office_number = office_number
         self.cancelled_at = cancelled_at
 
     def book(

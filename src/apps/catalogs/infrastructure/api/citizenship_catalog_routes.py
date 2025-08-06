@@ -33,9 +33,11 @@ async def get_by_id_for_admin(
         Provide[CatalogsContainer.citizenship_catalog_service]
     ),
 ) -> CitizenshipCatalogFullResponseSchema:
-    citizenship: CitizenshipCatalogFullResponseSchema = await service.get_by_id(
+    # fmt: off
+    citizenship: CitizenshipCatalogFullResponseSchema = await service.get_by_id(  # type: ignore
         citizenship_id, include_all_locales=True
     )
+    # fmt: on
 
     return citizenship
 
@@ -50,10 +52,11 @@ async def get_by_id_for_client(
         Provide[CatalogsContainer.citizenship_catalog_service]
     ),
 ) -> CitizenshipCatalogPartialResponseSchema:
-    citizenship: CitizenshipCatalogPartialResponseSchema = await service.get_by_id(
+    # fmt: off
+    citizenship: CitizenshipCatalogPartialResponseSchema = await service.get_by_id(  # type: ignore
         citizenship_id, include_all_locales=False
     )
-
+    # fmt: on
     return citizenship
 
 

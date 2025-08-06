@@ -27,8 +27,8 @@ from src.apps.registry.exceptions import (
     ScheduleDayNotFoundError,
     ScheduleIsNotActiveError,
 )
+from src.apps.registry.infrastructure.api.schemas.appointment_schemas import AdditionalServiceSchema
 from src.apps.registry.infrastructure.api.schemas.requests.appointment_schemas import (
-    AdditionalServiceSchema,
     CreateAppointmentSchema,
     UpdateAppointmentSchema,
 )
@@ -280,7 +280,7 @@ class AppointmentService:
                 filter_params.doctor_specialization_filter.strip().lower()
             )
             if not any(
-                specialization.get("name", "").strip().lower() == specialization_filter
+                (specialization.get("name") or "").strip().lower() == specialization_filter
                 for specialization in (doctor.specializations or [])
             ):
                 return False

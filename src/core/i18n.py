@@ -3,13 +3,13 @@ import gettext
 from pathlib import Path
 from typing import Optional
 
-from src.core.settings import project_settings
-
 _locale_ctx = contextvars.ContextVar("current_locale", default="en")
 _translators = {}
 
 
 def set_locale(lang: str):
+    from src.core.settings import project_settings
+
     if lang not in project_settings.LANGUAGES:
         lang = project_settings.DEFAULT_LANGUAGE
 

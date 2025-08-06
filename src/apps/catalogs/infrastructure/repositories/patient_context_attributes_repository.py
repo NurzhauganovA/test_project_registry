@@ -1,7 +1,6 @@
 from typing import List, Optional
 
 from sqlalchemy import delete, func, or_, select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.apps.catalogs.infrastructure.api.schemas.requests.patient_context_attributes_catalog_request_schemas import (
     AddPatientContextAttributeSchema,
@@ -16,18 +15,14 @@ from src.apps.catalogs.infrastructure.db_models.patient_context_attributes_catal
 from src.apps.catalogs.interfaces.patient_context_attributes_repository_interface import (
     PatientContextAttributesCatalogRepositoryInterface,
 )
-from src.core.logger import LoggerService
 from src.core.settings import project_settings
+from src.shared.helpers.decorators import handle_unique_violation, transactional
 from src.shared.infrastructure.base import BaseRepository
 
 
 class SQLAlchemyPatientContextAttributesCatalogueRepositoryImpl(
     BaseRepository, PatientContextAttributesCatalogRepositoryInterface
 ):
-    def __init__(self, async_db_session: AsyncSession, logger: LoggerService):
-        self._async_db_session = async_db_session
-        self._logger = logger
-
     async def get_by_default_name(
         self, name: str
     ) -> Optional[PatientContextAttributeCatalogFullResponseSchema]:
@@ -117,10 +112,13 @@ class SQLAlchemyPatientContextAttributesCatalogueRepositoryImpl(
             for record in records
         ]
 
+    @transactional
+    @handle_unique_violation
     async def add_patient_context_attribute(
         self, request_dto: AddPatientContextAttributeSchema
     ) -> PatientContextAttributeCatalogFullResponseSchema:
         obj = SQLAlchemyPatientContextAttributesCatalogue(
+            id=request_dto.id,
             name=request_dto.name,
             lang=request_dto.lang,
             name_locales=request_dto.name_locales,
@@ -133,6 +131,7 @@ class SQLAlchemyPatientContextAttributesCatalogueRepositoryImpl(
 
         return PatientContextAttributeCatalogFullResponseSchema.model_validate(obj)
 
+    @transactional
     async def update_patient_context_attribute(
         self,
         context_attribute_id: int,
@@ -158,6 +157,7 @@ class SQLAlchemyPatientContextAttributesCatalogueRepositoryImpl(
 
         return PatientContextAttributeCatalogFullResponseSchema.model_validate(obj)
 
+    @transactional
     async def delete_by_id(self, context_attribute_id: int) -> None:
         query = delete(SQLAlchemyPatientContextAttributesCatalogue).where(
             SQLAlchemyPatientContextAttributesCatalogue.id == context_attribute_id

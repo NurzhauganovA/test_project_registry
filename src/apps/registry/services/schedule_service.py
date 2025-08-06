@@ -451,12 +451,14 @@ class ScheduleService:
                     else:
                         self._logger.warning(
                             f"Platform rule 'MAX_SCHEDULE_PERIOD' has non-positive value "
-                            f"'{raw_max_schedule_period_days.value}'. Using default {max_schedule_period_days}."
+                            f"'{raw_max_schedule_period_days.rule_data.get('value')}'. "
+                            f"Using default {max_schedule_period_days}."
                         )
                 except (ValueError, TypeError):
                     self._logger.warning(
                         f"Platform rule 'MAX_SCHEDULE_PERIOD' is invalid type or format:"
-                        f" '{raw_max_schedule_period_days.value}'. Using default: {max_schedule_period_days}."
+                        f" '{raw_max_schedule_period_days.rule_data.get('value')}'. "
+                        f"Using default: {max_schedule_period_days}."
                     )
 
             period_duration = new_end - new_start
@@ -516,7 +518,7 @@ class ScheduleService:
                     week_days_template,
                     reduced_days=reduced_days,
                 )
-                day_schema = generated_days[0]  # type: ignore[index]
+                day_schema = generated_days[0]
 
                 days_to_add.append(day_schema)
             current_date += timedelta(days=1)

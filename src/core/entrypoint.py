@@ -8,7 +8,6 @@ from typing import Any
 
 from mis_eventer_lib.eventer_consumer import EventerConsumerService
 
-from src.apps.users.infrastructure.kafka.kafka_consumer import UsersKafkaConsumerImpl
 from src.core.core_container import CoreContainer
 from src.core.logger import logger
 from src.core.settings import Settings
@@ -32,12 +31,10 @@ class Entrypoint:
         self._container.config.from_dict(self._config.model_dump())
         self._signal_event = asyncio.Event()
 
-        self._users_kafka_consumer: UsersKafkaConsumerImpl | None = None
         self._eventer_consumer_service: EventerConsumerService | None = None
         self._uvicorn_server: Any = None
 
         # Kafka consumer & Uvicorn tasks
-        self._users_kafka_consumer_task: asyncio.Task | None = None
         self._eventer_consumer_task: asyncio.Task | None = None
         self._asgi_server_task: asyncio.Task | None = None
 
@@ -57,25 +54,13 @@ class Entrypoint:
         wire_subcontainers(self._container)
 
         # Get resource-objects
-        self._users_kafka_consumer = (
-            await self._container.users_container().users_kafka_consumer()
-        )
         self._eventer_consumer_service = self._container.eventer_consumer_service()
         self._uvicorn_server = self._container.api_server()
 
-        if self._users_kafka_consumer is None:
-            raise RuntimeError(
-                "[DEPRECATED] Kafka consumer for users is not initialized!"
-            )
-
         if self._eventer_consumer_service is None:
-            RuntimeError("[NEW] Kafka consumer for events is not initialized!")
+            RuntimeError("Kafka consumer for events is not initialized!")
 
         # Start Kafka consumers & Uvicorn tasks
-        self._users_kafka_consumer_task = asyncio.create_task(
-            self._users_kafka_consumer.start()
-        )
-
         self._eventer_consumer_task = asyncio.create_task(
             self._eventer_consumer_service.start()
         )
@@ -87,9 +72,6 @@ class Entrypoint:
 
     async def shutdown(self) -> None:
         # Stop Kafka consumer
-        if self._users_kafka_consumer is not None:
-            await self._users_kafka_consumer.stop()
-
         if self._eventer_consumer_task is not None:
             self._eventer_consumer_task.cancel()
             with contextlib.suppress(asyncio.CancelledError):
@@ -100,12 +82,6 @@ class Entrypoint:
             self._asgi_server_task.cancel()
             with contextlib.suppress(asyncio.CancelledError):
                 await self._asgi_server_task
-
-        # Stop Kafka consumer task
-        if self._users_kafka_consumer_task:
-            self._users_kafka_consumer_task.cancel()
-            with contextlib.suppress(asyncio.CancelledError):
-                await self._users_kafka_consumer_task
 
         await asyncify(self._container.shutdown_resources())
         unwire_subcontainers(self._container)

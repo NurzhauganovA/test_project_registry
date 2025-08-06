@@ -4,6 +4,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
+from sqlalchemy.ext.asyncio.engine import AsyncConnection
 
 # Needed for correct metadata registration for alembic
 from src.apps.registry.infrastructure.db_models.models import *  # noqa: F401,F403
@@ -55,7 +56,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = settings.DATABASE_URL
+    url = settings.DATABASE_URI
 
     context.configure(
         url=url,
@@ -77,7 +78,7 @@ async def run_migrations_online():
         future=True,
     )
 
-    async with connectable.connect() as connection:
+    async with connectable.connect() as connection:  # type: AsyncConnection
         await connection.run_sync(do_run_migrations)
 
     await connectable.dispose()

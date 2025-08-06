@@ -37,7 +37,9 @@ async def get_by_id_for_client(
         Provide[CatalogsContainer.medical_organizations_catalog_service]
     ),
 ) -> MedicalOrganizationCatalogPartialResponseSchema:
-    return await service.get_by_id(organization_id, include_all_locales=False)
+    # fmt: off
+    return await service.get_by_id(organization_id, include_all_locales=False)  # type: ignore
+    # fmt: on
 
 
 @medical_organizations_router.get(
@@ -51,7 +53,9 @@ async def get_by_id_for_admin(
         Provide[CatalogsContainer.medical_organizations_catalog_service]
     ),
 ) -> MedicalOrganizationCatalogFullResponseSchema:
-    return await service.get_by_id(organization_id, include_all_locales=True)
+    # fmt: off
+    return await service.get_by_id(organization_id, include_all_locales=True)  # type: ignore
+    # fmt: on
 
 
 @medical_organizations_router.get(

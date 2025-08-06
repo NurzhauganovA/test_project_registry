@@ -15,17 +15,31 @@ from src.apps.registry.infrastructure.api.schemas.appointment_schemas import (
 )
 
 
-class CreateAppointmentSchema(BaseModel):
-    time: time_from_library
+class AppointmentBaseRequestSchema(BaseModel):
+    time: Optional[time_from_library] = None
     patient_id: Optional[UUID] = None
     phone_number: Optional[str] = None
     address: Optional[str] = None
+    status: Optional[AppointmentStatusEnum] = None
+    type: Optional[AppointmentTypeEnum] = None
+    financing_sources_ids: Optional[List[int]] = None
+    referral_type: Optional[AppointmentReferralTypeEnum] = None
+    referral_origin: Optional[AppointmentReferralOriginTypeEnum] = None
+    reason: Optional[str] = None
+    office_number: Optional[int] = Field(
+        None,
+        description="Office number where appointment will be processed in",
+        ge=1,
+    )
+    additional_services: Optional[List[AdditionalServiceSchema]] = None
+
+
+class CreateAppointmentSchema(AppointmentBaseRequestSchema):
+    time: time_from_library
     status: AppointmentStatusEnum
     type: AppointmentTypeEnum
-    financing_sources_ids: Optional[List[int]] = None
     referral_type: AppointmentReferralTypeEnum
     referral_origin: AppointmentReferralOriginTypeEnum
-    reason: Optional[str] = None
     additional_services: Optional[List[AdditionalServiceSchema]] = Field(
         default_factory=list
     )
@@ -43,6 +57,7 @@ class CreateAppointmentSchema(BaseModel):
                 "referral_type": "with_referral",
                 "referral_origin": "from_external_organization",
                 "reason": "Плановый осмотр",
+                "office_number": 113,
                 "additional_services": [
                     {"name": "Услуга №1", "financing_source_id": 1, "price": 0},
                     {"name": "Услуга №2", "financing_source_id": 1, "price": 0},
@@ -52,19 +67,8 @@ class CreateAppointmentSchema(BaseModel):
     )
 
 
-class UpdateAppointmentSchema(BaseModel):
+class UpdateAppointmentSchema(AppointmentBaseRequestSchema):
     schedule_day_id: Optional[UUID] = None
-    time: Optional[time_from_library] = None
-    patient_id: Optional[UUID] = None
-    phone_number: Optional[str] = None
-    address: Optional[str] = None
-    status: Optional[AppointmentStatusEnum] = None
-    type: Optional[AppointmentTypeEnum] = None
-    financing_sources_ids: Optional[List[int]] = None
-    referral_type: Optional[AppointmentReferralTypeEnum] = None
-    referral_origin: Optional[AppointmentReferralOriginTypeEnum] = None
-    reason: Optional[str] = None
-    additional_services: Optional[List[AdditionalServiceSchema]] = None
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -84,6 +88,7 @@ class UpdateAppointmentSchema(BaseModel):
                     {"name": "Услуга №1", "financing_source_id": 1, "price": 0},
                     {"name": "Услуга №2", "financing_source_id": 1, "price": 0},
                 ],
+                "office_number": 96,
             }
         }
     )

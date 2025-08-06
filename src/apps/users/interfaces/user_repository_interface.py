@@ -10,11 +10,11 @@ class UserRepositoryInterface(ABC):
     """
 
     @abstractmethod
-    async def get_by_id(self, user_id: UUID) -> UserDomain:
+    async def get_by_id(self, user_id: UUID) -> UserDomain | None:
         pass
 
     @abstractmethod
-    async def get_by_iin(self, iin: str) -> UserDomain:
+    async def get_by_iin(self, iin: str) -> UserDomain | None:
         pass
 
     @abstractmethod

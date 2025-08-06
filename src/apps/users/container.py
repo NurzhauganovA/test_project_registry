@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio.engine import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm.session import sessionmaker
 
-from src.apps.users.infrastructure.kafka.kafka_consumer import UsersKafkaConsumerImpl
 from src.apps.users.infrastructure.repositories.user_repository import (
     SQLAlchemyUserRepository,
 )
@@ -16,7 +15,6 @@ class UsersContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         packages=[
             "src.apps.users.infrastructure",
-            "src.apps.users.services",
         ],
     )
     # Dependencies from core DI-container
@@ -50,13 +48,4 @@ class UsersContainer(containers.DeclarativeContainer):
         UserService,
         user_repository=user_repository,
         logger=logger,
-    )
-
-    users_kafka_consumer = providers.Singleton(
-        UsersKafkaConsumerImpl,
-        user_service=user_service,
-        bootstrap_servers=kafka_bootstrap_servers,
-        topic=kafka_users_topic,
-        logger=logger,
-        group_id=kafka_group_id,
     )

@@ -1,12 +1,8 @@
-from datetime import date, timedelta
+from datetime import date
 from typing import List, Optional
 from uuid import UUID
 
 from src.apps.registry.domain.exceptions import ScheduleValidationError
-from src.apps.registry.infrastructure.api.schemas.requests.schedule_day_schemas import (
-    CreateScheduleDaySchema,
-    ScheduleDayTemplateSchema,
-)
 from src.apps.registry.infrastructure.api.schemas.responses.schedule_day_schemas import (
     ResponseScheduleDaySchema,
 )
@@ -82,50 +78,3 @@ class ScheduleDomain:
                 raise ScheduleValidationError(
                     _("Schedule description cannot exceed 256 characters.")
                 )
-
-    def regenerate_days(
-        self, week_days_template: List[ScheduleDayTemplateSchema]
-    ) -> None:
-        """
-        Regenerate the list of days of the schedule based on the period and weekday pattern.
-        The method uses generation logic similar to the service method and updates self.days.
-
-        :param week_days_template: list of days containing a pattern for each day of the week,
-        where the key is 'day_of_week' (int from 1 to 7)
-
-            Example:
-                 [
-                   {"day_of_week": 1, "is_active": True, "appointment_interval": 30,
-                   "work_start_time": "09:00", "work_end_time": "17:00",
-                   "break_start_time": "12:00", "break_end_time": "13:00"},
-                   {"day_of_week": 2, ...},
-                   ...
-                 ]
-
-        :return: List of days.
-        """
-        # Transform the template: key is the day of the week number
-        template_by_day = {
-            template["day_of_week"]: template.model_dump()
-            for template in week_days_template
-        }
-        new_days: List[CreateScheduleDaySchema] = []
-        current_date = self.period_start
-        while current_date <= self.period_end:
-            # weekday() returns 0 for Monday, so add 1
-            day_of_week = current_date.weekday() + 1
-            if day_of_week in template_by_day:
-                template_data = template_by_day[day_of_week]
-                day_schema = CreateScheduleDaySchema(
-                    schedule_id=self.id,
-                    date=current_date,
-                    day_of_week=day_of_week,
-                    is_active=template_data.get("is_active", False),
-                    work_start_time=template_data["work_start_time"],
-                    work_end_time=template_data["work_end_time"],
-                    break_start_time=template_data.get("break_start_time"),
-                    break_end_time=template_data.get("break_end_time"),
-                )
-                new_days.append(day_schema)
-            current_date += timedelta(days=1)
-        self.days = new_days

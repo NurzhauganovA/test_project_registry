@@ -6,6 +6,10 @@ from sqlalchemy.orm.session import sessionmaker
 from src.apps.catalogs.services.financing_sources_catalog_service import (
     FinancingSourceCatalogService,
 )
+from src.apps.patients.services.patients_service import PatientService
+from src.apps.platform_rules.infrastructure.repositories.platform_rules_repository import (
+    SQLAlchemyPlatformRulesRepositoryImpl,
+)
 from src.apps.registry.infrastructure.repositories.appointment_repository import (
     AppointmentRepositoryImpl,
 )
@@ -19,6 +23,8 @@ from src.apps.registry.services.appointment_service import AppointmentService
 from src.apps.registry.services.schedule_day_service import ScheduleDayService
 from src.apps.registry.services.schedule_service import ScheduleService
 from src.apps.registry.uow import UnitOfWorkImpl
+from src.apps.users.infrastructure.repositories.user_repository import SQLAlchemyUserRepository
+from src.apps.users.services.user_service import UserService
 from src.core.database.config import provide_async_session
 from src.core.logger import LoggerService
 
@@ -33,10 +39,10 @@ class RegistryContainer(containers.DeclarativeContainer):
 
     # Dependencies from core DI-container
     logger = providers.Dependency(instance_of=LoggerService)
-    user_service = providers.Dependency()
-    patients_service = providers.Dependency()
-    user_repository = providers.Dependency()
-    platform_rules_repository = providers.Dependency()
+    user_service: providers.Dependency[UserService] = providers.Dependency()
+    patients_service: providers.Dependency[PatientService] = providers.Dependency()
+    user_repository: providers.Dependency[SQLAlchemyUserRepository] = providers.Dependency()
+    platform_rules_repository: providers.Dependency[SQLAlchemyPlatformRulesRepositoryImpl] = providers.Dependency()
     engine = providers.Dependency(instance_of=AsyncEngine)
     financing_sources_catalog_service = providers.Dependency(
         instance_of=FinancingSourceCatalogService

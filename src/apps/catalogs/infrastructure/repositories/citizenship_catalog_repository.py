@@ -16,6 +16,7 @@ from src.apps.catalogs.interfaces.citizenship_catalog_repository_interface impor
     CitizenshipCatalogRepositoryInterface,
 )
 from src.core.settings import project_settings
+from src.shared.helpers.decorators import handle_unique_violation, transactional
 from src.shared.infrastructure.base import BaseRepository
 
 
@@ -119,10 +120,13 @@ class SQLAlchemyCitizenshipCatalogueRepositoryImpl(
             CitizenshipCatalogFullResponseSchema.model_validate(obj) for obj in records
         ]
 
+    @transactional
+    @handle_unique_violation
     async def add_citizenship(
         self, request_dto: AddCitizenshipSchema
     ) -> CitizenshipCatalogFullResponseSchema:
         obj = SQLAlchemyCitizenshipCatalogue(
+            id=request_dto.id,
             country_code=request_dto.country_code,
             name=request_dto.name,
             lang=request_dto.lang,
@@ -136,6 +140,7 @@ class SQLAlchemyCitizenshipCatalogueRepositoryImpl(
 
         return CitizenshipCatalogFullResponseSchema.model_validate(obj)
 
+    @transactional
     async def update_citizenship(
         self, citizenship_id: int, request_dto: UpdateCitizenshipSchema
     ) -> CitizenshipCatalogFullResponseSchema:
@@ -159,6 +164,7 @@ class SQLAlchemyCitizenshipCatalogueRepositoryImpl(
 
         return CitizenshipCatalogFullResponseSchema.model_validate(obj)
 
+    @transactional
     async def delete_by_id(self, citizenship_id: int) -> None:
         query = delete(SQLAlchemyCitizenshipCatalogue).where(
             SQLAlchemyCitizenshipCatalogue.id == citizenship_id

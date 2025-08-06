@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 from uuid import UUID
 
 from src.apps.registry.domain.enums import AppointmentStatusEnum
@@ -77,7 +77,7 @@ class ScheduleDayService:
             )
 
         # Get a day's schedule
-        schedule: ScheduleDomain = await self._uow.schedule_repository.get_by_id(
+        schedule: Optional[ScheduleDomain] = await self._uow.schedule_repository.get_by_id(
             day.schedule_id
         )
         if not schedule:

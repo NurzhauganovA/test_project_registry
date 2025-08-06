@@ -3,6 +3,7 @@ from functools import wraps
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
+from src.core.logger import LoggerService
 from src.shared.exceptions import UniqueViolationError
 
 
@@ -105,3 +106,101 @@ def handle_unique_violation(method):
             raise
 
     return wrapper
+
+
+def handle_kafka_event(
+        action_type: str,
+        model_name: str,
+):
+    """
+    Decorator for handling exceptions and logging in asynchronous Kafka event handlers.
+    Wraps an async function, catches exceptions, and logs critical errors using the provided logger.
+
+    Args:
+        action_type (str): The type of action (e.g., "CREATE", "UPDATE", "DELETE").
+        model_name (str): The name of the model (e.g., "cat_citizenship").
+
+    Returns:
+        Callable: The wrapped function with exception handling and logging.
+
+    Note:
+        The decorated function **must** accept a `logger` parameter, which is an instance of LoggerService.
+        If `logger` is not passed (neither as a positional nor a keyword argument),
+        and an exception occurs, an explicit RuntimeError will be raised
+        indicating that the logger instance was not found.
+
+    Example usage:
+        @handle_kafka_event("DELETE", "cat_citizenship")
+        async def handler(_raw_message: bytes,
+                          schema_data: EventerResponseSchema,
+                          service: CitizenshipCatalogService,
+                          logger: LoggerService):
+            # Event handling logic
+            ...
+
+    """
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(*args, **kwargs) -> None:
+            # Trying to find among the named
+            logger = kwargs.get('logger')
+
+            if logger is None:
+                # Trying to find among positional ones by type
+                for arg in args:
+                    if isinstance(arg, LoggerService):
+                        logger = arg
+                        break
+
+            try:
+                result = await func(*args, **kwargs)
+
+                if logger is None:
+                    raise RuntimeError(
+                        "Logger instance not found in arguments of the decorated function."
+                    )
+
+                # Attempt to get an object with action/id for informative success log
+                schema_data = None
+                for arg in args:
+                    if hasattr(arg, 'action') and hasattr(arg, 'id'):
+                        schema_data = arg
+                        break
+
+                if schema_data:
+                    logger.info(
+                        f"Successfully handled '{schema_data.action}' type event for model: '{model_name}'. "
+                        f"Record with ID: {getattr(schema_data, 'id', 'N/A')} processed."
+                    )
+                else:
+                    # If schema_data is not found
+                    logger.info(
+                        f"Successfully handled '{action_type}' type event for model: '{model_name}'."
+                    )
+
+                return result
+
+            except Exception as err:
+                schema_data = None
+                for arg in args:
+                    if hasattr(arg, 'action'):
+                        schema_data = arg
+                        break
+
+                action = schema_data.action if schema_data else action_type
+
+                if logger is None:
+                    raise RuntimeError(
+                        "Logger instance not found in arguments of the decorated function."
+                    )
+
+                logger.critical(
+                    f"Failed to handle '{action}' type event for model: '{model_name}'. {err}",
+                    exc_info=True,
+                )
+
+                return
+
+        return wrapper
+
+    return decorator

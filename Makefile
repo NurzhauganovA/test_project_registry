@@ -1,3 +1,7 @@
+# Configs paths
+MYPY_CONFIG = ci_config/setup.cfg
+
+
 up:
 	docker-compose -f compose/docker-compose.yml up --build -d
 
@@ -18,3 +22,6 @@ kafka-up:
 
 kafka-down:
 	docker-compose -f debug/docker-compose-debug-services.yml down
+
+mypy:
+	mypy --config-file=$(MYPY_CONFIG) src

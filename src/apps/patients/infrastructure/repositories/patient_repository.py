@@ -157,10 +157,13 @@ class SQLAlchemyPatientRepository(BaseRepository, PatientRepositoryInterface):
             )
             .where(SQLAlchemyPatient.id == db_patient.id)
         )
-        result = await self._async_db_session.execute(reload_query)
-        db_patient = result.scalars().first()
+        result_patient = await self._async_db_session.execute(reload_query)
+        reloaded_db_patient = result_patient.scalars().first()
 
-        return map_patient_db_entity_to_domain(db_patient)
+        if reloaded_db_patient is None:
+            raise ValueError("Patient not found after reload.")  # for mypy
+
+        return map_patient_db_entity_to_domain(reloaded_db_patient)
 
     async def update_patient(self, patient_domain: PatientDomain) -> PatientDomain:
         # Fetch existing patient entity

@@ -160,12 +160,9 @@ class AppointmentRepositoryImpl(BaseRepository, AppointmentRepositoryInterface):
             "financing_sources_ids",
             "reason",
             "additional_services",
+            "office_number",
             "cancelled_at",
         ]
-
-        self._logger.debug(
-            f"Updating appointment with ID {appointment.id} with fields: {appointment.__dict__}"
-        )
 
         # Updating fields...
         for field in fields_to_update:

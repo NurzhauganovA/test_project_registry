@@ -66,7 +66,7 @@ class User(Base, PrimaryKey, CreatedAtMixin, ChangedAtMixin):
         server_default="[]",
     )
 
-    schedules: Mapped[List["Schedule"]] = relationship(
+    schedules: Mapped[List["Schedule"]] = relationship(  # type: ignore[name-defined]
         "Schedule",
         back_populates="doctor",
         cascade="all, delete-orphan",
@@ -74,6 +74,6 @@ class User(Base, PrimaryKey, CreatedAtMixin, ChangedAtMixin):
     )
 
     # Relationships
-    diagnoses: Mapped[List["SQLAlchemyPatientsAndDiagnoses"]] = relationship(
+    diagnoses: Mapped[List["SQLAlchemyPatientsAndDiagnoses"]] = relationship(  # type: ignore[name-defined]
         "SQLAlchemyPatientsAndDiagnoses", back_populates="doctor", lazy="selectin"
     )

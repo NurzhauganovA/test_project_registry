@@ -1,9 +1,8 @@
 from datetime import date
 from typing import Any, Dict, List, Optional
 
-from sqlalchemy import Date
+from sqlalchemy import Date, ForeignKey, String
 from sqlalchemy import Enum as SAEnum
-from sqlalchemy import ForeignKey, String
 from sqlalchemy.dialects.postgresql.json import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -171,7 +170,7 @@ class SQLAlchemyPatient(Base, PrimaryKey, ChangedAtMixin, CreatedAtMixin):
         lazy="selectin",
         backref="patients",
     )
-    insurances: Mapped[List["SQLAlchemyInsuranceInfoCatalogue"]] = (  # noqa: F821
+    insurances: Mapped[List["SQLAlchemyInsuranceInfoCatalogue"]] = (  # type: ignore[name-defined]  # noqa: F821
         relationship(
             "SQLAlchemyInsuranceInfoCatalogue",
             back_populates="patient",
@@ -184,9 +183,9 @@ class SQLAlchemyPatient(Base, PrimaryKey, ChangedAtMixin, CreatedAtMixin):
         back_populates="patient",
         lazy="selectin",
     )
-    diagnoses: Mapped[List["SQLAlchemyPatientsAndDiagnoses"]] = (  # noqa: F821
+    diagnoses: Mapped[List["SQLAlchemyPatientsAndDiagnoses"]] = (  # type: ignore[name-defined]  # noqa: F821
         relationship(
-            "SQLAlchemyPatientsAndDiagnoses",  # in the diagnoses_catalogue.py
+            "SQLAlchemyPatientsAndDiagnoses",
             back_populates="patient",
             lazy="selectin",
             cascade="all, delete-orphan",

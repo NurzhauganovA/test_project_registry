@@ -23,6 +23,7 @@ from src.apps.catalogs.mappers import (
     map_insurance_info_db_entity_to_response_schema,
     map_insurance_info_update_schema_to_db_entity,
 )
+from src.shared.helpers.decorators import handle_unique_violation, transactional
 from src.shared.infrastructure.base import BaseRepository
 
 
@@ -111,6 +112,8 @@ class SQLAlchemyInsuranceInfoCatalogRepositoryImpl(
             for record in records
         ]
 
+    @transactional
+    @handle_unique_violation
     async def add_insurance_info_record(
         self, request_dto: AddInsuranceInfoRecordSchema
     ) -> ResponseInsuranceInfoRecordSchema:
@@ -123,6 +126,7 @@ class SQLAlchemyInsuranceInfoCatalogRepositoryImpl(
 
         return map_insurance_info_db_entity_to_response_schema(obj)
 
+    @transactional
     async def update_insurance_info_record(
         self,
         insurance_info_record_id: int,
@@ -142,6 +146,7 @@ class SQLAlchemyInsuranceInfoCatalogRepositoryImpl(
 
         return map_insurance_info_db_entity_to_response_schema(obj)
 
+    @transactional
     async def delete_by_id(self, insurance_info_record_id: int) -> None:
         query = delete(SQLAlchemyInsuranceInfoCatalogue).where(
             SQLAlchemyInsuranceInfoCatalogue.id == insurance_info_record_id

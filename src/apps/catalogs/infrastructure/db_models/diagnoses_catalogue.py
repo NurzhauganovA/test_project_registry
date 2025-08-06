@@ -60,7 +60,7 @@ class SQLAlchemyPatientsAndDiagnoses(Base, PrimaryKey, ChangedAtMixin, CreatedAt
     diagnosis: Mapped["SQLAlchemyDiagnosesCatalogue"] = relationship(
         "SQLAlchemyDiagnosesCatalogue", lazy="joined"
     )
-    patient: Mapped["SQLAlchemyPatient"] = relationship(  # noqa: F821
+    patient: Mapped["SQLAlchemyPatient"] = relationship(  # type: ignore[name-defined]  # noqa: F821
         "SQLAlchemyPatient", lazy="joined"
     )
-    doctor: Mapped[Optional["User"]] = relationship("User", lazy="joined")  # noqa: F821
+    doctor: Mapped[Optional["User"]] = relationship("User", lazy="joined")  # type: ignore[name-defined]  # noqa: F821

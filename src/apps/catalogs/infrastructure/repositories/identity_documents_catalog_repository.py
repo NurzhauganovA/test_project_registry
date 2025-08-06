@@ -21,6 +21,7 @@ from src.apps.catalogs.mappers import (
     map_identity_document_db_entity_to_response_schema,
     map_identity_document_update_schema_to_db_entity,
 )
+from src.shared.helpers.decorators import handle_unique_violation, transactional
 from src.shared.infrastructure.base import BaseRepository
 
 
@@ -100,6 +101,8 @@ class SQLAlchemyIdentityDocumentsCatalogRepositoryImpl(
             map_identity_document_db_entity_to_response_schema(obj) for obj in records
         ]
 
+    @transactional
+    @handle_unique_violation
     async def add_identity_document(
         self, request_dto: AddIdentityDocumentRequestSchema
     ) -> IdentityDocumentResponseSchema:
@@ -114,6 +117,7 @@ class SQLAlchemyIdentityDocumentsCatalogRepositoryImpl(
 
         return map_identity_document_db_entity_to_response_schema(obj)
 
+    @transactional
     async def update_identity_document(
         self,
         document_id: int,
@@ -136,6 +140,7 @@ class SQLAlchemyIdentityDocumentsCatalogRepositoryImpl(
 
         return map_identity_document_db_entity_to_response_schema(updated_obj)
 
+    @transactional
     async def delete_by_id(self, document_id: int) -> None:
         query = delete(SQLAlchemyIdentityDocumentsCatalogue).where(
             SQLAlchemyIdentityDocumentsCatalogue.id == document_id

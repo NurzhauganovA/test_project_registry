@@ -19,6 +19,7 @@ from src.apps.catalogs.mappers import (
     map_diagnosis_catalog_create_schema_to_db_entity,
     map_diagnosis_catalog_db_entity_to_response_schema,
 )
+from src.shared.helpers.decorators import handle_unique_violation, transactional
 from src.shared.infrastructure.base import BaseRepository
 
 
@@ -93,6 +94,8 @@ class SQLAlchemyDiagnosesCatalogRepositoryImpl(
             map_diagnosis_catalog_db_entity_to_response_schema(obj) for obj in records
         ]
 
+    @transactional
+    @handle_unique_violation
     async def add_diagnosis(
         self, request_dto: AddDiagnosisRequestSchema
     ) -> DiagnosesCatalogResponseSchema:
@@ -107,6 +110,7 @@ class SQLAlchemyDiagnosesCatalogRepositoryImpl(
 
         return map_diagnosis_catalog_db_entity_to_response_schema(obj)
 
+    @transactional
     async def update_diagnosis(
         self, diagnosis_id: int, request_dto: UpdateDiagnosisRequestSchema
     ) -> DiagnosesCatalogResponseSchema:
@@ -127,6 +131,7 @@ class SQLAlchemyDiagnosesCatalogRepositoryImpl(
 
         return map_diagnosis_catalog_db_entity_to_response_schema(obj)
 
+    @transactional
     async def delete_by_id(self, diagnosis_id: int) -> None:
         query = delete(SQLAlchemyDiagnosesCatalogue).where(
             SQLAlchemyDiagnosesCatalogue.id == diagnosis_id

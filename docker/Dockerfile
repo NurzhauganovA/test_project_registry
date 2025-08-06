@@ -6,8 +6,6 @@ ENV PYTHONUNBUFFERED=1 \
     LANGUAGE=ru_RU:ru \
     LC_ALL=ru_RU.UTF-8
 
-
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gettext \

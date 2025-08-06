@@ -32,7 +32,7 @@ class SQLAlchemyInsuranceInfoCatalogue(Base, ChangedAtMixin, CreatedAtMixin):
     patient_id: Mapped[UUID] = mapped_column(
         ForeignKey("patients.id"), nullable=False, comment="Insurance ID"
     )
-    patient: Mapped["SQLAlchemyPatient"] = relationship(  # noqa: F821
+    patient: Mapped["SQLAlchemyPatient"] = relationship(  # type: ignore[name-defined]  # noqa: F821
         "SQLAlchemyPatient",
         back_populates="insurances",
         lazy="selectin",
@@ -43,7 +43,7 @@ class SQLAlchemyInsuranceInfoCatalogue(Base, ChangedAtMixin, CreatedAtMixin):
         nullable=False,
         comment="Financing source ID",
     )
-    financing_source: Mapped["SQLAlchemyFinancingSourcesCatalog"] = (  # noqa: F821
+    financing_source: Mapped["SQLAlchemyFinancingSourcesCatalog"] = (  # type: ignore[name-defined]  # noqa: F821
         relationship(
             "SQLAlchemyFinancingSourcesCatalog",
             back_populates="insurance_info_records",

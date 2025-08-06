@@ -2,9 +2,8 @@ from datetime import date
 from typing import Optional
 from uuid import UUID
 
-from sqlalchemy import Date
+from sqlalchemy import Date, ForeignKey, Integer, String
 from sqlalchemy import Enum as SAEnum
-from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.apps.catalogs.enums import IdentityDocumentTypeEnum
@@ -39,7 +38,7 @@ class SQLAlchemyIdentityDocumentsCatalogue(Base, ChangedAtMixin, CreatedAtMixin)
     )
 
     # Relationship
-    patient: Mapped["SQLAlchemyPatient"] = relationship(  # noqa: F821
+    patient: Mapped["SQLAlchemyPatient"] = relationship(  # type: ignore[name-defined]  # noqa: F821
         "SQLAlchemyPatient",
         back_populates="identity_documents",
     )

@@ -9,6 +9,7 @@ from src.apps.users.mappers import (
     map_user_db_entity_to_domain,
     map_user_domain_to_db_entity,
 )
+from src.shared.helpers.decorators import handle_unique_violation, transactional
 from src.shared.infrastructure.base import BaseRepository
 
 
@@ -37,6 +38,8 @@ class SQLAlchemyUserRepository(BaseRepository, UserRepositoryInterface):
 
         return map_user_db_entity_to_domain(user)
 
+    @transactional
+    @handle_unique_violation
     async def create(self, user: UserDomain) -> UserDomain:
         user_to_add = map_user_domain_to_db_entity(user)
 
@@ -46,21 +49,23 @@ class SQLAlchemyUserRepository(BaseRepository, UserRepositoryInterface):
 
         return map_user_db_entity_to_domain(user_to_add)
 
+    @transactional
     async def update(self, user: UserDomain) -> UserDomain:
         query = select(User).where(User.id == user.id)
         result = await self._async_db_session.execute(query)
         user_to_update = result.scalars().first()
 
-        user_as_dict = user.to_dict()
-        # Updating fields
-        for field, value in user_as_dict.items():
-            setattr(user_to_update, field, value)
+        user_with_updated_fields = map_user_domain_to_db_entity(
+            user=user,
+            existing_db_entity=user_to_update
+        )
 
         await self._async_db_session.commit()
-        await self._async_db_session.refresh(user_to_update)
+        await self._async_db_session.refresh(user_with_updated_fields)
 
-        return map_user_db_entity_to_domain(user_to_update)
+        return map_user_db_entity_to_domain(user_with_updated_fields)
 
+    @transactional
     async def delete(self, user_id: UUID) -> None:
         query = select(User).where(User.id == user_id)
         result = await self._async_db_session.execute(query)

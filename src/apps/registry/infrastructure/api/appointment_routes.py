@@ -18,10 +18,11 @@ from src.apps.registry.infrastructure.api.schemas.requests.filters.appointment_f
     AppointmentFilterParams,
 )
 from src.apps.registry.infrastructure.api.schemas.responses.appointment_schemas import (
+    AppointmentBlankInfoSchema,
     MultipleAppointmentsResponseSchema,
     ResponseAppointmentSchema,
 )
-from src.apps.registry.mappers import map_appointment_domain_to_response_schema
+from src.apps.registry.mappers import build_appointment_info_blank_schema, map_appointment_domain_to_response_schema
 from src.apps.registry.services.appointment_service import AppointmentService
 from src.apps.users.infrastructure.schemas.user_schemas import UserSchema
 from src.apps.users.mappers import map_user_domain_to_schema
@@ -89,16 +90,16 @@ async def get_appointments(
     appointment_service: AppointmentService = Depends(
         Provide[RegistryContainer.appointment_service]
     ),
-    _: None = Depends(
-        check_user_permissions(
-            resources=[
-                {
-                    "resource_name": AvailableResourcesEnum.APPOINTMENTS,
-                    "scopes": [AvailableScopesEnum.READ],
-                },
-            ],
-        )
-    ),
+    # _: None = Depends(
+    #     check_user_permissions(
+    #         resources=[
+    #             {
+    #                 "resource_name": AvailableResourcesEnum.APPOINTMENTS,
+    #                 "scopes": [AvailableScopesEnum.READ],
+    #             },
+    #         ],
+    #     )
+    # ),
     pagination_params: PaginationParams = Depends(),
 ) -> MultipleAppointmentsResponseSchema:
     results, total_appointments_amount = await appointment_service.get_appointments(
@@ -229,6 +230,46 @@ async def create_appointment(
     response_schema = map_appointment_domain_to_response_schema(
         appointment=appointment,
         appointment_end_time=end_time,
+        appointment_date=appointment_date,
+        patient_schema=patient_schema,
+        doctor_schema=doctor_schema,
+    )
+
+    return response_schema
+
+
+@appointments_router.post(
+    "/appointments/{appointment_id}/blank",
+    response_model=AppointmentBlankInfoSchema,
+)
+@inject
+async def get_appointment_blank_info(
+    appointment_id: int,
+    appointment_service: AppointmentService = Depends(
+        Provide[RegistryContainer.appointment_service]
+    ),
+    # _: None = Depends(
+    #     check_user_permissions(
+    #         resources=[
+    #             {
+    #                 "resource_name": AvailableResourcesEnum.APPOINTMENTS,
+    #                 "scopes": [AvailableScopesEnum.READ],
+    #             },
+    #         ],
+    #     )
+    # ),
+) -> AppointmentBlankInfoSchema:
+    appointment, patient, doctor, end_time, appointment_date = (
+        await appointment_service.get_by_id(appointment_id)
+    )
+
+    patient_schema: ResponsePatientSchema | None = (
+        map_patient_domain_to_response_schema(patient) if patient else None
+    )
+    doctor_schema: UserSchema = map_user_domain_to_schema(doctor)
+
+    response_schema = build_appointment_info_blank_schema(
+        appointment=appointment,
         appointment_date=appointment_date,
         patient_schema=patient_schema,
         doctor_schema=doctor_schema,

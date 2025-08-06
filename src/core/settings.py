@@ -3,6 +3,8 @@ from typing import List, Set
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from src.core import read_version
+
 
 class KafkaSettings(BaseSettings):
     KAFKA_BOOTSTRAP_SERVERS: List[str] = []
@@ -16,7 +18,7 @@ class Settings(BaseSettings):
     APP_PORT: int = 8002
     APP_HOST: str = "localhost"
     PROJECT_NAME: str = "Registry Service [ORKENDEU]"
-    PROJECT_VERSION: str = "0.0.2"
+    PROJECT_VERSION: str = read_version()
     API_PREFIX: str = "/api/v1"
     API_ENABLE_DOCS: bool = True
     BACKEND_CORS_ORIGINS: List[str] = []
@@ -76,7 +78,6 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(
         env_file_encoding="utf-8",
-        validate_environment=True,
     )
 
 

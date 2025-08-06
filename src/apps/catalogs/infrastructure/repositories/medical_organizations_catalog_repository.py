@@ -1,13 +1,10 @@
 from typing import List, Optional
 
 from sqlalchemy import and_, delete, func, or_, select
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.apps.catalogs.infrastructure.api.schemas.requests.citizenship_catalog_request_schemas import (
-    UpdateCitizenshipSchema,
-)
 from src.apps.catalogs.infrastructure.api.schemas.requests.medical_organizations_catalog_schemas import (
     AddMedicalOrganizationSchema,
+    UpdateMedicalOrganizationSchema,
 )
 from src.apps.catalogs.infrastructure.api.schemas.responses.medical_organizations_catalog_schemas import (
     MedicalOrganizationCatalogFullResponseSchema,
@@ -18,18 +15,14 @@ from src.apps.catalogs.infrastructure.db_models.medical_organizations_catalogue 
 from src.apps.catalogs.interfaces.medical_organizations_catalog_repository_interface import (
     MedicalOrganizationsCatalogRepositoryInterface,
 )
-from src.core.logger import LoggerService
 from src.core.settings import project_settings
+from src.shared.helpers.decorators import handle_unique_violation, transactional
 from src.shared.infrastructure.base import BaseRepository
 
 
 class SQLAlchemyMedicalOrganizationsCatalogCatalogueRepositoryImpl(
     BaseRepository, MedicalOrganizationsCatalogRepositoryInterface
 ):
-    def __init__(self, async_db_session: AsyncSession, logger: LoggerService):
-        self._async_db_session = async_db_session
-        self._logger = logger
-
     async def get_by_default_name(
         self, name: str
     ) -> Optional[MedicalOrganizationCatalogFullResponseSchema]:
@@ -175,10 +168,13 @@ class SQLAlchemyMedicalOrganizationsCatalogCatalogueRepositoryImpl(
             for record in records
         ]
 
+    @transactional
+    @handle_unique_violation
     async def add_medical_organization(
         self, request_dto: AddMedicalOrganizationSchema
     ) -> MedicalOrganizationCatalogFullResponseSchema:
         obj = SQLAlchemyMedicalOrganizationsCatalogue(
+            id=request_dto.id,
             name=request_dto.name,
             code=request_dto.organization_code,
             address=request_dto.address,
@@ -194,8 +190,9 @@ class SQLAlchemyMedicalOrganizationsCatalogCatalogueRepositoryImpl(
 
         return MedicalOrganizationCatalogFullResponseSchema.model_validate(obj)
 
+    @transactional
     async def update_medical_organization(
-        self, medical_organization_id: int, request_dto: UpdateCitizenshipSchema
+        self, medical_organization_id: int, request_dto: UpdateMedicalOrganizationSchema
     ) -> MedicalOrganizationCatalogFullResponseSchema:
         query = select(SQLAlchemyMedicalOrganizationsCatalogue).where(
             SQLAlchemyMedicalOrganizationsCatalogue.id == medical_organization_id
@@ -219,6 +216,7 @@ class SQLAlchemyMedicalOrganizationsCatalogCatalogueRepositoryImpl(
 
         return MedicalOrganizationCatalogFullResponseSchema.model_validate(obj)
 
+    @transactional
     async def delete_by_id(self, medical_organization_id: int) -> None:
         query = delete(SQLAlchemyMedicalOrganizationsCatalogue).where(
             SQLAlchemyMedicalOrganizationsCatalogue.id == medical_organization_id

@@ -52,6 +52,14 @@ class PatientTruncatedResponseSchema(BaseModel):
     middle_name: Optional[str] = Field(None, description="Patient's middle name")
 
 
+class PatientTruncatedAppointmentBlankInfoSchema(PatientTruncatedResponseSchema):
+    maiden_name: Optional[str] = Field(None, description="Patient's maiden name")
+    date_of_birth: date = Field(..., description="Patient's birth date")
+    gender: PatientGenderEnum = Field(..., description="Patient's gender")
+    address: Optional[str] = Field(None, description="Patient's primary address")
+    ambulatory_card_number: Optional[int] = Field(None, description="Patient's ambulatory card number")
+
+
 class MultiplePatientsResponseSchema(BaseModel):
     items: List[ResponsePatientSchema]
     pagination: PaginationMetaDataSchema

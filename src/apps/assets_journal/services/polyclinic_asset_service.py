@@ -41,19 +41,21 @@ class PolyclinicAssetService:
     def __init__(
             self,
             uow: AssetsJournalUnitOfWorkInterface,
+            polyclinic_asset_repository: PolyclinicAssetRepositoryInterface,
             patients_service: PatientService,
             medical_organizations_catalog_service: MedicalOrganizationsCatalogService,
             logger: LoggerService,
     ):
         self._uow = uow
+        self._polyclinic_asset_repository = polyclinic_asset_repository
         self._patients_service = patients_service
         self._medical_organizations_catalog_service = medical_organizations_catalog_service
         self._logger = logger
 
-    @property
-    def _polyclinic_asset_repository(self) -> PolyclinicAssetRepositoryInterface:
-        """Получить репозиторий через UoW"""
-        return self._uow.polyclinic_asset_repository
+    # @property
+    # def _polyclinic_asset_repository(self) -> PolyclinicAssetRepositoryInterface:
+    #     """Получить репозиторий через UoW"""
+    #     return self._uow.polyclinic_asset_repository
 
     async def get_by_id(self, asset_id: UUID) -> PolyclinicAssetDomain:
         """

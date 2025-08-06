@@ -63,12 +63,10 @@ class ScheduleRepositoryImpl(BaseRepository, ScheduleRepositoryInterface):
             for specialization in specialization_names:
                 if specialization:
                     exists_clause = (
-                        select(True)
+                        select(elements_source.c.value)
                         .select_from(elements_source)
                         .where(
-                            func.lower(element_name_as_text).ilike(
-                                f"%{specialization.lower()}%"
-                            )
+                            func.lower(element_name_as_text).ilike(f"%{specialization.lower()}%")
                         )
                         .exists()
                     )

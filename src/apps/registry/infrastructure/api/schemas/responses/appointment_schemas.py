@@ -1,17 +1,19 @@
-from datetime import date, datetime, time
+from datetime import date as DTdate
+from datetime import datetime, time
 from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
 
 from src.apps.patients.infrastructure.api.schemas.responses.patient_response_schemas import (
-    ResponsePatientSchema,
+    PatientTruncatedAppointmentBlankInfoSchema,
+    PatientTruncatedResponseSchema,
 )
 from src.apps.registry.domain.enums import AppointmentStatusEnum, AppointmentTypeEnum
 from src.apps.registry.infrastructure.api.schemas.appointment_schemas import (
     AdditionalServiceSchema,
 )
-from src.apps.users.infrastructure.schemas.user_schemas import UserSchema
+from src.apps.users.infrastructure.schemas.user_schemas import DoctorTruncatedResponseSchema
 from src.shared.schemas.pagination_schemas import PaginationMetaDataSchema
 
 
@@ -20,12 +22,12 @@ class ResponseAppointmentSchema(BaseModel):
     schedule_day_id: UUID
     start_time: time
     end_time: time  # Not in the 'appointments' DB table
-    date: date  # Not in the 'appointments' DB table
+    date: DTdate  # Not in the 'appointments' DB table
     doctor: (
-        UserSchema  # Not in the 'appointments' DB table, only 'doctor_id' is in the DB
+        DoctorTruncatedResponseSchema
     )
-    patient: Optional[ResponsePatientSchema] = (
-        None  # Not in the 'appointments' DB table, only 'patient_id' is in the DB
+    patient: Optional[PatientTruncatedResponseSchema] = (
+        None
     )
     phone_number: Optional[str] = None
     address: Optional[str] = None
@@ -36,6 +38,10 @@ class ResponseAppointmentSchema(BaseModel):
     additional_services: Optional[List[AdditionalServiceSchema]] = Field(
         default_factory=list
     )
+    office_number: Optional[int] = Field(
+        None,
+        description="Office number where appointment will be processed in",
+    )
 
     # Optional field. Is being set by the server when the appointment is cancelled.
     cancelled_at: Optional[datetime] = None
@@ -44,3 +50,23 @@ class ResponseAppointmentSchema(BaseModel):
 class MultipleAppointmentsResponseSchema(BaseModel):
     items: List[ResponseAppointmentSchema]
     pagination: PaginationMetaDataSchema
+
+
+class AppointmentBlankInfoSchema(BaseModel):
+    appointment_id: int = Field(..., description="Unique identifier of the appointment")
+    date: DTdate = Field(..., description="Date of the appointment")
+    start_time: time = Field(..., description="Start time of the appointment")
+    doctor_full_name: str = Field(
+        ...,
+        description="Full name of the doctor (Last name, First name, Middle name if available)"
+    )
+    doctor_speciality: Optional[str] = Field(None, description="Primary medical specialty of the doctor")
+    reason: str = Field(..., description="Reason or purpose for the appointment")
+    office_number: Optional[int] = Field(
+        None,
+        description="Office number where appointment will be processed in",
+    )
+    patient: Optional[PatientTruncatedAppointmentBlankInfoSchema] = Field(
+        None,
+        description="Brief information about the patient related to this appointment"
+    )

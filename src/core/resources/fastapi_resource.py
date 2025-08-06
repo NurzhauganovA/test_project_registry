@@ -4,6 +4,7 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.core.middlewares.i18n_middleware import LocalesTranslationMiddleware
+from src.shared.exception_handlers import generic_exception_handler
 
 
 def FastAPIResource(
@@ -43,6 +44,9 @@ def FastAPIResource(
         handler = handler_dict["handler"]
         error_it_handles = handler_dict["error"]
         app.add_exception_handler(error_it_handles, handler)
+
+    # Universal catch-all exception handler if nothing else above catches
+    app.add_exception_handler(Exception, generic_exception_handler)
 
     # Routers
     for router_dict in routers:

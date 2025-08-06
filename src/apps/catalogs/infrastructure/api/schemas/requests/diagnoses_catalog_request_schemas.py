@@ -19,6 +19,7 @@ class BaseNotBlankValidator(BaseModel):
 
 
 class DiagnosesCatalogBaseRequestSchema(BaseNotBlankValidator):
+    id: Optional[int] = Field(None, description="Unique diagnosis ID")
     diagnosis_code: Optional[str] = Field(
         None,
         description="Diagnosis code",
@@ -77,3 +78,7 @@ class UpdateDiagnosedPatientDiagnosisRecordRequestSchema(
     DiagnosedPatientDiagnosisBaseRequestSchema
 ):
     pass
+
+
+class DeleteDiagnosisSchema(BaseModel):
+    id: int

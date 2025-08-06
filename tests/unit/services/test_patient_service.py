@@ -89,23 +89,6 @@ async def test_get_patients_returns_patients_and_total(patient_service, mock_pat
 
 @pytest.mark.asyncio
 async def test_get_patients_none_filters(patient_service, mock_patient_repository):
-    filters = MagicMock(to_dict=lambda **kw: None)
-    pagination = MagicMock(page=1, limit=10)
-    mock_patient_repository.get_patients.return_value = []
-    mock_patient_repository.get_total_number_of_patients.return_value = 0
-
-    result_patients, total = await patient_service.get_patients(filters, pagination)
-
-    assert result_patients == []
-    assert total == 0
-    mock_patient_repository.get_patients.assert_awaited_once_with(
-        filters=None, page=1, limit=10
-    )
-    mock_patient_repository.get_total_number_of_patients.assert_awaited_once_with()
-
-
-@pytest.mark.asyncio
-async def test_get_patients_returns_empty_and_total(patient_service, mock_patient_repository):
     filters = MagicMock(to_dict=lambda **kw: {})
     pagination = MagicMock(page=1, limit=10)
     mock_patient_repository.get_patients.return_value = []
@@ -115,12 +98,26 @@ async def test_get_patients_returns_empty_and_total(patient_service, mock_patien
 
     assert result_patients == []
     assert total == 0
-    mock_patient_repository.get_patients.assert_awaited_once_with(
-        filters={}, page=1, limit=10
-    )
+
+    mock_patient_repository.get_patients.assert_not_awaited()
     mock_patient_repository.get_total_number_of_patients.assert_awaited_once_with()
 
 
+@pytest.mark.asyncio
+async def test_get_patients_returns_empty_and_total(patient_service, mock_patient_repository):
+    filters = MagicMock(to_dict=lambda **kw: {'iin': '123'})
+    pagination = MagicMock(page=1, limit=10)
+    mock_patient_repository.get_patients.return_value = []
+    mock_patient_repository.get_total_number_of_patients.return_value = 0
+
+    result_patients, total = await patient_service.get_patients(filters, pagination)
+
+    assert result_patients == []
+    assert total == 0
+    mock_patient_repository.get_patients.assert_awaited_once_with(
+        filters={'iin': '123'}, page=1, limit=10
+    )
+    mock_patient_repository.get_total_number_of_patients.assert_awaited_once_with()
 
 
 @pytest.mark.asyncio

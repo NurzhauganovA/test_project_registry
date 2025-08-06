@@ -57,6 +57,8 @@ from src.apps.catalogs.services.patient_context_attribute_service import (
 from src.apps.catalogs.services.patients_and_diagnoses_service import (
     DiagnosedPatientDiagnosisService,
 )
+from src.apps.patients.services.patients_service import PatientService
+from src.apps.users.services.user_service import UserService
 from src.core.database.config import provide_async_session
 from src.core.logger import LoggerService
 
@@ -65,17 +67,15 @@ class CatalogsContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         packages=[
             "src.apps.catalogs.infrastructure.api",
-        ],
-        modules=[
-            "src.apps.catalogs.infrastructure.kafka.event_handlers",
+            "src.apps.catalogs.infrastructure.kafka"
         ],
     )
 
     # Dependencies from core DI-container
     logger = providers.Dependency(instance_of=LoggerService)
     engine = providers.Dependency(instance_of=AsyncEngine)
-    patients_service = providers.Dependency()
-    user_service = providers.Dependency()
+    patients_service: providers.Dependency[PatientService] = providers.Dependency()
+    user_service: providers.Dependency[UserService] = providers.Dependency()
 
     # Session factory
     session_factory = providers.Singleton(

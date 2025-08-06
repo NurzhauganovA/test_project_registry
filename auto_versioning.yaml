@@ -1,0 +1,20 @@
+# Files path
+simple_files:
+  - VERSION
+env_files:
+  - .envs/app/dev.env
+  - .envs/app/example.env
+env_vars:
+  - PROJECT_VERSION
+  - PROJECT_VERSION
+yaml_files:
+  - k8s/ConfigMap.yaml
+yaml_keys:
+  - data.PROJECT_VERSION
+
+# Auto commiting options
+auto_commit: false
+auto_push: false
+
+# Version strategy choosing
+default_version_strategy: random

@@ -93,6 +93,7 @@ from src.apps.registry.infrastructure.db_models.models import (
     Appointment,
     ScheduleDay
 )
+from src.apps.users.domain.models.user import UserDomain
 from src.apps.users.infrastructure.db_models.models import User
 from src.apps.users.infrastructure.schemas.user_schemas import UserSchema, AttachmentDataModel, SpecializationModel, \
     DoctorTruncatedResponseSchema
@@ -340,23 +341,6 @@ def dummy_db_user() -> User:
     return user
 
 
-@pytest.fixture(autouse=True)
-def patch_map_entity_to_domain(monkeypatch, dummy_db_user, dummy_user_domain):
-    repository_module = importlib.import_module(
-        "src.apps.users.infrastructure.repositories.user_repository"
-    )
-    monkeypatch.setattr(
-        repository_module,
-        "map_user_db_entity_to_domain",
-        lambda db_obj: dummy_user_domain,
-    )
-    monkeypatch.setattr(
-        repository_module,
-        "map_user_domain_to_db_entity",
-        lambda domain_obj: dummy_db_user,
-    )
-
-
 @pytest.fixture
 def dummy_user_repo():
     repository = MagicMock(spec=UserRepositoryInterface)
@@ -404,13 +388,23 @@ def dummy_user_domain():
     return map_user_schema_to_domain(schema)
 
 
-@pytest.fixture(autouse=True)
-def patch_map_user_schema_to_domain(monkeypatch, dummy_user_domain):
-    service_module = importlib.import_module("src.apps.users.services.user_service")
-    monkeypatch.setattr(
-        service_module,
-        "map_user_schema_to_domain",
-        lambda schema: dummy_user_domain,
+@pytest.fixture
+def dummy_user_schema(dummy_user_id, dummy_user_domain):
+    return UserSchema(
+        id=dummy_user_id,
+        first_name=dummy_user_domain.first_name,
+        last_name=dummy_user_domain.last_name,
+        middle_name=dummy_user_domain.middle_name,
+        iin=dummy_user_domain.iin,
+        date_of_birth=dummy_user_domain.date_of_birth,
+        client_roles=dummy_user_domain.client_roles,
+        enabled=dummy_user_domain.enabled,
+        served_patient_types=dummy_user_domain.served_patient_types,
+        served_referral_types=dummy_user_domain.served_referral_types,
+        served_referral_origins=dummy_user_domain.served_referral_origins,
+        served_payment_types=dummy_user_domain.served_payment_types,
+        specializations=dummy_user_domain.specializations,
+        attachment_data=dummy_user_domain.attachment_data,
     )
 
 

@@ -55,7 +55,7 @@ class Schedule(Base, PrimaryKey, CreatedAtMixin, ChangedAtMixin):
         "ScheduleDay", back_populates="schedule", cascade="all, delete-orphan"
     )
 
-    doctor: Mapped["User"] = relationship(
+    doctor: Mapped["User"] = relationship(  # type: ignore[name-defined]
         "User",
         back_populates="schedules",
         foreign_keys=[doctor_id],
@@ -131,6 +131,7 @@ class Appointment(Base, CreatedAtMixin, ChangedAtMixin):
     additional_services: Mapped[Optional[List[Dict[str, Any]]]] = mapped_column(
         JSONB, nullable=True, server_default="[]"
     )
+    office_number: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     schedule_day_id: Mapped[UUID] = mapped_column(
         ForeignKey("schedule_days.id", ondelete="CASCADE"), nullable=False
     )
@@ -140,7 +141,7 @@ class Appointment(Base, CreatedAtMixin, ChangedAtMixin):
         DateTime(timezone=True), nullable=True
     )
 
-    patient: Mapped["SQLAlchemyPatient"] = relationship(
+    patient: Mapped["SQLAlchemyPatient"] = relationship(  # type: ignore[name-defined]
         "SQLAlchemyPatient",
         back_populates="appointments",
         foreign_keys=[patient_id],
@@ -148,4 +149,11 @@ class Appointment(Base, CreatedAtMixin, ChangedAtMixin):
     )
     schedule_day: Mapped["ScheduleDay"] = relationship(
         "ScheduleDay", back_populates="appointments"
+    )
+
+    __table_args__ = (
+        CheckConstraint(
+            "(office_number IS NULL) OR (office_number >= 1)",
+            name="ck_appointment_office_number_positive_or_null"
+        ),
     )

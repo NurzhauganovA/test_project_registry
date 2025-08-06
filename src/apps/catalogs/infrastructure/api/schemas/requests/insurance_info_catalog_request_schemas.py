@@ -9,6 +9,7 @@ from src.shared.helpers.validation_helpers import validate_field_not_blank
 
 
 class BaseInsuranceInfoRecordSchema(BaseModel):
+    id: Optional[int] = Field(None, description="Unique insurance record ID")
     policy_number: Optional[str] = Field(
         None,
         description="Policy number",
@@ -76,3 +77,7 @@ class AddInsuranceInfoRecordSchema(BaseInsuranceInfoRecordSchema):
 
 class UpdateInsuranceInfoRecordSchema(BaseInsuranceInfoRecordSchema):
     pass
+
+
+class DeleteInsuranceInfoRecordSchema(BaseModel):
+    id: int

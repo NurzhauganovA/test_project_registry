@@ -49,6 +49,7 @@ def map_diagnosis_catalog_create_schema_to_db_entity(
     create_schema: AddDiagnosisRequestSchema,
 ) -> SQLAlchemyDiagnosesCatalogue:
     return SQLAlchemyDiagnosesCatalogue(
+        id=create_schema.id,
         diagnosis_code=create_schema.diagnosis_code,
         description=create_schema.description,
         is_active=create_schema.is_active if create_schema.is_active else True,
@@ -90,6 +91,7 @@ def map_insurance_info_create_schema_to_db_entity(
     create_schema: AddInsuranceInfoRecordSchema,
 ) -> SQLAlchemyInsuranceInfoCatalogue:
     return SQLAlchemyInsuranceInfoCatalogue(
+        id=create_schema.id,
         financing_source_id=create_schema.financing_source_id,
         policy_number=create_schema.policy_number,
         company=create_schema.company,
@@ -144,6 +146,7 @@ def map_identity_document_create_schema_to_db_entity(
     create_schema: AddIdentityDocumentRequestSchema,
 ) -> SQLAlchemyIdentityDocumentsCatalogue:
     return SQLAlchemyIdentityDocumentsCatalogue(
+        id=create_schema.id,
         patient_id=create_schema.patient_id,
         type=create_schema.type,
         series=create_schema.series,

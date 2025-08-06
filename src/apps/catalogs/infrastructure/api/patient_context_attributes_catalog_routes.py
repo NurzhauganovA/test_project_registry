@@ -34,9 +34,11 @@ async def get_by_id_for_client(
         Provide[CatalogsContainer.patient_context_attributes_service]
     ),
 ) -> PatientContextAttributeCatalogPartialResponseSchema:
+    # fmt: off
     patient_context_attribute: PatientContextAttributeCatalogPartialResponseSchema = (
-        await service.get_by_id(context_attribute_id, include_all_locales=False)
+        await service.get_by_id(context_attribute_id, include_all_locales=False)  # type: ignore
     )
+    # fmt: on
 
     return patient_context_attribute
 
@@ -52,9 +54,11 @@ async def get_by_id_for_admin(
         Provide[CatalogsContainer.patient_context_attributes_service]
     ),
 ) -> PatientContextAttributeCatalogFullResponseSchema:
+    # fmt: off
     patient_context_attribute: PatientContextAttributeCatalogFullResponseSchema = (
-        await service.get_by_id(context_attribute_id, include_all_locales=True)
+        await service.get_by_id(context_attribute_id, include_all_locales=True)  # type: ignore
     )
+    # fmt: on
 
     return patient_context_attribute
 

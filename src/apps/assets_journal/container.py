@@ -4,6 +4,8 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm.session import sessionmaker
 
 from src.apps.assets_journal.infrastructure.repositories import polyclinic_asset_repository
+from src.apps.assets_journal.infrastructure.repositories.polyclinic_asset_repository import \
+    PolyclinicAssetRepositoryImpl
 from src.apps.assets_journal.infrastructure.repositories.stationary_asset_repository import (
     StationaryAssetRepositoryImpl,
 )
@@ -87,6 +89,12 @@ class AssetsJournalContainer(containers.DeclarativeContainer):
         logger=logger,
     )
 
+    polyclinic_asset_repository = providers.Factory(
+        PolyclinicAssetRepositoryImpl,
+        async_db_session=async_db_session,
+        logger=logger
+    )
+
     # Сервисы
     stationary_asset_service = providers.Factory(
         StationaryAssetService,
@@ -118,6 +126,7 @@ class AssetsJournalContainer(containers.DeclarativeContainer):
     polyclinic_asset_service = providers.Factory(
         PolyclinicAssetService,
         uow=unit_of_work,
+        polyclinic_asset_repository=polyclinic_asset_repository,
         patients_service=patients_service,
         medical_organizations_catalog_service=medical_organizations_catalog_service,
         logger=logger,

@@ -34,9 +34,11 @@ async def get_by_id_for_client(
         Provide[CatalogsContainer.nationalities_catalog_service]
     ),
 ) -> NationalityCatalogPartialResponseSchema:
+    # fmt: off
     nationality: NationalityCatalogPartialResponseSchema = await service.get_by_id(
-        nationality_id, include_all_locales=False
+        nationality_id, include_all_locales=False  # type: ignore
     )
+    # fmt: on
 
     return nationality
 
@@ -52,9 +54,11 @@ async def get_by_id_for_admin(
         Provide[CatalogsContainer.nationalities_catalog_service]
     ),
 ) -> NationalityCatalogFullResponseSchema:
+    # fmt: off
     nationality: NationalityCatalogFullResponseSchema = await service.get_by_id(
-        nationality_id, include_all_locales=True
+        nationality_id, include_all_locales=True  # type: ignore
     )
+    # fmt: off
 
     return nationality
 

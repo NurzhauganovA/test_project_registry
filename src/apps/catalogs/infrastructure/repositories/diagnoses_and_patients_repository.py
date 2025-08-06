@@ -9,7 +9,7 @@ from src.apps.catalogs.infrastructure.api.schemas.requests.diagnoses_catalog_req
     UpdateDiagnosedPatientDiagnosisRecordRequestSchema,
 )
 from src.apps.catalogs.infrastructure.api.schemas.responses.diagnoses_catalog_response_schemas import (
-    DiagnosedPatientDiagnosisBaseResponseSchema,
+    DiagnosedPatientDiagnosisResponseSchema,
 )
 from src.apps.catalogs.infrastructure.db_models.diagnoses_catalogue import (
     SQLAlchemyDiagnosesCatalogue,
@@ -87,7 +87,7 @@ class SQLAlchemyDiagnosedPatientDiagnosisRepositoryImpl(
 
     async def get_by_id(
         self, record_id: UUID
-    ) -> Optional[DiagnosedPatientDiagnosisBaseResponseSchema]:
+    ) -> Optional[DiagnosedPatientDiagnosisResponseSchema]:
         query = select(SQLAlchemyPatientsAndDiagnoses).where(
             SQLAlchemyPatientsAndDiagnoses.id == record_id
         )
@@ -103,7 +103,7 @@ class SQLAlchemyDiagnosedPatientDiagnosisRepositoryImpl(
         filters: Optional[Dict[str, Any]] = None,
         page: int = 1,
         limit: int = 30,
-    ) -> List[DiagnosedPatientDiagnosisBaseResponseSchema]:
+    ) -> List[DiagnosedPatientDiagnosisResponseSchema]:
         offset = (page - 1) * limit
         query = select(SQLAlchemyPatientsAndDiagnoses)
 
@@ -123,7 +123,7 @@ class SQLAlchemyDiagnosedPatientDiagnosisRepositoryImpl(
 
     async def add_patient_diagnosis_record(
         self, request_dto: AddDiagnosedPatientDiagnosisRecordRequestSchema
-    ) -> DiagnosedPatientDiagnosisBaseResponseSchema:
+    ) -> DiagnosedPatientDiagnosisResponseSchema:
         obj: SQLAlchemyPatientsAndDiagnoses = (
             map_diagnosed_patient_diagnosis_create_schema_to_db_entity(request_dto)
         )
@@ -139,7 +139,7 @@ class SQLAlchemyDiagnosedPatientDiagnosisRepositoryImpl(
         self,
         record_id: UUID,
         request_dto: UpdateDiagnosedPatientDiagnosisRecordRequestSchema,
-    ) -> DiagnosedPatientDiagnosisBaseResponseSchema:
+    ) -> DiagnosedPatientDiagnosisResponseSchema:
         query = select(SQLAlchemyPatientsAndDiagnoses).where(
             SQLAlchemyPatientsAndDiagnoses.id == record_id
         )
