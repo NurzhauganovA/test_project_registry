@@ -3,11 +3,10 @@ from typing import Optional, Type
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.apps.registry.interfaces.uow_interface import UnitOfWorkInterface
 from src.core.logger import LoggerService
 
 
-class BaseUnitOfWork(UnitOfWorkInterface):
+class BaseUnitOfWork:
     def __init__(self, session: AsyncSession, logger: LoggerService):
         self._session = session
         self._logger = logger

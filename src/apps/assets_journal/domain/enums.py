@@ -159,3 +159,41 @@ class PolyclinicTypeActiveVisit(enum.Enum):
     REPEAT_APPEAL = "repeat_appeal"     # Повторное обращение
     EMERGENCY_APPEAL = "emergency_appeal"  # Экстренное обращение
     PLANNED_APPEAL = "planned_appeal"   # Плановое обращение
+
+
+class MaternityOutcomeEnum(enum.Enum):
+    """Исход лечения в роддоме"""
+    DISCHARGED = "discharged"           # Выписан
+    TRANSFERRED = "transferred"         # Переведен
+    IMPROVED = "improved"               # Улучшение
+    DEATH = "death"                     # Смерть
+
+
+class MaternityAdmissionTypeEnum(enum.Enum):
+    """Тип госпитализации в роддом"""
+    PLANNED = "planned"                 # Плановая
+    EMERGENCY = "emergency"             # Экстренная
+    REFERRAL = "referral"               # По направлению
+
+
+class MaternityDiagnosisTypeEnum(enum.Enum):
+    """Тип диагноза в роддоме"""
+    PRIMARY = "primary"                 # Основной
+    SECONDARY = "secondary"             # Сопутствующий
+    COMPLICATION = "complication"       # Осложнение
+
+
+class MaternityStayTypeEnum(enum.Enum):
+    """Тип пребывания в роддоме"""
+    DELIVERY = "delivery"               # Роды
+    GYNECOLOGY = "gynecology"           # Гинекология
+    PATHOLOGY = "pathology"             # Патология беременности
+    OBSERVATION = "observation"         # Наблюдение
+
+
+class MaternityStatusEnum(enum.Enum):
+    """Статус пациентки в роддоме"""
+    PREGNANT = "pregnant"               # Беременная
+    IN_LABOR = "in_labor"               # В родах
+    POSTPARTUM = "postpartum"           # Послеродовая
+    GYNECOLOGICAL = "gynecological"     # Гинекологическая

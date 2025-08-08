@@ -3,6 +3,7 @@ from typing import Any, Awaitable, Dict, List, TypeVar
 
 from dependency_injector import containers, providers
 
+from src.apps.assets_journal.infrastructure.api.maternity_asset_routes import maternity_assets_router
 from src.apps.assets_journal.infrastructure.api.polyclinic_asset_routes import (
     polyclinic_assets_router
 )
@@ -167,6 +168,10 @@ def get_routers() -> List[Dict[str, Any]]:
         {
             "router": polyclinic_assets_router,
             "tags": ["Polyclinic assets routes"]
+        },
+        {
+            "router": maternity_assets_router,
+            "tags": ["Maternity assets routes"]
         }
     ]
 

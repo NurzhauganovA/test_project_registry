@@ -7,10 +7,11 @@ from src.apps.registry.infrastructure.repositories.schedule_day_repostiory impor
 from src.apps.registry.infrastructure.repositories.schedule_repository import (
     ScheduleRepositoryImpl,
 )
+from src.apps.registry.interfaces.uow_interface import UnitOfWorkInterface
 from src.shared.base_uow import BaseUnitOfWork
 
 
-class UnitOfWorkImpl(BaseUnitOfWork):
+class UnitOfWorkImpl(BaseUnitOfWork, UnitOfWorkInterface):
     @property
     def schedule_day_repository(self) -> ScheduleDayRepositoryImpl:
         return ScheduleDayRepositoryImpl(

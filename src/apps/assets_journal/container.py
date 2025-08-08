@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm.session import sessionmaker
 
 from src.apps.assets_journal.infrastructure.repositories import polyclinic_asset_repository
+from src.apps.assets_journal.infrastructure.repositories.maternity_asset_repository import MaternityAssetRepositoryImpl
 from src.apps.assets_journal.infrastructure.repositories.polyclinic_asset_repository import \
     PolyclinicAssetRepositoryImpl
 from src.apps.assets_journal.infrastructure.repositories.stationary_asset_repository import (
@@ -15,6 +16,7 @@ from src.apps.assets_journal.infrastructure.repositories.emergency_asset_reposit
 from src.apps.assets_journal.infrastructure.repositories.newborn_asset_repository import (
     NewbornAssetRepositoryImpl,
 )
+from src.apps.assets_journal.services.maternity_asset_service import MaternityAssetService
 from src.apps.assets_journal.services.polyclinic_asset_service import PolyclinicAssetService
 from src.apps.assets_journal.services.stationary_asset_service import (
     StationaryAssetService,
@@ -95,6 +97,12 @@ class AssetsJournalContainer(containers.DeclarativeContainer):
         logger=logger
     )
 
+    maternity_asset_repository = providers.Factory(
+        MaternityAssetRepositoryImpl,
+        async_db_session=async_db_session,
+        logger=logger,
+    )
+
     # Сервисы
     stationary_asset_service = providers.Factory(
         StationaryAssetService,
@@ -127,6 +135,15 @@ class AssetsJournalContainer(containers.DeclarativeContainer):
         PolyclinicAssetService,
         uow=unit_of_work,
         polyclinic_asset_repository=polyclinic_asset_repository,
+        patients_service=patients_service,
+        medical_organizations_catalog_service=medical_organizations_catalog_service,
+        logger=logger,
+    )
+
+    maternity_asset_service = providers.Factory(
+        MaternityAssetService,
+        uow=unit_of_work,
+        maternity_asset_repository=maternity_asset_repository,
         patients_service=patients_service,
         medical_organizations_catalog_service=medical_organizations_catalog_service,
         logger=logger,

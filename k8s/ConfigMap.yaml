@@ -22,7 +22,7 @@ data:
   MAX_OVERFLOW: '20'
   POOL_SIZE: '10'
   PROJECT_NAME: Registry Service [ORKENDEU]
-  PROJECT_VERSION: dev-20250729-142942
+  PROJECT_VERSION: dev-20250806-131952
   RPN_INTEGRATION_SERVICE_BASE_URL: https://rpn-integration-service:8010
   SCHEDULABLE_USER_ROLES: '["Chief Doctor","Primary Healthcare Expert","Registrar","General
     Practitioner","Specialist Doctor","Attending Physician"]'

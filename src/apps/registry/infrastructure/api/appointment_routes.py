@@ -90,16 +90,16 @@ async def get_appointments(
     appointment_service: AppointmentService = Depends(
         Provide[RegistryContainer.appointment_service]
     ),
-    # _: None = Depends(
-    #     check_user_permissions(
-    #         resources=[
-    #             {
-    #                 "resource_name": AvailableResourcesEnum.APPOINTMENTS,
-    #                 "scopes": [AvailableScopesEnum.READ],
-    #             },
-    #         ],
-    #     )
-    # ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.APPOINTMENTS,
+                    "scopes": [AvailableScopesEnum.READ],
+                },
+            ],
+        )
+    ),
     pagination_params: PaginationParams = Depends(),
 ) -> MultipleAppointmentsResponseSchema:
     results, total_appointments_amount = await appointment_service.get_appointments(
@@ -248,16 +248,16 @@ async def get_appointment_blank_info(
     appointment_service: AppointmentService = Depends(
         Provide[RegistryContainer.appointment_service]
     ),
-    # _: None = Depends(
-    #     check_user_permissions(
-    #         resources=[
-    #             {
-    #                 "resource_name": AvailableResourcesEnum.APPOINTMENTS,
-    #                 "scopes": [AvailableScopesEnum.READ],
-    #             },
-    #         ],
-    #     )
-    # ),
+    _: None = Depends(
+        check_user_permissions(
+            resources=[
+                {
+                    "resource_name": AvailableResourcesEnum.APPOINTMENTS,
+                    "scopes": [AvailableScopesEnum.READ],
+                },
+            ],
+        )
+    ),
 ) -> AppointmentBlankInfoSchema:
     appointment, patient, doctor, end_time, appointment_date = (
         await appointment_service.get_by_id(appointment_id)

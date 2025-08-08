@@ -1,4 +1,5 @@
 import math
+from datetime import datetime
 from typing import List
 from uuid import UUID
 
@@ -89,8 +90,8 @@ async def get_newborn_assets(
         patient_iin: str = Query(None, description="ИИН пациента"),
         mother_search: str = Query(None, description="Поиск по ФИО матери"),
         mother_iin: str = Query(None, description="ИИН матери"),
-        date_from: str = Query(None, description="Дата начала периода"),
-        date_to: str = Query(None, description="Дата окончания периода"),
+        date_from: datetime = Query(None, description="Дата начала периода"),
+        date_to: datetime = Query(None, description="Дата окончания периода"),
         status: AssetStatusEnum = Query(None, description="Статус актива"),
         delivery_status: AssetDeliveryStatusEnum = Query(None, description="Статус доставки"),
         newborn_condition: NewbornConditionEnum = Query(None, description="Состояние новорожденного"),
