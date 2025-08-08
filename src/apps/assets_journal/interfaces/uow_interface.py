@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from src.apps.assets_journal.interfaces.maternity_repository_interfaces import MaternityAssetRepositoryInterface
 from src.apps.assets_journal.interfaces.polyclinic_repository_interfaces import PolyclinicAssetRepositoryInterface
+from src.apps.assets_journal.interfaces.sick_leave_repository_interfaces import SickLeaveRepositoryInterface
 from src.apps.assets_journal.interfaces.stationary_repository_interfaces import (
     StationaryAssetRepositoryInterface,
 )
@@ -21,6 +22,9 @@ class AssetsJournalUnitOfWorkInterface(ABC):
     newborn_asset_repository: NewbornAssetRepositoryInterface
     polyclinic_asset_repository: PolyclinicAssetRepositoryInterface
     maternity_asset_repository: MaternityAssetRepositoryInterface
+
+    # Журнал больничных листов
+    sick_leave_repository: SickLeaveRepositoryInterface
 
     @abstractmethod
     async def commit(self) -> None:

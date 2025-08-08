@@ -13,6 +13,7 @@ from src.apps.assets_journal.infrastructure.api.emergency_asset_routes import (
 from src.apps.assets_journal.infrastructure.api.newborn_asset_routes import (
     newborn_assets_router,
 )
+from src.apps.assets_journal.infrastructure.api.sick_leave_routes import sick_leaves_router
 from src.apps.assets_journal.infrastructure.api.stationary_asset_routes import (
     stationary_assets_router,
 )
@@ -172,6 +173,12 @@ def get_routers() -> List[Dict[str, Any]]:
         {
             "router": maternity_assets_router,
             "tags": ["Maternity assets routes"]
+        },
+
+        # Журнал больничных листов
+        {
+            "router": sick_leaves_router,
+            "tags": ["Sick Leave Routes"]
         }
     ]
 

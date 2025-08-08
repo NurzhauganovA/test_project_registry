@@ -197,3 +197,39 @@ class MaternityStatusEnum(enum.Enum):
     IN_LABOR = "in_labor"               # В родах
     POSTPARTUM = "postpartum"           # Послеродовая
     GYNECOLOGICAL = "gynecological"     # Гинекологическая
+
+
+class SickLeaveStatusEnum(enum.Enum):
+    """Статус больничного листа"""
+    OPEN = "open"                    # Открыт
+    CLOSED = "closed"                # Закрыт
+    CANCELLED = "cancelled"          # Отменен
+    EXTENSION = "extension"          # Продление
+
+
+class SickLeaveTypeEnum(enum.Enum):
+    """Тип больничного листа"""
+    ILLNESS = "illness"               # Заболевание
+    INJURY = "injury"                 # Травма
+    QUARANTINE = "quarantine"         # Карантин
+    CARE = "care"                     # Уход за больным
+    PREGNANCY = "pregnancy"           # Беременность и роды
+    REHABILITATION = "rehabilitation" # Реабилитация
+
+
+class WorkCapacityEnum(enum.Enum):
+    """Трудоспособность"""
+    TEMPORARILY_DISABLED = "temporarily_disabled"            # Временно нетрудоспособен
+    LIMITED_CAPACITY = "limited_capacity"                    # Ограниченно трудоспособен
+    TRANSFERRED_TO_LIGHT_WORK = "transferred_to_light_work"  # Переведен на легкую работу
+
+
+class SickLeaveReasonEnum(enum.Enum):
+    """Причина выдачи больничного листа"""
+    ACUTE_ILLNESS = "acute_illness"                     # Острое заболевание
+    CHRONIC_ILLNESS = "chronic_illness"                 # Хроническое заболевание
+    WORK_INJURY = "work_injury"                         # Производственная травма
+    DOMESTIC_INJURY = "domestic_injury"                 # Бытовая травма
+    PREGNANCY_COMPLICATIONS = "pregnancy_complications" # Осложнения беременности
+    CHILD_CARE = "child_care"                           # Уход за ребенком
+    FAMILY_MEMBER_CARE = "family_member_care"           # Уход за членом семьи

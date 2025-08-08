@@ -2,6 +2,7 @@ from src.apps.assets_journal.infrastructure.repositories.maternity_asset_reposit
 from src.apps.assets_journal.infrastructure.repositories.polyclinic_asset_repository import (
     PolyclinicAssetRepositoryImpl
 )
+from src.apps.assets_journal.infrastructure.repositories.sick_leave_repository import SickLeaveRepositoryImpl
 from src.apps.assets_journal.infrastructure.repositories.stationary_asset_repository import (
     StationaryAssetRepositoryImpl,
 )
@@ -56,6 +57,15 @@ class AssetsJournalUnitOfWorkImpl(BaseUnitOfWork, AssetsJournalUnitOfWorkInterfa
     def maternity_asset_repository(self) -> MaternityAssetRepositoryImpl:
         """Репозиторий активов роддома"""
         return MaternityAssetRepositoryImpl(
+            async_db_session=self._session,
+            logger=self._logger
+        )
+
+    # Журнал больничных листов
+    @property
+    def sick_leave_repository(self) -> SickLeaveRepositoryImpl:
+        """Репозиторий больничных листов"""
+        return SickLeaveRepositoryImpl(
             async_db_session=self._session,
             logger=self._logger
         )
