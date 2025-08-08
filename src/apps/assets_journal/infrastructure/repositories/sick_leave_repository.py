@@ -1,5 +1,3 @@
-# src/apps/assets_journal/infrastructure/repositories/sick_leave_repository.py
-
 from typing import Dict, List, Optional
 from uuid import UUID
 
@@ -40,7 +38,8 @@ class SickLeaveRepositoryImpl(BaseRepository, SickLeaveRepositoryInterface):
             .where(SickLeave.id == sick_leave_id)
         )
         result = await self._async_db_session.execute(query)
-        sick_leave = result.scalar_one_or_none()
+        # Добавляем unique() для обработки joined loads
+        sick_leave = result.unique().scalar_one_or_none()
 
         if sick_leave:
             return map_sick_leave_db_to_domain(sick_leave)
@@ -57,7 +56,8 @@ class SickLeaveRepositoryImpl(BaseRepository, SickLeaveRepositoryInterface):
             .where(SickLeave.sick_leave_number == sick_leave_number)
         )
         result = await self._async_db_session.execute(query)
-        sick_leave = result.scalar_one_or_none()
+        # Добавляем unique() для обработки joined loads
+        sick_leave = result.unique().scalar_one_or_none()
 
         if sick_leave:
             return map_sick_leave_db_to_domain(sick_leave)
@@ -87,7 +87,8 @@ class SickLeaveRepositoryImpl(BaseRepository, SickLeaveRepositoryInterface):
         query = query.offset(offset).limit(limit)
 
         result = await self._async_db_session.execute(query)
-        sick_leaves = result.scalars().all()
+        # Добавляем unique() для обработки joined loads
+        sick_leaves = result.unique().scalars().all()
 
         return [map_sick_leave_db_to_list_item(sick_leave) for sick_leave in sick_leaves]
 
@@ -118,7 +119,8 @@ class SickLeaveRepositoryImpl(BaseRepository, SickLeaveRepositoryInterface):
             .where(SickLeave.id == db_sick_leave.id)
         )
         result = await self._async_db_session.execute(query)
-        db_sick_leave_with_relations = result.scalar_one()
+        # Добавляем unique() для обработки joined loads
+        db_sick_leave_with_relations = result.unique().scalar_one()
 
         return map_sick_leave_db_to_domain(db_sick_leave_with_relations)
 
@@ -133,7 +135,8 @@ class SickLeaveRepositoryImpl(BaseRepository, SickLeaveRepositoryInterface):
             .where(SickLeave.id == sick_leave.id)
         )
         result = await self._async_db_session.execute(query)
-        db_sick_leave = result.scalar_one()
+        # Добавляем unique() для обработки joined loads
+        db_sick_leave = result.unique().scalar_one()
 
         # Обновляем поля
         for field, value in sick_leave.__dict__.items():
@@ -168,7 +171,8 @@ class SickLeaveRepositoryImpl(BaseRepository, SickLeaveRepositoryInterface):
             .order_by(SickLeave.disability_start_date.desc())
         )
         result = await self._async_db_session.execute(query)
-        sick_leaves = result.scalars().all()
+        # Добавляем unique() для обработки joined loads
+        sick_leaves = result.unique().scalars().all()
 
         return [map_sick_leave_db_to_domain(sick_leave) for sick_leave in sick_leaves]
 
@@ -194,7 +198,8 @@ class SickLeaveRepositoryImpl(BaseRepository, SickLeaveRepositoryInterface):
         query = query.offset(offset).limit(limit)
 
         result = await self._async_db_session.execute(query)
-        sick_leaves = result.scalars().all()
+        # Добавляем unique() для обработки joined loads
+        sick_leaves = result.unique().scalars().all()
 
         return [map_sick_leave_db_to_domain(sick_leave) for sick_leave in sick_leaves]
 
@@ -217,110 +222,10 @@ class SickLeaveRepositoryImpl(BaseRepository, SickLeaveRepositoryInterface):
             .order_by(SickLeave.disability_start_date.asc())
         )
         result = await self._async_db_session.execute(query)
-        extensions = result.scalars().all()
+        # Добавляем unique() для обработки joined loads
+        extensions = result.unique().scalars().all()
 
         return [map_sick_leave_db_to_domain(extension) for extension in extensions]
-
-    def _apply_filters(self, query, filters: Dict[str, any]):
-        """Применить фильтры к запросу"""
-
-        # Поиск по пациенту (ФИО или ИИН)
-        if filters.get("patient_search"):
-            search_term = f"%{filters['patient_search']}%"
-            query = query.join(SQLAlchemyPatient).where(
-                or_(
-                    func.lower(func.concat(
-                        SQLAlchemyPatient.last_name, ' ',
-                        SQLAlchemyPatient.first_name, ' ',
-                        SQLAlchemyPatient.middle_name
-                    )).like(search_term.lower()),
-                    SQLAlchemyPatient.iin.like(search_term)
-                )
-            )
-
-        # Конкретный пациент
-        if filters.get("patient_id"):
-            query = query.where(SickLeave.patient_id == filters["patient_id"])
-
-        # ИИН пациента
-        if filters.get("patient_iin"):
-            query = query.join(SQLAlchemyPatient).where(
-                SQLAlchemyPatient.iin == filters["patient_iin"]
-            )
-
-        # Период по дате выдачи
-        if filters.get("issue_date_from"):
-            query = query.where(SickLeave.issue_date >= filters["issue_date_from"])
-
-        if filters.get("issue_date_to"):
-            query = query.where(SickLeave.issue_date <= filters["issue_date_to"])
-
-        # Период нетрудоспособности
-        if filters.get("disability_start_date_from"):
-            query = query.where(SickLeave.disability_start_date >= filters["disability_start_date_from"])
-
-        if filters.get("disability_start_date_to"):
-            query = query.where(SickLeave.disability_start_date <= filters["disability_start_date_to"])
-
-        # Статус
-        if filters.get("status") is not None:
-            query = query.where(SickLeave.status == filters["status"])
-
-        # Тип больничного листа
-        if filters.get("sick_leave_type") is not None:
-            query = query.where(SickLeave.sick_leave_type == filters["sick_leave_type"])
-
-        # Причина
-        if filters.get("sick_leave_reason") is not None:
-            query = query.where(SickLeave.sick_leave_reason == filters["sick_leave_reason"])
-
-        # Врач
-        if filters.get("doctor_name"):
-            query = query.where(
-                func.lower(SickLeave.doctor_full_name).like(
-                    f"%{filters['doctor_name'].lower()}%"
-                )
-            )
-
-        # Специализация врача
-        if filters.get("doctor_specialization"):
-            query = query.where(
-                func.lower(SickLeave.doctor_specialization).like(
-                    f"%{filters['doctor_specialization'].lower()}%"
-                )
-            )
-
-        # Диагноз
-        if filters.get("diagnosis"):
-            query = query.where(
-                func.lower(SickLeave.diagnosis).like(
-                    f"%{filters['diagnosis'].lower()}%"
-                )
-            )
-
-        # Код диагноза
-        if filters.get("diagnosis_code"):
-            query = query.where(SickLeave.diagnosis_code == filters["diagnosis_code"])
-
-        # Номер больничного листа
-        if filters.get("sick_leave_number"):
-            query = query.where(SickLeave.sick_leave_number == filters["sick_leave_number"])
-
-        # Место работы
-        if filters.get("workplace_name"):
-            query = query.where(
-                func.lower(SickLeave.workplace_name).like(
-                    f"%{filters['workplace_name'].lower()}%"
-                )
-            )
-
-        # Только первичные или продления
-        if filters.get("is_primary") is not None:
-            query = query.where(SickLeave.is_primary == filters["is_primary"])
-
-        # Активные больничные листы
-        if filters.get("is_active"):
-            query = query.where(SickLeave.status == SickLeaveStatusEnum.OPEN)
 
     def _apply_filters(self, query, filters: Dict[str, any]):
         """Применить фильтры к запросу"""

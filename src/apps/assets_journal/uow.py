@@ -1,8 +1,11 @@
+from src.apps.assets_journal.infrastructure.repositories.home_call_repository import HomeCallRepositoryImpl
 from src.apps.assets_journal.infrastructure.repositories.maternity_asset_repository import MaternityAssetRepositoryImpl
 from src.apps.assets_journal.infrastructure.repositories.polyclinic_asset_repository import (
     PolyclinicAssetRepositoryImpl
 )
 from src.apps.assets_journal.infrastructure.repositories.sick_leave_repository import SickLeaveRepositoryImpl
+from src.apps.assets_journal.infrastructure.repositories.staff_assignment_repository import \
+    StaffAssignmentRepositoryImpl
 from src.apps.assets_journal.infrastructure.repositories.stationary_asset_repository import (
     StationaryAssetRepositoryImpl,
 )
@@ -66,6 +69,24 @@ class AssetsJournalUnitOfWorkImpl(BaseUnitOfWork, AssetsJournalUnitOfWorkInterfa
     def sick_leave_repository(self) -> SickLeaveRepositoryImpl:
         """Репозиторий больничных листов"""
         return SickLeaveRepositoryImpl(
+            async_db_session=self._session,
+            logger=self._logger
+        )
+
+    # Журнал вызовов на дом
+    @property
+    def home_call_repository(self) -> HomeCallRepositoryImpl:
+        """Репозиторий вызовов на дом"""
+        return HomeCallRepositoryImpl(
+            async_db_session=self._session,
+            logger=self._logger
+        )
+
+    # Журнал введение медперсонала
+    @property
+    def staff_assignment_repository(self) -> StaffAssignmentRepositoryImpl:
+        """Репозиторий назначений медперсонала"""
+        return StaffAssignmentRepositoryImpl(
             async_db_session=self._session,
             logger=self._logger
         )

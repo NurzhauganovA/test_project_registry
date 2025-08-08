@@ -79,10 +79,10 @@ class SickLeave(Base, PrimaryKey, CreatedAtMixin, ChangedAtMixin):
         lazy="joined",
     )
 
-    # Самоссылка для продлений
+    # Самоссылка для продлений - ИСПРАВЛЕНО
     parent_sick_leave = relationship(
         "SickLeave",
-        remote_side=[Base.metadata.tables["sick_leaves"].c.id] if "sick_leaves" in Base.metadata.tables else "id",
+        remote_side="SickLeave.id",  # Используем строку вместо выражения
         back_populates="extensions",
         foreign_keys=[parent_sick_leave_id],
     )

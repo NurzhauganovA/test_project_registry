@@ -233,3 +233,125 @@ class SickLeaveReasonEnum(enum.Enum):
     PREGNANCY_COMPLICATIONS = "pregnancy_complications" # Осложнения беременности
     CHILD_CARE = "child_care"                           # Уход за ребенком
     FAMILY_MEMBER_CARE = "family_member_care"           # Уход за членом семьи
+
+
+class HomeCallStatusEnum(enum.Enum):
+    """Статус вызова на дом"""
+    REGISTERED = "registered"           # Зарегистрирован
+    IN_PROGRESS = "in_progress"         # В работе
+    COMPLETED = "completed"             # Выполнен
+    CANCELLED = "cancelled"             # Отменен
+
+
+class HomeCallCategoryEnum(enum.Enum):
+    """Категория вызова"""
+    EMERGENCY = "emergency"             # Экстренный
+    URGENT = "urgent"                   # Срочный
+    PLANNED = "planned"                 # Плановый
+
+
+class HomeCallSourceEnum(enum.Enum):
+    """Источник вызова"""
+    EGOV = "egov"                     # Egov
+    CALL_PATIENT = "call_patient"       # Звонок пациента
+    APPLICATION = "application"         # Приложение
+
+
+class HomeCallReasonEnum(enum.Enum):
+    """Повод вызова"""
+    ILLNESS = "illness"                 # Заболевание
+    INJURY = "injury"                   # Травма
+    CONSULTATION = "consultation"       # Консультация
+    VACCINATION = "vaccination"         # Вакцинация
+    MEDICAL_CERTIFICATE = "medical_certificate"  # Справка
+    CHRONIC_DISEASE = "chronic_disease" # Хроническое заболевание
+    ACUTE_CONDITION = "acute_condition" # Острое состояние
+    PREVENTIVE_CARE = "preventive_care" # Профилактический осмотр
+    OTHER = "other"                     # Другое
+
+
+class HomeCallTypeEnum(enum.Enum):
+    """Тип вызова"""
+    THERAPEUTIC = "therapeutic"         # Терапевтический
+    PEDIATRIC = "pediatric"             # Педиатрический
+    SPECIALIST = "specialist"           # Специализированный
+    NURSING = "nursing"                 # Сестринский
+    DIAGNOSTIC = "diagnostic"           # Диагностический
+
+
+class HomeCallVisitTypeEnum(enum.Enum):
+    """Вид посещения"""
+    PRIMARY = "primary"                 # Первичный
+    REPEAT = "repeat"                   # Повторный
+
+
+class HomeCallUrgencyEnum(enum.Enum):
+    """Срочность вызова"""
+    IMMEDIATE = "immediate"             # Немедленно
+    WITHIN_1_HOUR = "within_1_hour"     # В течение 1 часа
+    WITHIN_4_HOURS = "within_4_hours"   # В течение 4 часов
+    WITHIN_24_HOURS = "within_24_hours" # В течение 24 часов
+    PLANNED = "planned"                 # Плановый
+
+
+class HomeCallOutcomeEnum(enum.Enum):
+    """Исход вызова"""
+    TREATED_AT_HOME = "treated_at_home"         # Лечение на дому
+    HOSPITALIZED = "hospitalized"               # Госпитализирован
+    REFERRED_TO_CLINIC = "referred_to_clinic"   # Направлен в поликлинику
+    REFUSED_TREATMENT = "refused_treatment"     # Отказ от лечения
+    PATIENT_NOT_FOUND = "patient_not_found"     # Пациент не найден
+    FALSE_CALL = "false_call"                   # Ложный вызов
+
+
+class StaffAssignmentStatusEnum(enum.Enum):
+    """Статус назначения медперсонала"""
+    ACTIVE = "active"                   # Активен
+    INACTIVE = "inactive"               # Неактивен
+    SUSPENDED = "suspended"             # Приостановлен
+    COMPLETED = "completed"             # Завершен
+
+
+class MedicalSpecializationEnum(enum.Enum):
+    """Медицинские специализации"""
+    THERAPIST = "therapist"             # Терапевт
+    PEDIATRICIAN = "pediatrician"       # Педиатр
+    CARDIOLOGIST = "cardiologist"       # Кардиолог
+    NEUROLOGIST = "neurologist"         # Невролог
+    SURGEON = "surgeon"                 # Хирург
+    GYNECOLOGIST = "gynecologist"       # Гинеколог
+    UROLOGIST = "urologist"             # Уролог
+    DERMATOLOGIST = "dermatologist"     # Дерматолог
+    OPHTHALMOLOGIST = "ophthalmologist" # Офтальмолог
+    OTOLARYNGOLOGIST = "otolaryngologist" # ЛОР
+    PSYCHIATRIST = "psychiatrist"       # Психиатр
+    PSYCHOLOGIST = "psychologist"       # Психолог
+    PSYCHOTHERAPIST = "psychotherapist" # Психотерапевт
+    GENERAL_PRACTITIONER = "general_practitioner" # Врач общей практики
+    NURSE = "nurse"                     # Медсестра
+    PARAMEDIC = "paramedic"             # Фельдшер
+
+
+class MedicalDepartmentEnum(enum.Enum):
+    """Медицинские отделения"""
+    THERAPEUTIC = "therapeutic"         # Терапевтическое
+    PEDIATRIC = "pediatric"             # Педиатрическое
+    SURGICAL = "surgical"               # Хирургическое
+    GYNECOLOGICAL = "gynecological"     # Гинекологическое
+    NEUROLOGICAL = "neurological"       # Неврологическое
+    CARDIOLOGICAL = "cardiological"     # Кардиологическое
+    PSYCHIATRIC = "psychiatric"         # Психиатрическое
+    DERMATOLOGICAL = "dermatological"   # Дерматологическое
+    OPHTHALMOLOGICAL = "ophthalmological" # Офтальмологическое
+    OTOLARYNGOLOGICAL = "otolaryngological" # ЛОР
+    EMERGENCY = "emergency"             # Скорая помощь
+    OUTPATIENT = "outpatient"           # Поликлиническое
+    GENERAL_PRACTICE = "general_practice" # Общая практика
+
+
+class AreaTypeEnum(enum.Enum):
+    """Типы участков"""
+    THERAPEUTIC = "therapeutic"         # Терапевтический
+    PEDIATRIC = "pediatric"             # Педиатрический
+    GENERAL_PRACTICE = "general_practice" # Общей практики
+    SPECIALIZED = "specialized"         # Специализированный

@@ -3,6 +3,7 @@ from typing import Any, Awaitable, Dict, List, TypeVar
 
 from dependency_injector import containers, providers
 
+from src.apps.assets_journal.infrastructure.api.home_call_routes import home_calls_router
 from src.apps.assets_journal.infrastructure.api.maternity_asset_routes import maternity_assets_router
 from src.apps.assets_journal.infrastructure.api.polyclinic_asset_routes import (
     polyclinic_assets_router
@@ -14,6 +15,7 @@ from src.apps.assets_journal.infrastructure.api.newborn_asset_routes import (
     newborn_assets_router,
 )
 from src.apps.assets_journal.infrastructure.api.sick_leave_routes import sick_leaves_router
+from src.apps.assets_journal.infrastructure.api.staff_assignment_routes import staff_assignments_router
 from src.apps.assets_journal.infrastructure.api.stationary_asset_routes import (
     stationary_assets_router,
 )
@@ -179,6 +181,18 @@ def get_routers() -> List[Dict[str, Any]]:
         {
             "router": sick_leaves_router,
             "tags": ["Sick Leave Routes"]
+        },
+
+        # Журнал вызовов на дом
+        {
+            "router": home_calls_router,
+            "tags": ["Home Call Routes"]
+        },
+
+        # Журнал введения медперсонала
+        {
+            "router": staff_assignments_router,
+            "tags": ["Staff Assignments Routes"]
         }
     ]
 

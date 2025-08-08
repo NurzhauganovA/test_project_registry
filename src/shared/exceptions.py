@@ -90,3 +90,10 @@ class DomainValidationError(Exception):
         self.detail = detail
         self.status_code = status_code
         super().__init__(self.detail)
+
+
+class ValidationError(DomainValidationError):
+    """Custom exception to signal validation errors in domain models."""
+
+    def __init__(self, detail: str, status_code: int = 400):
+        super().__init__(detail, status_code)

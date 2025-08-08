@@ -26,6 +26,8 @@ from src.apps.assets_journal.infrastructure.db_models.newborn_models import * # 
 from src.apps.assets_journal.infrastructure.db_models.polyclinic_models import * # noqa: F401,F403
 from src.apps.assets_journal.infrastructure.db_models.maternity_models import * # noqa: F401,F403
 from src.apps.assets_journal.infrastructure.db_models.sick_leave_models import * # noqa: F401,F403
+from src.apps.assets_journal.infrastructure.db_models.home_call_models import * # noqa: F401,F403
+from src.apps.assets_journal.infrastructure.db_models.staff_assignment import * # noqa: F401,F403
 
 from src.core.settings import Settings
 from src.shared.infrastructure.base import Base
